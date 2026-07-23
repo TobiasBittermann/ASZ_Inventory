@@ -5,13 +5,15 @@ import java.util.List;
 
 import de.tobi.asz_inventory_api.model.Member;
 import de.tobi.asz_inventory_api.repository.MemberCsvRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class MemberController {
     private final MemberCsvRepository repository = new MemberCsvRepository();
-    private final String filePath = "CSV/members.csv";
+    @Value("${app.members.csv-path}")
+    private String filePath;
 
     @GetMapping("/members")
     public List<Member> getAllMembers() throws IOException {

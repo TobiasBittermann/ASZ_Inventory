@@ -15,12 +15,11 @@ public class MemberCsvRepository {
 
     public List<Member> getAllMembers(String filePath) throws IOException {
 
-        List<Member> members = new ArrayList<>();
-
         if (filePath == null || filePath.isBlank()) {
-            filePath = "CSV/members.csv";
+            throw new IllegalArgumentException("CSV file path must not be blank");
         }
 
+        List<Member> members = new ArrayList<>();
         Path path = Path.of(filePath);
 
         if (Files.notExists(path)) {
@@ -32,18 +31,7 @@ public class MemberCsvRepository {
         }
 
         if (Files.size(path) == 0) {
-            Field[] fields = Member.class.getDeclaredFields();
-            StringBuilder header = new StringBuilder();
-
-            for (int i = 0; i < fields.length; i++) {
-                header.append(fields[i].getName());
-
-                if (i < fields.length - 1) {
-                    header.append(",");
-                }
-            }
-
-            Files.writeString(path, header + System.lineSeparator());
+            Files.writeString(path, getMemberHeader() + System.lineSeparator());
         }
 
 
@@ -110,11 +98,10 @@ public class MemberCsvRepository {
 
     public void saveMembers(String filePath, List<Member> members) throws IOException {
         if (filePath == null || filePath.isBlank()) {
-            filePath = "CSV/members.csv";
+            throw new IllegalArgumentException("CSV file path must not be blank");
         }
 
         Path path = Path.of(filePath);
-
         Path parent = path.getParent();
         if (parent != null) {
             Files.createDirectories((parent));
