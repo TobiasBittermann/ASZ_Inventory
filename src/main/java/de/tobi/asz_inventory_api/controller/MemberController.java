@@ -42,4 +42,12 @@ public class MemberController {
         repository.updateMember(members, member);
         repository.saveMembers(filePath, members);
     }
+
+    @DeleteMapping("/members/{id}")
+    public void deleteMember(@PathVariable long id) throws IOException{
+        List<Member> members = repository.getAllMembers(filePath);
+
+        repository.deleteMember(members, id);
+        repository.saveMembers(filePath, members);
+    }
 }

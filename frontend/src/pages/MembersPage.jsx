@@ -49,6 +49,17 @@ function MembersPage() {
         setIsModalOpen(true);
     }
 
+    async function handleDeleteMember(id){
+        const response = await fetch(`http://localhost:8080/members/${id}`,{
+            method: "DELETE"
+        });
+        if (!response.ok){
+            throw new Error("Member could not be deleted!")
+        }
+
+        await loadMembers();
+    }
+
     return (
         <div>
             <h1>Members</h1>
@@ -89,6 +100,9 @@ function MembersPage() {
                         <td>
                             <button type={"button"} onClick={() => handleEditClick(member)}>
                                 Edit
+                            </button>
+                            <button type={"button"} onClick={() => handleDeleteMember(member.id)}>
+                                Delete
                             </button>
                         </td>
                     </tr>
