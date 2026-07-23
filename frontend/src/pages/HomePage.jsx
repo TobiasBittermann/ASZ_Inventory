@@ -3,9 +3,9 @@ import {Link} from "react-router-dom"
 function HomePage() {
     return (
         <div>
-            <p>
-               <h2> Hello friend!</h2>
-            </p>
+
+            <h2><p> Hello friend!</p></h2>
+
             <p>
                 You are at the start page right now.
             </p>
