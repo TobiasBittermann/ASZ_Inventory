@@ -5,15 +5,41 @@ import java.util.List;
 
 import de.tobi.asz_inventory_api.model.Member;
 import de.tobi.asz_inventory_api.repository.MemberCsvRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class MemberController {
     private final MemberCsvRepository repository = new MemberCsvRepository();
+    private final String filePath = "CSV/members.csv";
 
     @GetMapping("/members")
     public List<Member> getAllMembers() throws IOException {
-        return repository.getAllMembers("CSV/members.csv");
+        return repository.getAllMembers(filePath);
+    }
+
+    @PostMapping("/members")
+    public void addMember(@RequestBody Member member) throws IOException {
+        List<Member> members = repository.getAllMembers(filePath);
+
+        long nextId = members.stream()
+                .mapToLong(Member::getId)
+                .max()
+                .orElse(0) + 1;
+
+        member.setId(nextId);
+
+        repository.addMember(members, member);
+        repository.saveMembers(filePath, members);
+    }
+
+    @PutMapping("/members/{id}")
+    public void updateMember(@PathVariable long id, @RequestBody Member member) throws IOException{
+        List<Member> members = repository.getAllMembers(filePath);
+
+        member.setId(id);
+
+        repository.updateMember(members, member);
+        repository.saveMembers(filePath, members);
     }
 }
