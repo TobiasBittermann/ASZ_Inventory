@@ -1,4 +1,4 @@
-package Bierwart.Model;
+package de.tobi.asz_inventory_api.model;
 
 /**
  * Represents a member with basic personal data and an account balance.

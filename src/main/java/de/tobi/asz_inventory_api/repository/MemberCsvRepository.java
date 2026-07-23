@@ -1,6 +1,6 @@
-package Bierwart.Repositories;
+package de.tobi.asz_inventory_api.repository;
 
-import Bierwart.Model.Member;
+import de.tobi.asz_inventory_api.model.Member;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
