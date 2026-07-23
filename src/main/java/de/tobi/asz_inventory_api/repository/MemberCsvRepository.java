@@ -104,7 +104,7 @@ public class MemberCsvRepository {
         Path path = Path.of(filePath);
         Path parent = path.getParent();
         if (parent != null) {
-            Files.createDirectories((parent));
+            Files.createDirectories(parent);
         }
 
         StringBuilder content = new StringBuilder();
