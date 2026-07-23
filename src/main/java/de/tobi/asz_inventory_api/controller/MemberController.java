@@ -8,7 +8,6 @@ import de.tobi.asz_inventory_api.repository.MemberCsvRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class MemberController {
     private final MemberCsvRepository repository = new MemberCsvRepository();

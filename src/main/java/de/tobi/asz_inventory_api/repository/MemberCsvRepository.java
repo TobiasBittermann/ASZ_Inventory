@@ -13,6 +13,20 @@ import java.util.List;
 
 public class MemberCsvRepository {
 
+    private String getMemberHeader() {
+        Field[] fields = Member.class.getDeclaredFields();
+        StringBuilder header = new StringBuilder();
+
+        for (int i = 0; i < fields.length; i++) {
+            header.append(fields[i].getName());
+
+            if (i < fields.length - 1) {
+                header.append(",");
+            }
+        }
+        return header.toString();
+    }
+
     public List<Member> getAllMembers(String filePath) throws IOException {
 
         if (filePath == null || filePath.isBlank()) {
@@ -80,20 +94,6 @@ public class MemberCsvRepository {
 
     public void deleteMember(List<Member> members, long id) {
         members.removeIf(member -> member.getId() == id);
-    }
-
-    private String getMemberHeader() {
-        Field[] fields = Member.class.getDeclaredFields();
-        StringBuilder header = new StringBuilder();
-
-        for (int i = 0; i < fields.length; i++) {
-            header.append(fields[i].getName());
-
-            if (i < fields.length - 1) {
-                header.append(",");
-            }
-        }
-        return header.toString();
     }
 
     public void saveMembers(String filePath, List<Member> members) throws IOException {
