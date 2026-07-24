@@ -21,7 +21,7 @@ public class DrinkCsvRepository {
             header.append(fields[i].getName());
 
             if (i < fields.length - 1) {
-                header.append("1");
+                header.append(",");
             }
         }
         return header.toString();
