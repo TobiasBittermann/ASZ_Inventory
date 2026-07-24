@@ -95,23 +95,31 @@ public class DrinkCsvRepository {
         drinks.removeIf(drink -> drink.getId() == id);
     }
 
-    public void safeDrinks(String filePath, List<Drink> drinks) throws IOException{
-        if(filePath == null || filePath.isBlank()){
+    public void saveDrinks(String filePath, List<Drink> drinks) throws IOException {
+        if (filePath == null || filePath.isBlank()) {
             throw new IllegalArgumentException("CSV file path must not be blank");
         }
 
         Path path = Path.of(filePath);
         Path parent = path.getParent();
-        if(parent != null){
+        if (parent != null) {
             Files.createDirectories(parent);
         }
 
         StringBuilder content = new StringBuilder();
         content.append(getDrinksHeader()).append(System.lineSeparator());
 
-        //TODO: append all properties
-        for(Drink drink : drinks){
+        for (Drink drink : drinks) {
             content.append(drink.getId()).append(",")
+                    .append(drink.getName()).append(",")
+                    .append(drink.getPurchasePrice()).append(",")
+                    .append(drink.getSellingPrice()).append(",")
+                    .append(drink.getFactor()).append(",")
+                    .append(drink.getAmount()).append(",")
+                    .append(drink.getTotalValue())
+                    .append(System.lineSeparator());
         }
+
+        Files.writeString(path, content.toString());
     }
 }
