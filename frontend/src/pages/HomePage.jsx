@@ -14,6 +14,11 @@ function HomePage() {
                     <button type={"button"}>Members</button>
                 </Link>
             </p>
+            <p>
+                <Link to={"/drinks"}>
+                    <button type={"button"}>Drinks</button>
+                </Link>
+            </p>
         </div>
 
 

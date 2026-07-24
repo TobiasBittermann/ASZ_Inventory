@@ -11,6 +11,7 @@ function MembersPage() {
     }, [])
 
     function loadMembers() {
+        //TODO: find a way to put this into application.properties
         fetch("http://localhost:8080/members")
             .then((response) => response.json())
             .then((data) => setMembers(data));
@@ -36,7 +37,7 @@ function MembersPage() {
             throw new Error("Member could not be saved!")
         }
 
-        await loadMembers();
+        loadMembers();
     }
 
     function handleEditClick(member) {
@@ -57,7 +58,7 @@ function MembersPage() {
             throw new Error("Member could not be deleted!")
         }
 
-        await loadMembers();
+        loadMembers();
     }
 
     return (
