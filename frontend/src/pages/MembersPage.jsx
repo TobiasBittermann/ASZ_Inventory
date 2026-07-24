@@ -50,11 +50,11 @@ function MembersPage() {
         setIsModalOpen(true);
     }
 
-    async function handleDeleteMember(id){
-        const response = await fetch(`http://localhost:8080/members/${id}`,{
+    async function handleDeleteMember(id) {
+        const response = await fetch(`http://localhost:8080/members/${id}`, {
             method: "DELETE"
         });
-        if (!response.ok){
+        if (!response.ok) {
             throw new Error("Member could not be deleted!")
         }
 
@@ -74,8 +74,7 @@ function MembersPage() {
                 <MemberAddEdit
                     member={selectedMember}
                     onClose={() => setIsModalOpen(false)}
-                    onSave={handleSaveMember}
-                />
+                    onSave={handleSaveMember}/>
 
             )}
 

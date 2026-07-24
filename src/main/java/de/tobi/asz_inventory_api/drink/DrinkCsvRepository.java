@@ -1,6 +1,6 @@
-package de.tobi.asz_inventory_api.repository;
+package de.tobi.asz_inventory_api.drink;
 
-import de.tobi.asz_inventory_api.model.Drink;
+import org.springframework.stereotype.Repository;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class DrinkCsvRepository {
 
     private String getDrinksHeader() {

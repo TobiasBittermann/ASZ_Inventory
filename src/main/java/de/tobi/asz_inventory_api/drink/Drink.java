@@ -1,4 +1,4 @@
-package de.tobi.asz_inventory_api.model;
+package de.tobi.asz_inventory_api.drink;
 
 public class Drink {
     private long id;

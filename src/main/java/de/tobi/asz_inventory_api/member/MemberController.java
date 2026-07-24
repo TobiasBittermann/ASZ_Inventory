@@ -1,10 +1,8 @@
-package de.tobi.asz_inventory_api.controller;
+package de.tobi.asz_inventory_api.member;
 
 import java.io.IOException;
 import java.util.List;
 
-import de.tobi.asz_inventory_api.model.Member;
-import de.tobi.asz_inventory_api.repository.MemberCsvRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 

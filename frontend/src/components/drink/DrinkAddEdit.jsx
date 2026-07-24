@@ -75,6 +75,9 @@ function DrinkAddEdit({drink, onClose, onSave}) {
                            onChange={event => setAmount(event.target.value)}
                     />
                 </div>
+
+                <button type={"submit"}>Save</button>
+                <button type={"button"} onClick={onClose}>Close</button>
             </form>
         </div>
     )

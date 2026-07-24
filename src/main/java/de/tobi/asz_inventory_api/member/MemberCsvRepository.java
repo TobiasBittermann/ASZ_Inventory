@@ -1,6 +1,4 @@
-package de.tobi.asz_inventory_api.repository;
-
-import de.tobi.asz_inventory_api.model.Member;
+package de.tobi.asz_inventory_api.member;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

@@ -1,4 +1,4 @@
-package de.tobi.asz_inventory_api.model;
+package de.tobi.asz_inventory_api.member;
 
 /**
  * Represents a member with basic personal data and an account balance.

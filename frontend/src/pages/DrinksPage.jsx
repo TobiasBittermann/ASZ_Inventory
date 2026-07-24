@@ -70,12 +70,12 @@ function DrinksPage() {
             </button>
 
             {
-                isModalOpen && (<DrinkAddEdit>
-                    drink={selectedDrink}
-                    onClose={() => setIsModalOpen(false)}
-                    onSave = {handleSaveDrink()}
-                </DrinkAddEdit>)
-            }
+                isModalOpen && (
+                    <DrinkAddEdit
+                        drink={selectedDrink}
+                        onClose={() => setIsModalOpen(false)}
+                        onSave={handleSaveDrink}/>
+                )}
 
             <table>
                 <thead>
@@ -90,7 +90,7 @@ function DrinksPage() {
                 </tr>
                 </thead>
                 <tbody>
-                {drinks.map(drink =>(
+                {drinks.map(drink => (
                     <tr key={drink.id}>
                         <td>{drink.id}</td>
                         <td>{drink.name}</td>
@@ -103,7 +103,7 @@ function DrinksPage() {
                             <button type={"button"} onClick={() => handleEditClick(drink)}>
                                 Edit
                             </button>
-                            <button type={"button"} onClick={() => handleDeleteDrink(drink)}>
+                            <button type={"button"} onClick={() => handleDeleteDrink(drink.id)}>
                                 Delete
                             </button>
                         </td>

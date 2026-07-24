@@ -1,26 +1,27 @@
-package de.tobi.asz_inventory_api.controller;
+package de.tobi.asz_inventory_api.drink;
 
-import de.tobi.asz_inventory_api.model.Drink;
-import de.tobi.asz_inventory_api.repository.DrinkCsvRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
 
-@RestController
-public class DrinkController {
-    private final DrinkCsvRepository repository = new DrinkCsvRepository();
-    @Value("CSV/drinks.csv")
+@Service
+public class DrinkService {
+
+    private final DrinkCsvRepository repository;
     private String filePath;
 
-    @GetMapping("/drinks")
-    public List<Drink> getAllDrinks() throws IOException {
+    public DrinkService(DrinkCsvRepository repository, @Value("${app.drinks.csv-path}") String filePath){
+        this.repository = repository;
+        this.filePath = filePath;
+    }
+
+    public List<Drink> getAllDrinks() throws IOException{
         return repository.getAllDrinks(filePath);
     }
 
-    @PostMapping("/drinks")
-    public void addDrink(@RequestBody Drink drink) throws IOException {
+    public void addDrink(Drink drink) throws IOException{
         List<Drink> drinks = repository.getAllDrinks(filePath);
 
         long nextId = drinks.stream()
@@ -34,8 +35,7 @@ public class DrinkController {
         repository.saveDrinks(filePath, drinks);
     }
 
-    @PutMapping("/drinks/{id}")
-    public void updateDrink(@PathVariable long id, @RequestBody Drink drink) throws IOException {
+    public void updateDrink(long id, Drink drink) throws IOException {
         List<Drink> drinks = repository.getAllDrinks(filePath);
 
         drink.setId(id);
@@ -44,8 +44,7 @@ public class DrinkController {
         repository.saveDrinks(filePath, drinks);
     }
 
-    @DeleteMapping("/drinks/{id}")
-    public void deleteDrink(@PathVariable long id) throws IOException {
+    public void deleteDrink(long id) throws IOException {
         List<Drink> drinks = repository.getAllDrinks(filePath);
 
         repository.deleteDrink(drinks ,id);
