@@ -1,5 +1,7 @@
 import {useEffect, useState} from "react";
 import MemberAddEdit from "../components/member/MemberAddEdit.jsx";
+import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
+import {Tooltip} from "react-tooltip";
 
 function MembersPage() {
     const [members, setMembers] = useState([]);
@@ -68,10 +70,13 @@ function MembersPage() {
             </h1>
 
             <button
-                className={"hover:bg-blue-500 hover:scale-105 bg-blue-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-3 transition"}
+                className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-3 transition"}
+                data-tooltip-id={"add-tip"}
+                data-tooltip-content={"Add a new member"}
                 onClick={handleAddClick}>
-                Add Member
+                <FiPlusCircle/>
             </button>
+            <Tooltip id={"add-tip"}/>
 
             {isModalOpen && (
                 <MemberAddEdit
@@ -104,15 +109,21 @@ function MembersPage() {
                             <td className={"px-6 py-3"}>{member.balance}</td>
                             <td>
                                 <button
-                                    className={"hover:bg-blue-500 hover:scale-105 bg-blue-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}
+                                    className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}
+                                    data-tooltip-id={"edit-tip"}
+                                    data-tooltip-content={"Edit a member entry"}
                                     onClick={() => handleEditClick(member)}>
-                                    Edit
+                                    <FiEdit3 />
                                 </button>
+                                <Tooltip id={"edit-tip"}/>
                                 <button
-                                    className={"hover:bg-blue-500 hover:scale-105 bg-blue-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}
+                                    className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}
+                                    data-tooltip-id={"delete-tip"}
+                                    data-tooltip-content={"Delete a member entry"}
                                     onClick={() => handleDeleteMember(member.id)}>
-                                    Delete
+                                    <FiTrash2 />
                                 </button>
+                                <Tooltip id={"delete-tip"}/>
                             </td>
                         </tr>
                     ))}

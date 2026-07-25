@@ -5,13 +5,13 @@ function HomePage() {
     return (
         <div className={"min-h-screen flex flex-col items-center justify-center bg-cover bg-center"}
         style={{backgroundImage:`url(${houseImage})`}}>
-            <div className={"bg-white shadow-lg rounded-2xl p-10 flex flex-col items-center gap-6 w-120"}>
+            <div className={"bg-white/50 backdrop-blur-sm shadow-lg rounded-2xl p-10 flex flex-col items-center gap-6 w-240"}>
 
                 <h1 className={"text-3xl font-bold text-gray-800 text-center"}>
-                    ASZ Inventory
+                    AV! Albingia-Schwarzwald-Zaringia
                 </h1>
 
-                <p className={"text-gray-500 text-sm"}>
+                <p className={"text-gray-800 text-sm"}>
                     Was möchtest du verwalten?
                 </p>
                 <p>

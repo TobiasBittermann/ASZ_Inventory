@@ -584,6 +584,177 @@ Beide müssen parallel laufen.
 
 ---
 
+## Veröffentlichen auf dem Raspberry Pi
+
+Ziel: App läuft auf dem Pi, erreichbar im WLAN unter `http://<pi-ip>`
+
+### Strategie: Frontend und Backend getrennt hosten
+
+- **Backend** → Spring Boot JAR läuft als Dienst auf Port 8080
+- **Frontend** → nginx liefert die gebauten React-Dateien auf Port 80
+
+Das ist die korrekte Produktions-Architektur: Jede Schicht ist unabhängig deploybar und austauschbar.
+
+---
+
+### Schritt 1: CORS für den Pi anpassen
+
+Im Controller die Pi-IP erlauben:
+
+```java
+@CrossOrigin(origins = "http://<pi-ip>")
+```
+
+---
+
+### Schritt 2: Frontend bauen
+
+Im `frontend`-Ordner die API-URL auf den Pi zeigen lassen (in allen `fetch`-Aufrufen):
+
+```js
+fetch("http://<pi-ip>:8080/members")
+```
+
+Dann bauen:
+
+```bash
+npm run build
+```
+
+→ Erzeugt `frontend/dist/`
+
+---
+
+### Schritt 3: JAR bauen
+
+Im Projektroot:
+
+```bash
+./mvnw package -DskipTests
+```
+
+→ Erzeugt `target/asz_inventory_api-0.0.1-SNAPSHOT.jar`
+
+---
+
+### Schritt 4: Dateien auf den Pi kopieren
+
+```bash
+# Backend
+scp target/*.jar pi@<pi-ip>:/home/pi/app/
+
+# CSV-Daten
+scp -r CSV pi@<pi-ip>:/home/pi/app/
+
+# Frontend
+scp -r frontend/dist/* pi@<pi-ip>:/home/pi/frontend/
+```
+
+---
+
+### Schritt 5: Pi einrichten (einmalig)
+
+```bash
+# Java installieren
+sudo apt update
+sudo apt install openjdk-21-jre
+
+# nginx installieren
+sudo apt install nginx
+```
+
+---
+
+### Schritt 6: nginx konfigurieren
+
+```bash
+sudo nano /etc/nginx/sites-available/asz-inventory
+```
+
+Inhalt:
+
+```nginx
+server {
+    listen 80;
+
+    root /home/pi/frontend;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+```
+
+Aktivieren:
+
+```bash
+sudo ln -s /etc/nginx/sites-available/asz-inventory /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+---
+
+### Schritt 7: Backend als Dienst einrichten
+
+Damit das Backend beim Pi-Start automatisch startet:
+
+```bash
+sudo nano /etc/systemd/system/asz-inventory.service
+```
+
+Inhalt:
+
+```ini
+[Unit]
+Description=ASZ Inventory Backend
+After=network.target
+
+[Service]
+ExecStart=java -jar /home/pi/app/asz_inventory_api-0.0.1-SNAPSHOT.jar --app.drinks.csv-path=/home/pi/app/CSV/drinks.csv
+WorkingDirectory=/home/pi/app
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Aktivieren und starten:
+
+```bash
+sudo systemctl enable asz-inventory
+sudo systemctl start asz-inventory
+sudo systemctl status asz-inventory
+```
+
+---
+
+### Ergebnis
+
+| Dienst   | Port | URL                       |
+|----------|------|---------------------------|
+| Frontend | 80   | `http://<pi-ip>`          |
+| Backend  | 8080 | `http://<pi-ip>:8080`     |
+
+### Pi-IP herausfinden
+
+Auf dem Pi:
+
+```bash
+hostname -I
+```
+
+### Typische Fehler
+
+- CORS-Fehler → Pi-IP im `@CrossOrigin` nicht eingetragen
+- API-URL im Frontend zeigt noch auf `localhost` → fetch-URLs anpassen vor dem Build
+- Backend startet nicht → `sudo journalctl -u asz-inventory -n 50`
+- nginx zeigt Standardseite → default-Konfiguration deaktivieren: `sudo rm /etc/nginx/sites-enabled/default`
+
+---
+
 ## Späterer Ausbau
 
 - PostgreSQL statt CSV
