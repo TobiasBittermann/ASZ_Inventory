@@ -63,12 +63,17 @@ function MembersPage() {
 
     return (
         <div>
-            <h1>Members</h1>
+            <h1 className={"text-3xl font-bold text-gray-800 text-center"}>
+                Mitgliederverzeichnis
+            </h1>
 
-
-            <button type={"button"} onClick={handleAddClick}>
-                Add Member
-            </button>
+            <div className={"justify-start"}>
+                <button
+                    className={"hover:bg-blue-500 hover:scale-105 bg-blue-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-3 transition"}
+                    onClick={handleAddClick}>
+                    Add Member
+                </button>
+            </div>
 
             {isModalOpen && (
                 <MemberAddEdit
@@ -78,37 +83,45 @@ function MembersPage() {
 
             )}
 
-            <table>
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Vorname</th>
-                    <th>Nachname</th>
-                    <th>E-Mail</th>
-                    <th>Kontostand</th>
-                    <th>Aktionen</th>
-                </tr>
-                </thead>
-                <tbody>
-                {members.map((member) => (
-                    <tr key={member.id}>
-                        <td>{member.id}</td>
-                        <td>{member.firstName}</td>
-                        <td>{member.lastName}</td>
-                        <td>{member.email}</td>
-                        <td>{member.balance}</td>
-                        <td>
-                            <button type={"button"} onClick={() => handleEditClick(member)}>
-                                Edit
-                            </button>
-                            <button type={"button"} onClick={() => handleDeleteMember(member.id)}>
-                                Delete
-                            </button>
-                        </td>
+            <div className={"overflow-x-auto rounded-xl shadow"}>
+
+                <table className={"min-w-full bg-white text-sm text-left"}>
+                    <thead className={"bg-gray-200 text-gray-600 uppercase text-xs"}>
+                    <tr>
+                        <th className={"px-6 py-3"}>Id</th>
+                        <th className={"px-6 py-3"}>Vorname</th>
+                        <th className={"px-6 py-3"}>Nachname</th>
+                        <th className={"px-6 py-3"}>E-Mail</th>
+                        <th className={"px-6 py-3"}>Kontostand</th>
+                        <th className={"px-6 py-3"}>Aktionen</th>
                     </tr>
-                ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody className={"divide-y divide-gray-100"}>
+                    {members.map((member) => (
+                        <tr key={member.id} className={"hover:bg-gray-50 transition"}>
+                            <td className={"px-6 py-3"}>{member.id}</td>
+                            <td className={"px-6 py-3"}>{member.firstName}</td>
+                            <td className={"px-6 py-3"}>{member.lastName}</td>
+                            <td className={"px-6 py-3"}>{member.email}</td>
+                            <td className={"px-6 py-3"}>{member.balance}</td>
+                            <td>
+                                <button
+                                    className={"hover:bg-blue-500 hover:scale-105 bg-blue-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}
+                                    onClick={() => handleEditClick(member)}>
+                                    Edit
+                                </button>
+                                <button
+                                    className={"hover:bg-blue-500 hover:scale-105 bg-blue-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}
+                                    onClick={() => handleDeleteMember(member.id)}>
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+
+            </div>
         </div>
     );
 }
