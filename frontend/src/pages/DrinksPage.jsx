@@ -63,9 +63,13 @@ function DrinksPage() {
 
     return (
         <div>
-            <h1>Drinks</h1>
+            <h1 className={"text-3xl font-bold text-gray-800 text-center"}>
+                Getränke
+            </h1>
 
-            <button type={"button"} onClick={handleAddClick}>
+            <button
+                className={"hover:bg-blue-500 hover:scale-105 bg-blue-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-3 transition"}
+                onClick={handleAddClick}>
                 Add Drink
             </button>
 
@@ -77,40 +81,48 @@ function DrinksPage() {
                         onSave={handleSaveDrink}/>
                 )}
 
-            <table>
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Einkaufspreis</th>
-                    <th>Verkaufspreis</th>
-                    <th>Faktor</th>
-                    <th>Menge</th>
-                    <th>Gesamtwert</th>
-                </tr>
-                </thead>
-                <tbody>
-                {drinks.map(drink => (
-                    <tr key={drink.id}>
-                        <td>{drink.id}</td>
-                        <td>{drink.name}</td>
-                        <td>{drink.purchasePrice}</td>
-                        <td>{drink.sellingPrice}</td>
-                        <td>{drink.factor}</td>
-                        <td>{drink.amount}</td>
-                        <td>{drink.totalValue}</td>
-                        <td>
-                            <button type={"button"} onClick={() => handleEditClick(drink)}>
-                                Edit
-                            </button>
-                            <button type={"button"} onClick={() => handleDeleteDrink(drink.id)}>
-                                Delete
-                            </button>
-                        </td>
+            <div className={"overflow-x-auto rounded-xl shadow"}>
+
+                <table className={"min-w-full bg-white text-sm text-left"}>
+                    <thead className={"bg-gray-200 text-gray-600 uppercase text-xs"}>
+                    <tr>
+                        <th className={"px-6 py-3"}>Id</th>
+                        <th className={"px-6 py-3"}>Name</th>
+                        <th className={"px-6 py-3"}>Einkaufspreis</th>
+                        <th className={"px-6 py-3"}>Verkaufspreis</th>
+                        <th className={"px-6 py-3"}>Faktor</th>
+                        <th className={"px-6 py-3"}>Menge</th>
+                        <th className={"px-6 py-3"}>Gesamtwert</th>
+                        <th className={"px-6 py-3"}>Aktionen</th>
                     </tr>
-                ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody className={"divide-y divide-gray-100"}>
+                    {drinks.map(drink => (
+                        <tr key={drink.id} className={"hover:gb-grey-50 transition"}>
+                            <td className={"px-6 py-3"}>{drink.id}</td>
+                            <td className={"px-6 py-3"}>{drink.name}</td>
+                            <td className={"px-6 py-3"}>{drink.purchasePrice}</td>
+                            <td className={"px-6 py-3"}>{drink.sellingPrice}</td>
+                            <td className={"px-6 py-3"}>{drink.factor}</td>
+                            <td className={"px-6 py-3"}>{drink.amount}</td>
+                            <td className={"px-6 py-3"}>{drink.totalValue}</td>
+                            <td>
+                                <button
+                                    className={"hover:bg-blue-500 hover:scale-105 bg-blue-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}
+                                    onClick={() => handleEditClick(drink)}>
+                                    Edit
+                                </button>
+                                <button
+                                    className={"hover:bg-blue-500 hover:scale-105 bg-blue-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}
+                                    onClick={() => handleDeleteDrink(drink.id)}>
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

@@ -44,41 +44,67 @@ function DrinkAddEdit({drink, onClose, onSave}) {
     }
 
     return (
-        <div>
-            <h2>{drink ? "Edit Drink" : "Add Drink"}</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Name: </label>
-                    <input type={"text"}
-                           value={name}
-                           onChange={event => setName(event.target.value)}
-                    />
-                </div>
-                <div>
-                    <label>Einkaufspreis: </label>
-                    <input type={"text"}
-                           value={purchasePrice}
-                           onChange={event => setPurchasePrice(event.target.value)}
-                    />
-                </div>
-                <div>
-                    <label>Faktor: </label>
-                    <input type={"text"}
-                           value={factor}
-                           onChange={event => setFactor(event.target.value)}
-                    />
-                </div>
-                <div>
-                    <label>Anzahl: </label>
-                    <input type={"text"}
-                           value={amount}
-                           onChange={event => setAmount(event.target.value)}
-                    />
-                </div>
+        <div className={"fixed inset-0 bg-black/50 flex items-center justify-center z-50"}>
+            <div className={"bg-white rounded-2xl shadow-xl p-8 w-full max-w-md"}>
 
-                <button type={"submit"}>Save</button>
-                <button type={"button"} onClick={onClose}>Close</button>
-            </form>
+                <h2 className={"text-2xl font-bold text-gray-800 mb-6"}>
+                    {drink ? "Edit Drink" : "Add Drink"}
+                </h2>
+
+                <form
+                    className={"grid grid-cols-[auto_1fr] items-center gab-x-4 gap-y-4"}
+                    onSubmit={handleSubmit}>
+                    <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
+                        Name:
+                    </label>
+                    <input
+                        className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
+                        type={"text"}
+                        value={name}
+                        onChange={event => setName(event.target.value)}
+                    />
+                    <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
+                        Einkaufspreis:
+                    </label>
+                    <input
+                        className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
+                        type={"text"}
+                        value={purchasePrice}
+                        onChange={event => setPurchasePrice(event.target.value)}
+                    />
+                    <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
+                        Faktor:
+                    </label>
+                    <input
+                        className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
+                        type={"text"}
+                        value={factor}
+                        onChange={event => setFactor(event.target.value)}
+                    />
+                    <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
+                        Anzahl:
+                    </label>
+                    <input
+                        className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
+                        type={"text"}
+                        value={amount}
+                        onChange={event => setAmount(event.target.value)}
+                    />
+
+                    <div className={"col-span-2 flex justify-end gab-3 mt-2"}>
+                        <button
+                            className={"hover:bg-blue-500 hover:scale-105 bg-blue-300 text-black shadow-md rounded px-6 py-2 m-1 transition"}
+                            type={"button"} onClick={handleSubmit}>
+                            Save
+                        </button>
+                        <button
+                            className={"hover:bg-blue-500 hover:scale-105 bg-blue-300 text-black shadow-md rounded px-6 py-2 m-1 transition"}
+                            type={"button"} onClick={onClose}>
+                            Close
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     )
 }

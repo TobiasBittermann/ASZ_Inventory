@@ -67,13 +67,11 @@ function MembersPage() {
                 Mitgliederverzeichnis
             </h1>
 
-            <div className={"justify-start"}>
-                <button
-                    className={"hover:bg-blue-500 hover:scale-105 bg-blue-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-3 transition"}
-                    onClick={handleAddClick}>
-                    Add Member
-                </button>
-            </div>
+            <button
+                className={"hover:bg-blue-500 hover:scale-105 bg-blue-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-3 transition"}
+                onClick={handleAddClick}>
+                Add Member
+            </button>
 
             {isModalOpen && (
                 <MemberAddEdit
@@ -120,11 +118,9 @@ function MembersPage() {
                     ))}
                     </tbody>
                 </table>
-
             </div>
         </div>
     );
 }
-
 
 export default MembersPage;
