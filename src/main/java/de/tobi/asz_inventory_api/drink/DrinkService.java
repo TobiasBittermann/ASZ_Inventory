@@ -31,6 +31,9 @@ public class DrinkService {
 
         drink.setId(nextId);
 
+        calculateSellingPrice(drink);
+        calculateTotalValue(drink);
+
         repository.addDrink(drinks, drink);
         repository.saveDrinks(filePath, drinks);
     }
@@ -39,6 +42,9 @@ public class DrinkService {
         List<Drink> drinks = repository.getAllDrinks(filePath);
 
         drink.setId(id);
+
+        calculateSellingPrice(drink);
+        calculateTotalValue(drink);
 
         repository.updateDrink(drinks, drink);
         repository.saveDrinks(filePath, drinks);
@@ -49,5 +55,13 @@ public class DrinkService {
 
         repository.deleteDrink(drinks ,id);
         repository.saveDrinks(filePath, drinks);
+    }
+
+    private void calculateSellingPrice(Drink drink){
+        drink.setSellingPrice(drink.getPurchasePrice() * drink.getFactor());
+    }
+
+    private void calculateTotalValue(Drink drink){
+        drink.setTotalValue(drink.getPurchasePrice() * drink.getAmount());
     }
 }
