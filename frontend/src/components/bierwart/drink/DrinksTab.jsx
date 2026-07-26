@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
-import DrinkAddEdit from "../components/bierwart/drink/DrinkAddEdit.jsx";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi"
 import {Tooltip} from "react-tooltip";
+import DrinkAddEdit from "./DrinkAddEdit.jsx";
 
 function DrinksPage() {
     const [drinks, setDrinks] = useState([]);
@@ -65,9 +65,9 @@ function DrinksPage() {
 
     return (
         <div>
-            <h1 className={"text-3xl font-bold text-gray-800 text-center"}>
-                Getränke
-            </h1>
+            <h3 className={"text-3xl font-bold text-gray-800 text-center"}>
+                Getränkeliste
+            </h3>
 
             <button
                 className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-3 transition"}
