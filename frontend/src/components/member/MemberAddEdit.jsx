@@ -8,6 +8,7 @@ function MemberAddEdit({member, onClose, onSave}) {
 
     useEffect(() => {
         if (member) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setFirstName(member.firstName)
             setLastName(member.lastName)
             setEmail(member.email)

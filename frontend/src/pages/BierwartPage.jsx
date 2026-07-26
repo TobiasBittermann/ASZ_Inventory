@@ -1,8 +1,9 @@
 import {useState} from "react";
 import DrinksTab from "../components/bierwart/drink/DrinksTab.jsx";
+import BookingsTab from "../components/bierwart/booking/BookingsTab.jsx";
 
 function BierwartPage() {
-    const [activeTab, setActiveTab] = useState("bookings");
+    const [activeTab, setActiveTab] = useState("drinks");
 
     return (
         <div className={"p-8"}>
@@ -31,7 +32,7 @@ function BierwartPage() {
             </div>
 
             {/* content */}
-            {/*{activeTab === "bookings" && <BookingsTab/>}*/}
+            {activeTab === "bookings" && <BookingsTab/>}
             {activeTab === "drinks" && <DrinksTab/>}
         </div>
 

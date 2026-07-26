@@ -12,11 +12,15 @@ function MembersPage() {
         loadMembers();
     }, [])
 
-    function loadMembers() {
-        //TODO: find a way to put this into application.properties
-        fetch("http://localhost:8080/members")
-            .then((response) => response.json())
-            .then((data) => setMembers(data));
+    async function loadMembers() {
+        const response = await fetch("http://localhost:8080/members");
+
+        if (!response.ok) {
+            throw new Error("Loading members failed")
+        }
+
+        const data = await response.json();
+        setMembers(data);
     }
 
     async function handleSaveMember(member) {
@@ -39,7 +43,7 @@ function MembersPage() {
             throw new Error("Member could not be saved!")
         }
 
-        loadMembers();
+        await loadMembers();
     }
 
     function handleEditClick(member) {
@@ -60,7 +64,7 @@ function MembersPage() {
             throw new Error("Member could not be deleted!")
         }
 
-        loadMembers();
+        await loadMembers();
     }
 
     return (
@@ -113,22 +117,22 @@ function MembersPage() {
                                     data-tooltip-id={"edit-tip"}
                                     data-tooltip-content={"Edit a member entry"}
                                     onClick={() => handleEditClick(member)}>
-                                    <FiEdit3 />
+                                    <FiEdit3/>
                                 </button>
-                                <Tooltip id={"edit-tip"}/>
                                 <button
                                     className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}
                                     data-tooltip-id={"delete-tip"}
                                     data-tooltip-content={"Delete a member entry"}
                                     onClick={() => handleDeleteMember(member.id)}>
-                                    <FiTrash2 />
+                                    <FiTrash2/>
                                 </button>
-                                <Tooltip id={"delete-tip"}/>
                             </td>
                         </tr>
                     ))}
                     </tbody>
                 </table>
+                <Tooltip id={"edit-tip"}/>
+                <Tooltip id={"delete-tip"}/>
             </div>
         </div>
     );

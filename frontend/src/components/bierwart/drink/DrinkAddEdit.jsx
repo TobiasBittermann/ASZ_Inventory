@@ -10,6 +10,7 @@ function DrinkAddEdit({drink, onClose, onSave}) {
 
     useEffect(() => {
         if (drink) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setName(drink.name)
             setPurchasePrice(drink.purchasePrice)
             setSellingPrice(drink.sellingPrice)
@@ -52,7 +53,7 @@ function DrinkAddEdit({drink, onClose, onSave}) {
                 </h2>
 
                 <form
-                    className={"grid grid-cols-[auto_1fr] items-center gab-x-4 gap-y-4"}
+                    className={"grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-4"}
                     onSubmit={handleSubmit}>
                     <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
                         Name:
@@ -91,7 +92,7 @@ function DrinkAddEdit({drink, onClose, onSave}) {
                         onChange={event => setAmount(event.target.value)}
                     />
 
-                    <div className={"col-span-2 flex justify-end gab-3 mt-2"}>
+                    <div className={"col-span-2 flex justify-end gap-3 mt-2"}>
                         <button
                             className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md rounded px-6 py-2 m-1 transition"}
                             type={"button"} onClick={handleSubmit}>

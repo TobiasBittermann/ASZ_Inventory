@@ -3,7 +3,7 @@ import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi"
 import {Tooltip} from "react-tooltip";
 import DrinkAddEdit from "./DrinkAddEdit.jsx";
 
-function DrinksPage() {
+function DrinksTab() {
     const [drinks, setDrinks] = useState([]);
     const [selectedDrink, setSelectedDrink] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,11 +12,15 @@ function DrinksPage() {
         loadDrinks();
     }, [])
 
-    function loadDrinks() {
-        //TODO: find a way to put this into application.properties
-        fetch("http://localhost:8080/drinks")
-            .then(response => response.json())
-            .then(data => setDrinks(data));
+    async function loadDrinks() {
+        const response = await fetch("http://localhost:8080/drinks");
+
+        if(!response.ok){
+            throw new Error("Loading drinks failed");
+        }
+
+        const data = await response.json();
+        setDrinks(data);
     }
 
     async function handleSaveDrink(drink) {
@@ -39,7 +43,7 @@ function DrinksPage() {
             throw new Error("Drink could not be saved!")
         }
 
-        loadDrinks();
+        await loadDrinks();
     }
 
     function handleEditClick(drink) {
@@ -60,7 +64,7 @@ function DrinksPage() {
             throw new Error("Drink could not be deleted!");
         }
 
-        loadDrinks();
+        await loadDrinks();
     }
 
     return (
@@ -103,7 +107,7 @@ function DrinksPage() {
                     </thead>
                     <tbody className={"divide-y divide-gray-100"}>
                     {drinks.map(drink => (
-                        <tr key={drink.id} className={"hover:gb-grey-50 transition"}>
+                        <tr key={drink.id} className={"hover:gb-gray-50 transition"}>
                             <td className={"px-6 py-3"}>{drink.id}</td>
                             <td className={"px-6 py-3"}>{drink.name}</td>
                             <td className={"px-6 py-3"}>{drink.purchasePrice}</td>
@@ -119,7 +123,6 @@ function DrinksPage() {
                                     onClick={() => handleEditClick(drink)}>
                                     <FiEdit3 />
                                 </button>
-                                <Tooltip id={"edit-tip"}/>
                                 <button
                                     className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}
                                     data-tooltip-id={"delete-tip"}
@@ -127,15 +130,16 @@ function DrinksPage() {
                                     onClick={() => handleDeleteDrink(drink.id)}>
                                     <FiTrash2 />
                                 </button>
-                                <Tooltip id={"delete-tip"}/>
                             </td>
                         </tr>
                     ))}
                     </tbody>
                 </table>
+                <Tooltip id={"edit-tip"}/>
+                <Tooltip id={"delete-tip"}/>
             </div>
         </div>
     );
 }
 
-export default DrinksPage;
+export default DrinksTab;
