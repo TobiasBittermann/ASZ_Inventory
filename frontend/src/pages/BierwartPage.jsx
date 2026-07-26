@@ -3,7 +3,7 @@ import DrinksTab from "../components/bierwart/drink/DrinksTab.jsx";
 import BookingsTab from "../components/bierwart/booking/BookingsTab.jsx";
 
 function BierwartPage() {
-    const [activeTab, setActiveTab] = useState("drinks");
+    const [activeTab, setActiveTab] = useState("bookings");
 
     return (
         <div className={"p-8"}>

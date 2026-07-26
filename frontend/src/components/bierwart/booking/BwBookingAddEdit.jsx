@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-function BwBookingAddEdit({booking, onClose, onSave}) {
+function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
     const [memberId, setMemberId] = useState("");
     const [drinkId, setDrinkId] = useState("");
     const [amountDrink, setAmountDrink] = useState("");
@@ -12,13 +12,13 @@ function BwBookingAddEdit({booking, onClose, onSave}) {
             setDrinkId(booking.drinkId)
             setAmountDrink(booking.amountDrink)
         } else {
-            setMemberId(null)
-            setDrinkId(null)
-            setAmountDrink(null)
+            setMemberId("")
+            setDrinkId("")
+            setAmountDrink("")
         }
     }, [booking]);
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
 
         const savedBwBooking = {
@@ -28,7 +28,7 @@ function BwBookingAddEdit({booking, onClose, onSave}) {
             amountDrink: Number(amountDrink)
         }
 
-        onSave(savedBwBooking)
+        await onSave(savedBwBooking)
         onClose();
     }
 
@@ -45,12 +45,43 @@ function BwBookingAddEdit({booking, onClose, onSave}) {
                     onSubmit={handleSubmit}>
 
                     <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
+                        Mitglied:
+                    </label>
+                    <select
+                        className={"w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 text-gray-800 shadow-sm cursor-pointer hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400"}
+                        value={memberId}
+                            onChange={e => setMemberId(e.target.value)}>
+                        <option value={""}>Bitte Mitglied auswählen</option>
+                        {members.map(member => (
+                            <option key={member.id} value={member.id}>
+                                {member.firstName} {member.lastName}
+                            </option>
+                        ))}
+                    </select>
+
+                    <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
+                        Getränk:
+                    </label>
+                    <select
+                        className={"w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 text-gray-800 shadow-sm cursor-pointer hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400"}
+                        value={drinkId}
+                        onChange={e => setDrinkId(e.target.value)}>
+                        <option value={""}>Bitte Getränk auswählen</option>
+                        {drinks.map(drink => (
+                            <option key={drink.id} value={drink.id}>
+                                {drink.name}
+                            </option>
+                        ))}
+                    </select>
+
+                    <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
                         Anzahl:
                     </label>
                     <input
                         className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
-                        type={"text"}
+                        type={"number"}
                         value={amountDrink}
+                        onChange={event => setAmountDrink(event.target.value)}
                     />
 
                     <div className={"col-span-2 flex justify-end gap-3 mt-2"}>

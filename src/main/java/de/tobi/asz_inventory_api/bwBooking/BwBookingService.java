@@ -13,7 +13,7 @@ public class BwBookingService {
     private final MediaTypeFileExtensionResolver mediaTypeFileExtensionResolver;
     private String filePath;
 
-    public BwBookingService(BwBookingCsvRepository repository, @Value("CSV/bwbookings,csv") String filePath, MediaTypeFileExtensionResolver mediaTypeFileExtensionResolver) {
+    public BwBookingService(BwBookingCsvRepository repository, @Value("CSV/bwbookings.csv") String filePath, MediaTypeFileExtensionResolver mediaTypeFileExtensionResolver) {
         this.repository = repository;
         this.filePath = filePath;
         this.mediaTypeFileExtensionResolver = mediaTypeFileExtensionResolver;
@@ -27,7 +27,7 @@ public class BwBookingService {
         List<BwBooking> bookings = repository.getAllBwBookings(filePath);
 
         long nextId = bookings.stream()
-                .mapToLong(BwBooking::getDrinkId)
+                .mapToLong(BwBooking::getId)
                 .max()
                 .orElse(0) + 1;
 

@@ -27,7 +27,7 @@ function DrinkAddEdit({drink, onClose, onSave}) {
         }
     }, [drink]);
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
 
         const savedDrink = {
@@ -40,7 +40,7 @@ function DrinkAddEdit({drink, onClose, onSave}) {
             totalValue: Number(totalValue)
         }
 
-        onSave(savedDrink)
+        await onSave(savedDrink)
         onClose();
     }
 
@@ -69,7 +69,7 @@ function DrinkAddEdit({drink, onClose, onSave}) {
                     </label>
                     <input
                         className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
-                        type={"text"}
+                        type={"number"}
                         value={purchasePrice}
                         onChange={event => setPurchasePrice(event.target.value)}
                     />
@@ -78,7 +78,7 @@ function DrinkAddEdit({drink, onClose, onSave}) {
                     </label>
                     <input
                         className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
-                        type={"text"}
+                        type={"number"}
                         value={factor}
                         onChange={event => setFactor(event.target.value)}
                     />
@@ -87,7 +87,7 @@ function DrinkAddEdit({drink, onClose, onSave}) {
                     </label>
                     <input
                         className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
-                        type={"text"}
+                        type={"number"}
                         value={amount}
                         onChange={event => setAmount(event.target.value)}
                     />

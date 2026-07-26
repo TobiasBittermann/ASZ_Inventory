@@ -21,7 +21,7 @@ function MemberAddEdit({member, onClose, onSave}) {
         }
     }, [member]);
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
 
         const savedMember = {
@@ -32,7 +32,7 @@ function MemberAddEdit({member, onClose, onSave}) {
             balance: Number(balance)
         }
 
-        onSave(savedMember)
+        await onSave(savedMember)
         onClose();
     }
 
@@ -78,7 +78,7 @@ function MemberAddEdit({member, onClose, onSave}) {
                         </label>
                         <input
                             className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
-                            type={"text"}
+                            type={"number"}
                             value={balance}
                             onChange={(event) => setBalance(event.target.value)}
                         />

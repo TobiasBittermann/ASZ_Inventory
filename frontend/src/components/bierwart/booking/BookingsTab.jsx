@@ -5,13 +5,19 @@ import BwBookingAddEdit from "./BwBookingAddEdit.jsx";
 
 function BwBookingsTab() {
     const [bwBookings, setBwBookings] = useState([]);
+    const [members, setMembers] = useState([])
+    const [drinks, setDrinks] = useState([])
     const [selectedBwBooking, setSelectedBwBooking] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         loadBwBookings();
+        loadMembers();
+        loadDrinks();
     }, [])
 
+
+    //TODO: outsource this part
     async function loadBwBookings() {
         const response = await fetch("http://localhost:8080/bwbookings");
 
@@ -21,6 +27,28 @@ function BwBookingsTab() {
 
         const data = await response.json();
         setBwBookings(data);
+    }
+
+    async function loadMembers() {
+        const response = await fetch("http://localhost:8080/members");
+
+        if (!response.ok) {
+            throw new Error("Loading members failed")
+        }
+
+        const data = await response.json();
+        setMembers(data);
+    }
+
+    async function loadDrinks() {
+        const response = await fetch("http://localhost:8080/drinks");
+
+        if (!response.ok) {
+            throw new Error("Loading drinks failed");
+        }
+
+        const data = await response.json();
+        setDrinks(data);
     }
 
     async function handleSaveBwBooking(booking) {
@@ -67,6 +95,19 @@ function BwBookingsTab() {
         await loadBwBookings();
     }
 
+    function  getMemberName(members, booking){
+        const member = members.find(member => member.id === booking.memberId);
+
+        return member
+            ? `${member.firstName} ${member.lastName}`
+        :"Unbekannt";
+    }
+    function getDrinkName(drinks, booking){
+        const drink = drinks.find(drink => drink.id ===booking.drinkId);
+
+        return drink ? `${drink.name}` : "Unbekannt";
+    }
+
     return (
         <div>
             <h3 className={"text-3xl font-bold text-gray-800 text-center"}>
@@ -86,6 +127,8 @@ function BwBookingsTab() {
                 isModalOpen && (
                     <BwBookingAddEdit
                         booking={selectedBwBooking}
+                        members={members}
+                        drinks={drinks}
                         onClose={() => setIsModalOpen(false)}
                         onSave={handleSaveBwBooking}/>
                 )}
@@ -106,8 +149,8 @@ function BwBookingsTab() {
                     {bwBookings.map(booking => (
                         <tr key={booking.id} className={"hover:bg-gray-50 transition"}>
                             <td className={"px-6 py-3"}>{booking.id}</td>
-                            <td className={"px-6 py-3"}>{booking.memberId}</td>
-                            <td className={"px-6 py-3"}>{booking.drinkId}</td>
+                            <td className={"px-6 py-3"}>{getMemberName(members, booking)}</td>
+                            <td className={"px-6 py-3"}>{getDrinkName(drinks, booking)}</td>
                             <td className={"px-6 py-3"}>{booking.amountDrink}</td>
                             <td>
                                 <button
