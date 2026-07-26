@@ -1,5 +1,7 @@
 package de.tobi.asz_inventory_api.member;
 
+import org.springframework.stereotype.Repository;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,6 +11,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class MemberCsvRepository {
 
     private String getMemberHeader() {
