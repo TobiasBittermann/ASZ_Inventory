@@ -1,9 +1,16 @@
 import {useEffect, useState} from "react";
+/* Declaration out of function because of linter error: ESLint: Error: Cannot access variable before it is declared (react-hooks/immutability)*/
+function getCurrentLocalDateTime(){
+    const now = new Date();
+    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    return local.toISOString().slice(0,16);
+}
 
 function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
     const [memberId, setMemberId] = useState("");
     const [drinkId, setDrinkId] = useState("");
     const [amountDrink, setAmountDrink] = useState("");
+    const [bookingDate, setBookingDate] = useState("")
 
     useEffect(() => {
         if (booking) {
@@ -11,10 +18,12 @@ function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
             setMemberId(booking.memberId)
             setDrinkId(booking.drinkId)
             setAmountDrink(booking.amountDrink)
+            setBookingDate(booking.bookingDate)
         } else {
             setMemberId("")
             setDrinkId("")
             setAmountDrink("")
+            setBookingDate(getCurrentLocalDateTime());
         }
     }, [booking]);
 
@@ -25,7 +34,8 @@ function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
             id: booking ? booking.id : 0,
             memberId: Number(memberId),
             drinkId: Number(drinkId),
-            amountDrink: Number(amountDrink)
+            amountDrink: Number(amountDrink),
+            bookingDate: bookingDate
         }
 
         await onSave(savedBwBooking)
@@ -48,7 +58,7 @@ function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
                         Mitglied:
                     </label>
                     <select
-                        className={"w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 text-gray-800 shadow-sm cursor-pointer hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400"}
+                        className={"w-full border border-gray-300 rounded-xl px-4 py-2 text-gray-800 shadow-sm cursor-pointer hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400"}
                         value={memberId}
                             onChange={e => setMemberId(e.target.value)}>
                         <option value={""}>Bitte Mitglied auswählen</option>
@@ -63,7 +73,7 @@ function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
                         Getränk:
                     </label>
                     <select
-                        className={"w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 text-gray-800 shadow-sm cursor-pointer hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400"}
+                        className={"w-full border border-gray-300 rounded-xl px-4 py-2 text-gray-800 shadow-sm cursor-pointer hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400"}
                         value={drinkId}
                         onChange={e => setDrinkId(e.target.value)}>
                         <option value={""}>Bitte Getränk auswählen</option>
@@ -82,6 +92,17 @@ function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
                         type={"number"}
                         value={amountDrink}
                         onChange={event => setAmountDrink(event.target.value)}
+                    />
+
+                    <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
+                        Buchungsdatum:
+                    </label>
+                    <input
+                        className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
+                        type={"datetime-local"}
+                        value={bookingDate}
+                        onChange={event => setBookingDate(event.target.value)}
+                        disabled
                     />
 
                     <div className={"col-span-2 flex justify-end gap-3 mt-2"}>

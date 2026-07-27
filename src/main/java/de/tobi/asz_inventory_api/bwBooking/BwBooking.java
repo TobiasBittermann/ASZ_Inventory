@@ -1,18 +1,23 @@
 package de.tobi.asz_inventory_api.bwBooking;
 
+import java.time.LocalDateTime;
+
 public class BwBooking {
     public long id;
     public long memberId;
     public long drinkId;
     public int amountDrink;
+    public LocalDateTime bookingDate;
 
-    public BwBooking() {}
+    public BwBooking() {
+    }
 
-    public BwBooking(BwBooking other){
+    public BwBooking(BwBooking other) {
         this.id = other.id;
         this.memberId = other.memberId;
         this.drinkId = other.drinkId;
         this.amountDrink = other.amountDrink;
+        this.bookingDate = other.bookingDate;
     }
 
     public long getId() {
@@ -47,11 +52,20 @@ public class BwBooking {
         this.amountDrink = amountDrink;
     }
 
-    public void updateFrom(BwBooking bwBooking){
+    public LocalDateTime getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(LocalDateTime bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
+    public void updateFrom(BwBooking bwBooking) {
         this.id = bwBooking.id;
         this.memberId = bwBooking.memberId;
         this.drinkId = bwBooking.drinkId;
         this.amountDrink = bwBooking.amountDrink;
+        this.bookingDate = bwBooking.bookingDate;
     }
 }
 

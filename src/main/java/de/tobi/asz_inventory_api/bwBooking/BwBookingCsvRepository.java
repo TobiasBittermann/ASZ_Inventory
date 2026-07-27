@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +70,7 @@ public class BwBookingCsvRepository {
                 booking.setMemberId(Long.parseLong(values[1]));
                 booking.setDrinkId(Long.parseLong(values[2]));
                 booking.setAmountDrink(Integer.parseInt(values[3]));
+                booking.setBookingDate(LocalDateTime.parse(values[4]));
 
                 bookings.add(booking);
             }
@@ -111,7 +113,8 @@ public class BwBookingCsvRepository {
             content.append(booking.getId()).append(",")
                     .append(booking.memberId).append(",")
                     .append(booking.drinkId).append(",")
-                    .append(booking.amountDrink)
+                    .append(booking.amountDrink).append(",")
+                    .append(booking.bookingDate)
                     .append(System.lineSeparator());
         }
 
