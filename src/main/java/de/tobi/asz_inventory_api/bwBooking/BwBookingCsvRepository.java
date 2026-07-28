@@ -84,7 +84,7 @@ public class BwBookingCsvRepository {
 
     public void updateBwBooking(List<BwBooking> bookings, BwBooking updatedBooking) {
         for (BwBooking booking : bookings) {
-            if (booking.getId() == updatedBooking.id) {
+            if (booking.getId() == updatedBooking.getId()) {
                 booking.updateFrom(updatedBooking);
                 return;
             }
@@ -105,16 +105,19 @@ public class BwBookingCsvRepository {
         if (parent != null) {
             Files.createDirectories(parent);
         }
+        if(Files.notExists(path)){
+            Files.createFile(path);
+        }
 
         StringBuilder content = new StringBuilder();
         content.append(getBwBookingsHeader()).append(System.lineSeparator());
 
         for (BwBooking booking: bookings){
             content.append(booking.getId()).append(",")
-                    .append(booking.memberId).append(",")
-                    .append(booking.drinkId).append(",")
-                    .append(booking.amountDrink).append(",")
-                    .append(booking.bookingDate)
+                    .append(booking.getMemberId()).append(",")
+                    .append(booking.getDrinkId()).append(",")
+                    .append(booking.getAmountDrink()).append(",")
+                    .append(booking.getBookingDate())
                     .append(System.lineSeparator());
         }
 

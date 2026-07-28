@@ -29,6 +29,7 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-### Folders
+### Java Project
 CSV/
 .idea/
+.iml

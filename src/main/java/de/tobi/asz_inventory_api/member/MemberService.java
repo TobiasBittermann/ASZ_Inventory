@@ -10,7 +10,7 @@ import java.util.List;
 public class MemberService {
 
     private final MemberCsvRepository repository;
-    private String filePath;
+    private final String filePath;
 
     public MemberService(MemberCsvRepository repository, @Value("CSV/members.csv") String filePath) {
         this.repository = repository;

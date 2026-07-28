@@ -10,13 +10,11 @@ import java.util.List;
 @Service
 public class BwBookingService {
     private final BwBookingCsvRepository repository;
-    private final MediaTypeFileExtensionResolver mediaTypeFileExtensionResolver;
-    private String filePath;
+    private final String filePath;
 
-    public BwBookingService(BwBookingCsvRepository repository, @Value("CSV/bwbookings.csv") String filePath, MediaTypeFileExtensionResolver mediaTypeFileExtensionResolver) {
+    public BwBookingService(BwBookingCsvRepository repository, @Value("CSV/bwbookings.csv") String filePath) {
         this.repository = repository;
         this.filePath = filePath;
-        this.mediaTypeFileExtensionResolver = mediaTypeFileExtensionResolver;
     }
 
     public List<BwBooking> getAllBwBookings() throws IOException {

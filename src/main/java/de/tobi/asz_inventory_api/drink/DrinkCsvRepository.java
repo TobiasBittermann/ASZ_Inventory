@@ -106,6 +106,9 @@ public class DrinkCsvRepository {
         if (parent != null) {
             Files.createDirectories(parent);
         }
+        if(Files.notExists(path)){
+            Files.createFile(path);
+        }
 
         StringBuilder content = new StringBuilder();
         content.append(getDrinksHeader()).append(System.lineSeparator());

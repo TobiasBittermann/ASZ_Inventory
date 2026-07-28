@@ -10,7 +10,7 @@ import java.util.List;
 public class DrinkService {
 
     private final DrinkCsvRepository repository;
-    private String filePath;
+    private final String filePath;
 
     public DrinkService(DrinkCsvRepository repository, @Value("${app.drinks.csv-path}") String filePath){
         this.repository = repository;

@@ -3,11 +3,11 @@ package de.tobi.asz_inventory_api.bwBooking;
 import java.time.LocalDateTime;
 
 public class BwBooking {
-    public long id;
-    public long memberId;
-    public long drinkId;
-    public int amountDrink;
-    public LocalDateTime bookingDate;
+    private long id;
+    private long memberId;
+    private long drinkId;
+    private int amountDrink;
+    private LocalDateTime bookingDate;
 
     public BwBooking() {
     }
