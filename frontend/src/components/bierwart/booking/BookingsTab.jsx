@@ -33,7 +33,7 @@ function BwBookingsTab() {
         const response = await fetch("http://localhost:8080/members");
 
         if (!response.ok) {
-            throw new Error("Loading members failed")
+            throw new Error("Loading members failed");
         }
 
         const data = await response.json();
@@ -102,6 +102,7 @@ function BwBookingsTab() {
             ? `${member.firstName} ${member.lastName}`
         :"Unbekannt";
     }
+
     function getDrinkName(drinks, booking){
         const drink = drinks.find(drink => drink.id ===booking.drinkId);
 

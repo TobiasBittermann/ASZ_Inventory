@@ -1,6 +1,5 @@
 package de.tobi.asz_inventory_api.bwDeposit;
 
-import de.tobi.asz_inventory_api.bwBooking.BwBookingCsvRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -19,7 +18,7 @@ public class BwDepositController {
         return depositService.getAllBwDeposits();
     }
 
-    @PostMapping("/bedeposits")
+    @PostMapping("/bwdeposits")
     public void addBwDeposit(@RequestBody BwDeposit deposit) throws IOException{
         depositService.addBwDeposit(deposit);
     }

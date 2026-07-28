@@ -113,11 +113,12 @@ public class BwDepositCsvRepository {
         content.append(getBwDepositHeader()).append(System.lineSeparator());
 
         for (BwDeposit deposit : deposits){
-            content.append(deposit.getId()).append(";");
-            content.append(deposit.getMemberId()).append(";");
-            content.append(deposit.getDeposit()).append(";");
-            content.append(deposit.getDepositDate()).append(";");
-            content.append(deposit.getDescription()).append(";");
+            content.append(deposit.getId()).append(",");
+            content.append(deposit.getMemberId()).append(",");
+            content.append(deposit.getDeposit()).append(",");
+            content.append(deposit.getDepositDate()).append(",");
+            content.append(deposit.getDescription());
+            content.append(System.lineSeparator());
         }
 
         Files.writeString(path, content.toString());

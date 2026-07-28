@@ -1,6 +1,7 @@
 import {useState} from "react";
 import DrinksTab from "../components/bierwart/drink/DrinksTab.jsx";
 import BookingsTab from "../components/bierwart/booking/BookingsTab.jsx";
+import DepositsTab from "../components/bierwart/deposit/DepositsTab.jsx";
 
 function BierwartPage() {
     const [activeTab, setActiveTab] = useState("bookings");
@@ -29,11 +30,20 @@ function BierwartPage() {
                     onClick={() => setActiveTab("drinks")}>
                     Getränke
                 </button>
+                <button
+                    className={`hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-1 transition 
+                    ${activeTab === "deposits"
+                        ? "bg-green-500 text-white scale-105"
+                        : "bg-green-300 text-black hover:bg-green-500 hover:scale-105"}`}
+                    onClick={() => setActiveTab("deposits")}>
+                    Einzahlungen
+                </button>
             </div>
 
             {/* content */}
             {activeTab === "bookings" && <BookingsTab/>}
             {activeTab === "drinks" && <DrinksTab/>}
+            {activeTab === "deposits" && <DepositsTab/>}
         </div>
 
     )
