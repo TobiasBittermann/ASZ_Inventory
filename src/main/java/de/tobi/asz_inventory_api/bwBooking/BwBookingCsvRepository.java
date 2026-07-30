@@ -71,6 +71,7 @@ public class BwBookingCsvRepository {
                 booking.setDrinkId(Long.parseLong(values[2]));
                 booking.setAmountDrink(Integer.parseInt(values[3]));
                 booking.setBookingDate(LocalDateTime.parse(values[4]));
+                booking.setBookingCost(Double.parseDouble(values[5]));
 
                 bookings.add(booking);
             }
@@ -117,7 +118,8 @@ public class BwBookingCsvRepository {
                     .append(booking.getMemberId()).append(",")
                     .append(booking.getDrinkId()).append(",")
                     .append(booking.getAmountDrink()).append(",")
-                    .append(booking.getBookingDate())
+                    .append(booking.getBookingDate()).append(",")
+                    .append(booking.getBookingCost())
                     .append(System.lineSeparator());
         }
 

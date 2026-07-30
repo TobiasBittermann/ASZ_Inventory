@@ -8,6 +8,7 @@ public class BwBooking {
     private long drinkId;
     private int amountDrink;
     private LocalDateTime bookingDate;
+    private double bookingCost;
 
     public BwBooking() {
     }
@@ -18,6 +19,7 @@ public class BwBooking {
         this.drinkId = other.drinkId;
         this.amountDrink = other.amountDrink;
         this.bookingDate = other.bookingDate;
+        this.bookingCost = other.bookingCost;
     }
 
     public long getId() {
@@ -60,12 +62,21 @@ public class BwBooking {
         this.bookingDate = bookingDate;
     }
 
+    public double getBookingCost() {
+        return bookingCost;
+    }
+
+    public void setBookingCost(double bookingCost) {
+        this.bookingCost = bookingCost;
+    }
+
     public void updateFrom(BwBooking bwBooking) {
         this.id = bwBooking.id;
         this.memberId = bwBooking.memberId;
         this.drinkId = bwBooking.drinkId;
         this.amountDrink = bwBooking.amountDrink;
         this.bookingDate = bwBooking.bookingDate;
+        this.bookingCost = bwBooking.bookingCost;
     }
 }
 

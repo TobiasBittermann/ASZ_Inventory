@@ -119,7 +119,7 @@ function BwDepositsTab() {
                     <tr>
                         <th className={"px-6 py-3"}>Id</th>
                         <th className={"px-6 py-3"}>Mitglied</th>
-                        <th className={"px-6 py-3"}>Einzahlung</th>
+                        <th className={"px-6 py-3"}>Einzahlung in €</th>
                         <th className={"px-6 py-3"}>Buchungsdatum</th>
                         <th className={"px-6 py-3"}>Aktionen</th>
                     </tr>
