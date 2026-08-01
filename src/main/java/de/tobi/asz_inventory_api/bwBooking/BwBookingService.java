@@ -54,8 +54,8 @@ public class BwBookingService {
         repository.addBwBooking(bookings, booking);
         repository.saveBwBooking(filePath, bookings);
 
-        changeBalance(booking, 0, "add");
-        changeAmountDrinks(booking, "add");
+        changeBalance(booking, false);
+        changeAmountDrinks(booking, false);
     }
 
     public void updateBwBooking(long id, BwBooking booking) throws IOException {
@@ -63,11 +63,16 @@ public class BwBookingService {
 
         BwBooking oldBooking = bookings.stream().filter(b -> b.getId() == id).findAny().orElseThrow();
 
+        changeAmountDrinks(oldBooking, true);
+        changeBalance(oldBooking, true);
 
         booking.setId(id);
 
         repository.updateBwBooking(bookings, booking);
         repository.saveBwBooking(filePath, bookings);
+
+        changeAmountDrinks(booking, false);
+        changeBalance(booking, false);
     }
 
     public void deleteBwBooking(long id) throws IOException {
@@ -78,12 +83,12 @@ public class BwBookingService {
         repository.deleteBwBooking(bookings, id);
         repository.saveBwBooking(filePath, bookings);
 
-        changeBalance(booking, 0, "delete");
-        changeAmountDrinks(booking, "delete");
+        changeBalance(booking, true);
+        changeAmountDrinks(booking, true);
     }
 
 
-    private void changeBalance(BwBooking booking, double oldAmountDrinks, String actionType) throws IOException {
+    private void changeBalance(BwBooking booking, boolean x) throws IOException {
         List<Member> members = memberRepository.getAllMembers(memberFilePath);
         List<Drink> drinks = drinkRepository.getAllDrinks(drinkFilePath);
 
@@ -92,15 +97,8 @@ public class BwBookingService {
 
         double price = booking.getBookingCost();
 
-        switch (actionType) {
-            case "add":
-                break;
-            case "update":
-                price = price - (oldAmountDrinks * drink.getSellingPrice());
-                break;
-            case "delete":
-                price = -price;
-                break;
+        if (x){
+            price = -price;
         }
 
         member.setBalance(member.getBalance() - price);
@@ -109,23 +107,16 @@ public class BwBookingService {
         memberRepository.saveMembers(memberFilePath, members);
     }
 
-    private void changeAmountDrinks(BwBooking booking, String actionType) throws IOException {
+    private void changeAmountDrinks(BwBooking booking, boolean x) throws IOException {
         List<Drink> drinks = drinkRepository.getAllDrinks(drinkFilePath);
 
         Drink drink = drinks.stream().filter(d -> d.getId() == booking.getDrinkId()).findAny().orElseThrow();
 
         int amount = booking.getAmountDrink();
 
-        switch (actionType) {
-            case "add":
-                break;
-            case "update":
-                break;
-            case "delete":
-                amount = - amount;
-                break;
+        if (x) {
+            amount = -amount;
         }
-
 
         drink.setAmount(drink.getAmount() - amount);
 
