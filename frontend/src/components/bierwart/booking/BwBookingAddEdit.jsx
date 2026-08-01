@@ -35,7 +35,7 @@ function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
         event.preventDefault();
 
         const selectedDrink = drinks.find(drink => drink.id === Number(drinkId));
-        const bookingCost = Number(amountDrink) * Number(selectedDrink.sellingPrice);
+        const bookingCost = (Number(amountDrink) * Number(selectedDrink.sellingPrice)).toFixed(2);
 
         const savedBwBooking = {
             id: booking ? booking.id : 0,
@@ -110,7 +110,6 @@ function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
                         type={"datetime-local"}
                         value={bookingDate}
                         onChange={event => setBookingDate(event.target.value)}
-                        disabled
                     />
 
                     <div className={"col-span-2 flex justify-end gap-3 mt-2"}>
