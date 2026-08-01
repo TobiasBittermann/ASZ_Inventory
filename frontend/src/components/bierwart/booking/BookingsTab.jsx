@@ -140,10 +140,11 @@ function BwBookingsTab() {
                     <thead className={"bg-gray-200 text-gray-600 uppercase text-xs"}>
                     <tr>
                         <th className={"px-6 py-3"}>Id</th>
+                        <th className={"px-6 py-3"}>Buchungsdatum</th>
                         <th className={"px-6 py-3"}>Mitglied</th>
                         <th className={"px-6 py-3"}>Getränk</th>
                         <th className={"px-6 py-3"}>Anzahl Getränk</th>
-                        <th className={"px-6 py-3"}>Buchungsdatum</th>
+                        <th className={"px-6 py-3"}>Preis</th>
                         <th className={"px-6 py-3"}>Aktionen</th>
                     </tr>
                     </thead>
@@ -151,10 +152,11 @@ function BwBookingsTab() {
                     {bwBookings.map(booking => (
                         <tr key={booking.id} className={"hover:bg-gray-50 transition"}>
                             <td className={"px-6 py-3"}>{booking.id}</td>
+                            <td className={"px-6 py-3"}>{booking.bookingDate}</td>
                             <td className={"px-6 py-3"}>{getMemberName(members, booking)}</td>
                             <td className={"px-6 py-3"}>{getDrinkName(drinks, booking)}</td>
                             <td className={"px-6 py-3"}>{booking.amountDrink}</td>
-                            <td className={"px-6 py-3"}>{booking.bookingDate}</td>
+                            <td className={"px-6 py-3"}>{booking.bookingCost}</td>
                             <td>
                                 <button
                                     className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}

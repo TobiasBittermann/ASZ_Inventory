@@ -3,6 +3,7 @@ package de.tobi.asz_inventory_api.bwBooking;
 import de.tobi.asz_inventory_api.bwDeposit.BwDeposit;
 import de.tobi.asz_inventory_api.drink.Drink;
 import de.tobi.asz_inventory_api.drink.DrinkCsvRepository;
+import de.tobi.asz_inventory_api.drink.DrinkService;
 import de.tobi.asz_inventory_api.member.Member;
 import de.tobi.asz_inventory_api.member.MemberCsvRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,6 +55,7 @@ public class BwBookingService {
         repository.saveBwBooking(filePath, bookings);
 
         changeBalance(booking, 0, "add");
+        changeAmountDrinks(booking, "add");
     }
 
     public void updateBwBooking(long id, BwBooking booking) throws IOException {
@@ -66,20 +68,18 @@ public class BwBookingService {
 
         repository.updateBwBooking(bookings, booking);
         repository.saveBwBooking(filePath, bookings);
-
-        changeBalance(booking, oldBooking.getAmountDrink(), "update");
-
     }
 
     public void deleteBwBooking(long id) throws IOException {
         List<BwBooking> bookings = repository.getAllBwBookings(filePath);
 
+        BwBooking booking = bookings.stream().filter(b -> b.getId() == id).findAny().orElseThrow();
+
         repository.deleteBwBooking(bookings, id);
         repository.saveBwBooking(filePath, bookings);
 
-        BwBooking booking = bookings.stream().filter(b -> b.getId() == id).findAny().orElseThrow();
-        changeBalance(booking,0,"delete");
-
+        changeBalance(booking, 0, "delete");
+        changeAmountDrinks(booking, "delete");
     }
 
 
@@ -90,7 +90,7 @@ public class BwBookingService {
         Member member = members.stream().filter(m -> m.getId() == booking.getMemberId()).findAny().orElseThrow();
         Drink drink = drinks.stream().filter(d -> d.getId() == booking.getDrinkId()).findAny().orElseThrow();
 
-        double price = booking.getAmountDrink() * drink.getSellingPrice();
+        double price = booking.getBookingCost();
 
         switch (actionType) {
             case "add":
@@ -107,5 +107,29 @@ public class BwBookingService {
 
         memberRepository.updateMember(members, member);
         memberRepository.saveMembers(memberFilePath, members);
+    }
+
+    private void changeAmountDrinks(BwBooking booking, String actionType) throws IOException {
+        List<Drink> drinks = drinkRepository.getAllDrinks(drinkFilePath);
+
+        Drink drink = drinks.stream().filter(d -> d.getId() == booking.getDrinkId()).findAny().orElseThrow();
+
+        int amount = booking.getAmountDrink();
+
+        switch (actionType) {
+            case "add":
+                break;
+            case "update":
+                break;
+            case "delete":
+                amount = - amount;
+                break;
+        }
+
+
+        drink.setAmount(drink.getAmount() - amount);
+
+        drinkRepository.updateDrink(drinks, drink);
+        drinkRepository.saveDrinks(drinkFilePath, drinks);
     }
 }

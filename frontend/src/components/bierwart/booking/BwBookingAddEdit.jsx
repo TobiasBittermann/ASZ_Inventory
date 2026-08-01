@@ -1,9 +1,10 @@
 import {useEffect, useState} from "react";
+
 /* Declaration out of function because of linter error: ESLint: Error: Cannot access variable before it is declared (react-hooks/immutability)*/
-function getCurrentLocalDateTime(){
+function getCurrentLocalDateTime() {
     const now = new Date();
     const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-    return local.toISOString().slice(0,16);
+    return local.toISOString().slice(0, 16);
 }
 
 function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
@@ -11,6 +12,7 @@ function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
     const [drinkId, setDrinkId] = useState("");
     const [amountDrink, setAmountDrink] = useState("");
     const [bookingDate, setBookingDate] = useState("")
+    const [bookingCost, setBookingCost] = useState("")
 
     useEffect(() => {
         if (booking) {
@@ -19,23 +21,29 @@ function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
             setDrinkId(booking.drinkId)
             setAmountDrink(booking.amountDrink)
             setBookingDate(booking.bookingDate)
+            setBookingCost(booking.bookingCost)
         } else {
             setMemberId("")
             setDrinkId("")
             setAmountDrink("")
             setBookingDate(getCurrentLocalDateTime());
+            setBookingCost("")
         }
     }, [booking]);
 
     async function handleSubmit(event) {
         event.preventDefault();
 
+        const selectedDrink = drinks.find(drink => drink.id === Number(drinkId));
+        const bookingCost = Number(amountDrink) * Number(selectedDrink.sellingPrice);
+
         const savedBwBooking = {
             id: booking ? booking.id : 0,
             memberId: Number(memberId),
             drinkId: Number(drinkId),
             amountDrink: Number(amountDrink),
-            bookingDate: bookingDate
+            bookingDate: bookingDate,
+            bookingCost: bookingCost
         }
 
         await onSave(savedBwBooking)
@@ -60,7 +68,7 @@ function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
                     <select
                         className={"w-full border border-gray-300 rounded-xl px-4 py-2 text-gray-800 shadow-sm cursor-pointer hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400"}
                         value={memberId}
-                            onChange={e => setMemberId(e.target.value)}>
+                        onChange={e => setMemberId(e.target.value)}>
                         <option value={""}>Bitte Mitglied auswählen</option>
                         {members.map(member => (
                             <option key={member.id} value={member.id}>
