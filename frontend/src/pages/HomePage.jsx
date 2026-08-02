@@ -15,7 +15,7 @@ function HomePage() {
                     Was möchtest du verwalten?
                 </p>
                 <p>
-                    <Link to="/members">
+                    <Link to="/member">
                         <button
                             className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md rounded px-6 py-2 w-48 transition"}>
                             Mitglieder

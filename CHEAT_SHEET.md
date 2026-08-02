@@ -251,6 +251,51 @@ export default HomePage;
 
 ---
 
+## Docker Kurzbefehle
+
+### Images bauen
+
+```bash
+docker build -f Dockerfile.backend -t asz-backend .
+docker build -f Dockerfile.frontend -t asz-frontend .
+```
+
+### Einzelne Container starten
+
+```bash
+docker run --name asz-backend-test -p 8080:8080 asz-backend
+docker run --name asz-frontend-test -p 8081:80 asz-frontend
+```
+
+### Container anzeigen
+
+```bash
+sudo docker ps
+sudo docker ps -a
+sudo docker compose ps
+```
+
+### Container stoppen/löschen
+
+```bash
+docker stop asz-backend-test
+docker stop asz-frontend-test
+docker rm asz-backend-test
+docker rm asz-frontend-test
+docker rm -f asz-frontend-test
+```
+
+### Compose
+
+```bash
+sudo docker compose up --build
+sudo docker compose down
+sudo docker compose logs -f backend
+sudo docker compose logs -f frontend
+```
+
+---
+
 ## 7. Members laden
 
 `MembersPage.jsx`:
@@ -764,4 +809,3 @@ hostname -I
 - schöneres Modal / Styling
 - echtes DataGrid
 - Fehleranzeigen im UI
-

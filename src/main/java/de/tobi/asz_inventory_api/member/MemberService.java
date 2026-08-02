@@ -12,7 +12,7 @@ public class MemberService {
     private final MemberCsvRepository repository;
     private final String filePath;
 
-    public MemberService(MemberCsvRepository repository, @Value("CSV/members.csv") String filePath) {
+    public MemberService(MemberCsvRepository repository, @Value("${app.members.csv-path}") String filePath) {
         this.repository = repository;
         this.filePath = filePath;
     }

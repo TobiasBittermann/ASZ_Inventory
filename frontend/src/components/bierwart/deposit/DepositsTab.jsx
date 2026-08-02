@@ -15,7 +15,7 @@ function BwDepositsTab() {
     }, [])
 
     async function loadBwDeposits() {
-        const response = await fetch("http://localhost:8080/bwdeposits");
+        const response = await fetch("/bwdeposits");
 
         if (!response.ok) {
             throw new Error("Loading deposits failed");
@@ -26,7 +26,7 @@ function BwDepositsTab() {
     }
 
     async function loadMembers() {
-        const response = await fetch("http://localhost:8080/members")
+        const response = await fetch("/members")
 
         if (!response.ok) {
             throw new Error("Loading members failed")
@@ -39,8 +39,8 @@ function BwDepositsTab() {
     async function handleSaveBwDeposit(deposit) {
         const isEditMode = deposit.id && deposit.id > 0;
         const url = isEditMode
-            ? `http://localhost:8080/bwdeposits/${deposit.id}`
-            : "http://localhost:8080/bwdeposits";
+            ? `/bwdeposits/${deposit.id}`
+            : "/bwdeposits";
 
         const method = isEditMode ? "PUT" : "POST";
 
@@ -70,7 +70,7 @@ function BwDepositsTab() {
     }
 
     async function handleDeleteBwDeposit(id) {
-        const response = await fetch(`http://localhost:8080/bwdeposits/${id}`, {
+        const response = await fetch(`/bwdeposits/${id}`, {
             method: "DELETE"
         });
         if (!response.ok) {

@@ -13,7 +13,7 @@ function MembersPage() {
     }, [])
 
     async function loadMembers() {
-        const response = await fetch("http://localhost:8080/members");
+        const response = await fetch("/members");
 
         if (!response.ok) {
             throw new Error("Loading members failed")
@@ -26,8 +26,8 @@ function MembersPage() {
     async function handleSaveMember(member) {
         const isEditMode = member.id && member.id > 0;
         const url = isEditMode
-            ? `http://localhost:8080/members/${member.id}`
-            : "http://localhost:8080/members";
+            ? `/members/${member.id}`
+            : "/members";
 
         const method = isEditMode ? "PUT" : "POST";
 
@@ -57,7 +57,7 @@ function MembersPage() {
     }
 
     async function handleDeleteMember(id) {
-        const response = await fetch(`http://localhost:8080/members/${id}`, {
+        const response = await fetch(`/members/${id}`, {
             method: "DELETE"
         });
         if (!response.ok) {

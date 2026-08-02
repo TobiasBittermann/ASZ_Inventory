@@ -15,7 +15,7 @@ public class BwDepositService {
     private final String filePath;
     private final String memberFilePath;
 
-    public BwDepositService(BwDepositCsvRepository repository, MemberCsvRepository memberCsvRepository, @Value("CSV/deposits.csv") String filePath, @Value("CSV/members.csv") String memberFilePath) {
+    public BwDepositService(BwDepositCsvRepository repository, MemberCsvRepository memberCsvRepository, @Value("${app.bwdeposits.csv-path}") String filePath, @Value("${app.members.csv-path}") String memberFilePath) {
         this.repository = repository;
         this.memberRepository = memberCsvRepository;
         this.filePath = filePath;

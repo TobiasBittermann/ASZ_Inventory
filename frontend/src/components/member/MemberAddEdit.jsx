@@ -85,7 +85,7 @@ function MemberAddEdit({member, onClose, onSave}) {
                     <div className={"col-span-2 flex justify-end gab-3 mt-2"}>
                         <button
                             className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md rounded px-6 py-2 m-1 transition"}
-                            type={"button"} onClick={handleSubmit}>
+                            type={"submit"}>
                             Save
                         </button>
                         <button

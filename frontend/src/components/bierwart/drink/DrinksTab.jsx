@@ -13,7 +13,7 @@ function DrinksTab() {
     }, [])
 
     async function loadDrinks() {
-        const response = await fetch("http://localhost:8080/drinks");
+        const response = await fetch("/drinks");
 
         if(!response.ok){
             throw new Error("Loading drinks failed");
@@ -26,8 +26,8 @@ function DrinksTab() {
     async function handleSaveDrink(drink) {
         const isEditMode = drink.id && drink.id > 0;
         const url = isEditMode
-            ? `http://localhost:8080/drinks/${drink.id}`
-            : "http://localhost:8080/drinks";
+            ? `/drinks/${drink.id}`
+            : "/drinks";
 
         const method = isEditMode ? "PUT" : "POST";
 
@@ -57,7 +57,7 @@ function DrinksTab() {
     }
 
     async function handleDeleteDrink(id) {
-        const response = await fetch(`http://localhost:8080/drinks/${id}`, {
+        const response = await fetch(`/drinks/${id}`, {
             method: "DELETE"
         });
         if (!response.ok) {

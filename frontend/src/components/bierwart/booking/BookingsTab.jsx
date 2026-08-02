@@ -19,7 +19,7 @@ function BwBookingsTab() {
 
     //TODO: outsource this part
     async function loadBwBookings() {
-        const response = await fetch("http://localhost:8080/bwbookings");
+        const response = await fetch("/bwbookings");
 
         if (!response.ok) {
             throw new Error("Loading bookings failed");
@@ -30,7 +30,7 @@ function BwBookingsTab() {
     }
 
     async function loadMembers() {
-        const response = await fetch("http://localhost:8080/members");
+        const response = await fetch("/members");
 
         if (!response.ok) {
             throw new Error("Loading members failed");
@@ -41,7 +41,7 @@ function BwBookingsTab() {
     }
 
     async function loadDrinks() {
-        const response = await fetch("http://localhost:8080/drinks");
+        const response = await fetch("/drinks");
 
         if (!response.ok) {
             throw new Error("Loading drinks failed");
@@ -54,8 +54,8 @@ function BwBookingsTab() {
     async function handleSaveBwBooking(booking) {
         const isEditMode = booking.id && booking.id > 0;
         const url = isEditMode
-            ? `http://localhost:8080/bwbookings/${booking.id}`
-            : "http://localhost:8080/bwbookings";
+            ? `/bwbookings/${booking.id}`
+            : "/bwbookings";
 
         const method = isEditMode ? "PUT" : "POST";
 
@@ -85,7 +85,7 @@ function BwBookingsTab() {
     }
 
     async function handleDeleteBwBooking(id) {
-        const response = await fetch(`http://localhost:8080/bwbookings/${id}`, {
+        const response = await fetch(`/bwbookings/${id}`, {
             method: "DELETE"
         });
         if (!response.ok) {

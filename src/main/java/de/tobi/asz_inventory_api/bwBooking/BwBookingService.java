@@ -26,9 +26,9 @@ public class BwBookingService {
     public BwBookingService(BwBookingCsvRepository repository,
                             MemberCsvRepository memberRepository,
                             DrinkCsvRepository drinkRepository,
-                            @Value("CSV/bwbookings.csv") String filePath,
-                            @Value("CSV/members.csv") String memberFilePath,
-                            @Value("CSV/drinks.csv") String drinkFilePath) {
+                            @Value("${app.bwbookings.csv-path}") String filePath,
+                            @Value("${app.members.csv-path}") String memberFilePath,
+                            @Value("${app.drinks.csv-path}") String drinkFilePath) {
         this.repository = repository;
         this.memberRepository = memberRepository;
         this.drinkRepository = drinkRepository;

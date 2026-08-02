@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    volumes:
+      - ./CSV:/data
+    environment:
+      APP_FRONTEND_ORIGIN: http://localhost:8081
+      APP_MEMBERS_CSV_PATH: /data/members.csv
+      APP_DRINKS_CSV_PATH: /data/drinks.csv
+      APP_BWBOOKINGS_CSV_PATH: /data/bwbookings.csv
+      APP_BWDEPOSITS_CSV_PATH: /data/bwdeposits.csv
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend
