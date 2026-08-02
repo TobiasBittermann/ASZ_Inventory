@@ -2,13 +2,13 @@
 
 ## Zweck dieser Datei
 
-Diese Cheat Sheet soll dir helfen, **ein aehnliches Programm von Grund auf selbst zu bauen**:
+Diese Cheat Sheet soll dir helfen, **ein ähnliches Programm von Grund auf selbst zu bauen**:
 
 - **Backend mit Java + Spring Boot**
 - **Frontend mit React + Vite**
 - **REST-API zwischen Frontend und Backend**
 - **CSV-Dateien als einfache Persistenz**
-- **Docker + Docker Compose fuer Transport und Deployment**
+- **Docker + Docker Compose für Transport und Deployment**
 
 Sie basiert auf der Architektur und den Techniken dieses Projekts.
 
@@ -22,7 +22,7 @@ Sie basiert auf der Architektur und den Techniken dieses Projekts.
 | Editor/IDE | WebStorm / VS Code / IntelliJ | React-Frontend entwickeln |
 | Sprache Backend | Java 17 | API und Business-Logik |
 | Framework Backend | Spring Boot | Webserver, REST, Konfiguration, DI |
-| Build Backend | Maven | Abhaengigkeiten, Build, JAR |
+| Build Backend | Maven | Abhängigkeiten, Build, JAR |
 | Sprache Frontend | JavaScript | UI-Logik |
 | Framework Frontend | React | Komponenten, State, Routing |
 | Dev-Server Frontend | Vite | schnelles lokales Frontend |
@@ -37,7 +37,7 @@ Sie basiert auf der Architektur und den Techniken dieses Projekts.
 
 ## 2. Werkzeuge, die du installiert brauchst
 
-## Fuer lokale Entwicklung
+## Für lokale Entwicklung
 
 ### Backend
 
@@ -54,12 +54,12 @@ Sie basiert auf der Architektur und den Techniken dieses Projekts.
 
 - Git
 
-## Fuer Docker-Betrieb
+## Für Docker-Betrieb
 
 - Docker
 - Docker Compose
 
-Unter Windows normalerweise ueber **Docker Desktop**.  
+Unter Windows normalerweise über **Docker Desktop**.  
 Wichtig: **Docker Desktop muss wirklich laufen** - nur installiert reicht nicht.
 
 ---
@@ -95,15 +95,15 @@ Hier konkret:
 - Header schreiben, wenn Datei leer ist
 
 ### 3. Service
-Enthaelt die **Business-Logik**.
+Enthält die **Business-Logik**.
 
 Beispiele in diesem Projekt:
 
-- naechste freie ID berechnen
+- nächste freie ID berechnen
 - Preise berechnen
 - Gesamtwert berechnen
-- Kontostand eines Members aendern
-- Getraenkebestand bei Buchungen veraendern
+- Kontostand eines Members ändern
+- Getränkebestand bei Buchungen verändern
 
 ### 4. Controller
 Stellt die **HTTP-Endpunkte** bereit.
@@ -123,9 +123,9 @@ Das ist die **REST-API**.
 
 REST bedeutet vereinfacht:
 
-- Daten werden ueber **HTTP-Endpunkte** bereitgestellt
+- Daten werden über **HTTP-Endpunkte** bereitgestellt
 - das Frontend spricht diese Endpunkte per `fetch(...)` an
-- Daten werden meist als **JSON** uebertragen
+- Daten werden meist als **JSON** übertragen
 
 ## Typische HTTP-Methoden
 
@@ -134,7 +134,7 @@ REST bedeutet vereinfacht:
 | GET | Daten lesen |
 | POST | neuen Datensatz anlegen |
 | PUT | bestehenden Datensatz aktualisieren |
-| DELETE | Datensatz loeschen |
+| DELETE | Datensatz löschen |
 
 ## Beispiel
 
@@ -285,7 +285,7 @@ In diesem Projekt ist das Backend ein **Spring Boot Web MVC**-Projekt.
 
 ## 7.2 Model-Klassen anlegen
 
-Eine Model-Klasse ist ein einfacher Datentraeger.
+Eine Model-Klasse ist ein einfacher Datenträger.
 
 ### Typisches Muster
 
@@ -315,7 +315,7 @@ public class Member {
 
 ## 7.3 Repository-Schicht
 
-Das Repository kuemmert sich um Speicherzugriff.
+Das Repository kümmert sich um Speicherzugriff.
 
 In diesem Projekt:
 
@@ -326,11 +326,11 @@ In diesem Projekt:
 
 ## Typisches Vorgehen beim CSV-Ansatz
 
-1. Dateipfad pruefen
+1. Dateipfad prüfen
 2. Datei anlegen, wenn sie fehlt
 3. Header schreiben, wenn sie leer ist
 4. komplette Datei lesen
-5. Liste im Speicher aendern
+5. Liste im Speicher ändern
 6. komplette Datei wieder speichern
 
 ## Wichtig
@@ -338,23 +338,23 @@ In diesem Projekt:
 CSV wird hier **nicht direkt zeilenweise aktualisiert**, sondern:
 
 1. alles laden
-2. im RAM aendern
-3. alles zurueckschreiben
+2. im RAM ändern
+3. alles zurückschreiben
 
-Das ist fuer kleine Tools vollkommen okay.
+Das ist für kleine Tools vollkommen okay.
 
 ---
 
 ## 7.4 Service-Schicht
 
-Die Service-Schicht enthaelt **fachliche Logik**.
+Die Service-Schicht enthält **fachliche Logik**.
 
 ### Beispiele aus diesem Projekt
 
 #### MemberService
 
 - alle Members laden
-- neue ID berechnen
+- neu ID berechnen
 - Member speichern
 
 #### DrinkService
@@ -365,7 +365,7 @@ Die Service-Schicht enthaelt **fachliche Logik**.
 #### BwDepositService
 
 - Einzahlung speichern
-- anschliessend `Member.balance` erhoehen
+- anschliessend `Member.balance` erhöhen
 
 #### BwBookingService
 
@@ -421,7 +421,7 @@ public class MemberController {
 
 ## 7.6 Dependency Injection
 
-Spring erstellt Objekte fuer dich und injiziert sie in Konstruktoren.
+Spring erstellt Objekte für dich und injiziert sie in Konstruktoren.
 
 ### Beispiel
 
@@ -437,7 +437,7 @@ public MemberService(MemberCsvRepository repository,
 
 - Spring kennt das `MemberCsvRepository`, weil es mit `@Repository` markiert ist
 - Spring liest den Property-Wert aus `application.properties`
-- Spring uebergibt beides an den Konstruktor
+- Spring übergibt beides an den Konstruktor
 
 ## Vorteile
 
@@ -469,7 +469,7 @@ Den Wert liest du in Java so:
 @Value("${app.members.csv-path}")
 ```
 
-### Haeufiger Fehler
+### Häufiger Fehler
 
 Falsch:
 
@@ -584,13 +584,13 @@ const data = await response.json();
 setMembers(data);
 ```
 
-### Modal oeffnen
+### Modal öffnen
 
 ```jsx
 const [isModalOpen, setIsModalOpen] = useState(false);
 ```
 
-### Ausgewaehlten Datensatz speichern
+### Ausgewählten Datensatz speichern
 
 ```jsx
 const [selectedMember, setSelectedMember] = useState(null);
@@ -608,8 +608,8 @@ Die Formulare in diesem Projekt sind **controlled components**.
 const [firstName, setFirstName] = useState("");
 
 <input
-  value={firstName}
-  onChange={(event) => setFirstName(event.target.value)}
+  valü={firstName}
+  onChange={(event) => setFirstName(event.target.valü)}
 />
 ```
 
@@ -636,9 +636,9 @@ Dieses Projekt nutzt wiederverwendbare Form-Komponenten wie:
 
 ## Typischer Ablauf
 
-1. Parent-Komponente oeffnet Modal
-2. uebergibt ausgewaehltes Objekt oder `null`
-3. Formular fuellt Felder via `useEffect`
+1. Parent-Komponente öffnet Modal
+2. übergibt ausgewähltes Objekt oder `null`
+3. Formular füllt Felder via `useEffect`
 4. `handleSubmit(...)` baut ein Objekt
 5. `onSave(...)` geht zur Parent-Komponente
 6. Parent sendet Request an Backend
@@ -686,7 +686,7 @@ Das ist das Standardmuster in diesem Projekt.
 
 ---
 
-## 9.7 Vite-Proxy fuer lokale Entwicklung
+## 9.7 Vite-Proxy für lokale Entwicklung
 
 Damit relative API-Calls wie `/members` lokal funktionieren, nutzt dieses Projekt in `vite.config.js`:
 
@@ -703,7 +703,7 @@ server: {
 
 ## Warum?
 
-Damit kann das Frontend lokal auf `localhost:5173` laufen, waehrend Requests intern ans Backend auf `localhost:8080` gehen.
+Damit kann das Frontend lokal auf `localhost:5173` laufen, während Requests intern ans Backend auf `localhost:8080` gehen.
 
 ---
 
@@ -727,7 +727,7 @@ Das Projekt nutzt:
 
 Dieses Projekt ist nicht nur CRUD.
 
-Es enthaelt bereits **abgeleitete Fachlogik**:
+Es enthält bereits **abgeleitete Fachlogik**:
 
 ### Drinks
 
@@ -737,17 +737,17 @@ Es enthaelt bereits **abgeleitete Fachlogik**:
 ### Bookings
 
 - Buchung reduziert Member-Guthaben
-- Buchung reduziert Getraenkebestand
-- Update/Loeschen muss alte Werte rueckgaengig machen
+- Buchung reduziert Getränkebestand
+- Update/Löschen muss alte Werte rückgängig machen
 
 ### Deposits
 
-- Einzahlung erhoeht Member-Guthaben
+- Einzahlung erhöht Member-Guthaben
 - Update muss nur die Differenz verrechnen
 
 ## Wichtige Lektion
 
-Sobald Entitaeten sich gegenseitig beeinflussen, gehoert das in die **Service-Schicht**, nicht in den Controller und nicht ins Frontend.
+Sobald Entitäten sich gegenseitig beeinflussen, gehört das in die **Service-Schicht**, nicht in den Controller und nicht ins Frontend.
 
 ---
 
@@ -759,13 +759,13 @@ Dieses Projekt verwendet bewusst CSV-Dateien.
 
 - sehr einfach
 - leicht lesbar
-- schnell fuer kleine Tools
+- schnell für kleine Tools
 - keine DB-Einrichtung
 
 ## Nachteile
 
 - keine echten Relationen
-- keine Queries
+- keine komplexen Abfragen
 - bei wachsender Datenmenge unpraktisch
 - konkurrierende Schreibzugriffe problematisch
 
@@ -775,15 +775,15 @@ Dieses Projekt verwendet bewusst CSV-Dateien.
 - Lernprojekte
 - sehr einfache Single-User- oder Small-Team-Anwendungen
 
-## Wann spaeter Datenbank?
+## Wann später Datenbank?
 
 Wenn du brauchst:
 
 - Benutzerverwaltung
-- viele Datensaetze
+- viele Datensätze
 - Suchfunktionen
 - parallele Nutzer
-- sichere Datenintegritaet
+- sichere Datenintegrität
 
 Dann ist z. B. PostgreSQL sinnvoller.
 
@@ -816,13 +816,13 @@ npm run dev
 
 ## 14. Docker verstehen
 
-## Was Docker hier loest
+## Was Docker hier löst
 
 - gleiche Laufumgebung auf anderen PCs
-- Java/Node nicht manuell lokal einrichten
+- Java/Node nicht manüll lokal einrichten
 - Frontend und Backend als reproduzierbare Pakete
 
-## Was Docker **nicht automatisch** loest
+## Was Docker **nicht automatisch** löst
 
 - Firewall
 - Netzwerkerreichbarkeit
@@ -839,7 +839,7 @@ npm run dev
 
 Muster:
 
-1. Maven + Java 17 zum Bauen
+1. Maven + Java 17 zum Baün
 2. JAR erzeugen
 3. schlankes Runtime-Image mit JRE
 4. JAR starten
@@ -881,7 +881,7 @@ COPY --from=build /app/dist ...
 
 ## Wichtige Erkenntnis
 
-Im Docker-Betrieb laeuft **nicht `npm run dev`**, sondern das **fertig gebaute Frontend**.
+Im Docker-Betrieb läuft **nicht `npm run dev`**, sondern das **fertig gebaute Frontend**.
 
 ---
 
@@ -900,7 +900,7 @@ location / {
 }
 ```
 
-Das ist wichtig fuer Frontend-Routing.
+Das ist wichtig für Frontend-Routing.
 
 ### API-Proxy
 
@@ -925,12 +925,12 @@ In diesem Projekt:
 - `backend`
 - `frontend`
 
-## Compose uebernimmt
+## Compose übernimmt
 
 - Images bauen
 - Container starten
 - Netzwerk erstellen
-- Service-Namen verfuegbar machen
+- Service-Namen verfügbar machen
 - Volumes mounten
 
 ---
@@ -962,13 +962,13 @@ APP_MEMBERS_CSV_PATH: /data/members.csv
 
 ## Vorteil
 
-Container koennen geloescht werden, die Daten bleiben erhalten.
+Container können gelöscht werden, die Daten bleiben erhalten.
 
 ---
 
 ## 19. Umgebungsvariablen
 
-Spring kann Properties durch Environment Variables ueberschreiben.
+Spring kann Properties durch Environment Variables überschreiben.
 
 ### Mapping-Regel
 
@@ -992,16 +992,16 @@ Du kannst:
 
 - lokal mit `application.properties` arbeiten
 - in Docker andere Werte setzen
-- spaeter auf Servern wieder andere Werte setzen
+- später auf Servern wieder andere Werte setzen
 
 ---
 
 ## 20. CORS im Docker-Setup
 
-Die saubere Loesung dieses Projekts ist:
+Die saubere Lösung dieses Projekts ist:
 
 - CORS wird **im Backend** konfiguriert
-- die erlaubte Frontend-Origin wird ueber `APP_FRONTEND_ORIGIN` gesetzt
+- die erlaubte Frontend-Origin wird über `APP_FRONTEND_ORIGIN` gesetzt
 
 ### Lokal mit Docker
 
@@ -1009,13 +1009,13 @@ Die saubere Loesung dieses Projekts ist:
 APP_FRONTEND_ORIGIN: http://localhost:8081
 ```
 
-### Im LAN ueber einen anderen PC
+### Im LAN über einen anderen PC
 
 ```yaml
 APP_FRONTEND_ORIGIN: http://192.168.x.x:8081
 ```
 
-### Spaeter auf echter Domain
+### Später auf echter Domain
 
 ```yaml
 APP_FRONTEND_ORIGIN: https://app.meine-domain.de
@@ -1036,8 +1036,8 @@ Du erlaubst **nicht die Benutzer-IP**, sondern die **Origin deiner Web-App**.
 
 ## Im LAN
 
-- App laeuft auf einem Rechner
-- andere Geraete greifen ueber `http://<IP>:8081` zu
+- App läuft auf einem Rechner
+- andere Geräte greifen über `http://<IP>:8081` zu
 
 ## Auf Server
 
@@ -1051,7 +1051,7 @@ Dann bleibt CORS einfach.
 
 ---
 
-## 22. Auf einen anderen PC uebertragen
+## 22. Auf einen anderen PC übertragen
 
 ## Was du brauchst
 
@@ -1102,7 +1102,7 @@ docker ps -a
 docker compose ps
 ```
 
-## Container stoppen / loeschen
+## Container stoppen / löschen
 
 ```bash
 docker stop asz-backend-test
@@ -1127,11 +1127,11 @@ docker compose logs -f frontend
 
 - Docker nicht installiert
 - Docker Desktop nicht gestartet
-- Terminal neu oeffnen
+- Terminal neu öffnen
 
 ## `failed to connect to docker api`
 
-- Docker Engine laeuft nicht
+- Docker Engine läuft nicht
 - Docker Desktop noch nicht fertig gestartet
 
 ## `vite: not found` im Frontend-Build
@@ -1145,13 +1145,13 @@ docker compose logs -f frontend
 
 ## Daten werden gelesen, aber nicht gespeichert
 
-Moegliche Ursachen:
+Mögliche Ursachen:
 
 - CORS blockiert POST/PUT/DELETE
 - falsche Save-Buttons
 - Fehler in `fetch(...)`
 - CSV-Pfade falsch
-- Backend-Logs pruefen
+- Backend-Logs prüfen
 
 ## Docker liest leere CSVs statt echter Dateien
 
@@ -1161,7 +1161,7 @@ Moegliche Ursachen:
 
 ---
 
-## 25. Lernreihenfolge fuer aehnliche Projekte
+## 25. Lernreihenfolge für ähnliche Projekte
 
 Wenn du ein neues Verwaltungs-Tool bauen willst, gehe am besten so vor:
 
@@ -1179,7 +1179,7 @@ Wenn du ein neues Verwaltungs-Tool bauen willst, gehe am besten so vor:
 12. **Dockerfiles schreiben**
 13. **Nginx-Proxy schreiben**
 14. **Compose bauen**
-15. **Deployment auf anderem Geraet testen**
+15. **Deployment auf anderem Gerät testen**
 
 ---
 
@@ -1187,11 +1187,11 @@ Wenn du ein neues Verwaltungs-Tool bauen willst, gehe am besten so vor:
 
 ## Backend
 
-- Controller duenn halten
+- Controller dünn halten
 - Business-Logik in Services
 - Speicherlogik in Repositorys
 - Konfiguration nicht hart codieren
-- Abhaengigkeiten per Konstruktor injizieren
+- Abhängigkeiten per Konstruktor injizieren
 
 ## Frontend
 
@@ -1205,7 +1205,7 @@ Wenn du ein neues Verwaltungs-Tool bauen willst, gehe am besten so vor:
 
 - Backend und Frontend getrennt containerisieren
 - Multi-Stage-Builds nutzen
-- Daten ueber Volumes persistent halten
+- Daten über Volumes persistent halten
 - Compose als Hauptstartpunkt nutzen
 
 ---
@@ -1221,7 +1221,7 @@ Mit diesem Projekt hast du bereits folgende Standardverfahren praktisch genutzt:
 - JSON-Kommunikation
 - CRUD
 - Service/Repository-Architektur
-- Konfiguration ueber Properties
+- Konfiguration über Properties
 - Dependency Injection
 - CORS
 - Reverse Proxy
@@ -1230,37 +1230,37 @@ Mit diesem Projekt hast du bereits folgende Standardverfahren praktisch genutzt:
 - persistente Volume-Mounts
 - Deployment auf einen zweiten Rechner
 
-Das ist fuer ein erstes eigenes Full-Stack-Verwaltungstool bereits sehr stark.
+Das ist für ein erstes eigenes Full-Stack-Verwaltungstool bereits sehr stark.
 
 ---
 
-## 28. Naechste sinnvolle Ausbaustufen
+## 28. Nächste sinnvolle Ausbaustufen
 
 Wenn du dein Wissen weiter vertiefen willst, sind diese Schritte sinnvoll:
 
 1. Fehlerbehandlung im Frontend sichtbar machen
 2. Form-Validierung verbessern
-3. Tests einfuehren
+3. Tests einführen
 4. DTOs / Mapper lernen
 5. von CSV auf Datenbank wechseln
-6. Benutzer/Authentifizierung einfuehren
+6. Benutzer/Authentifizierung einführen
 7. echtes Production-Deployment mit Domain + HTTPS
 8. CI/CD lernen
 
 ---
 
-## 29. Merksaetze
+## 29. Merksätze
 
 - **REST ist die Sprache zwischen Frontend und Backend.**
-- **Service enthaelt die Logik, Controller nur die HTTP-Schnittstelle.**
+- **Service enthält die Logik, Controller nur die HTTP-Schnittstelle.**
 - **Repository kapselt den Datenzugriff.**
 - **Relative Frontend-URLs machen Docker und Deployment viel leichter.**
 - **Docker macht Software portabel, aber Netzwerk und CORS musst du trotzdem verstehen.**
-- **Eine Domain ersetzt spaeter nicht die Logik, sondern gibt deiner App nur eine stabile Adresse.**
+- **Eine Domain ersetzt später nicht die Logik, sondern gibt deiner App nur eine stabile Adresse.**
 
 ---
 
-## 30. Mini-Checkliste fuer ein neues Projekt
+## 30. Mini-Checkliste für ein neues Projekt
 
 ### Backend
 
@@ -1277,7 +1277,7 @@ Wenn du dein Wissen weiter vertiefen willst, sind diese Schritte sinnvoll:
 - [ ] Routing
 - [ ] Tabellenansicht
 - [ ] Form-Komponenten
-- [ ] `fetch(...)` fuer CRUD
+- [ ] `fetch(...)` für CRUD
 - [ ] Proxy in Vite
 
 ### Docker
@@ -1286,6 +1286,5 @@ Wenn du dein Wissen weiter vertiefen willst, sind diese Schritte sinnvoll:
 - [ ] `Dockerfile.frontend`
 - [ ] `nginx.conf`
 - [ ] `docker-compose.yml`
-- [ ] Volume fuer Daten
+- [ ] Volume für Daten
 - [ ] CORS-Origin sauber setzen
-
