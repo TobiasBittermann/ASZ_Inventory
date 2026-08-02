@@ -1,134 +1,293 @@
-# ASZ Inventory Cheat Sheet
+# ASZ Management Suite - Cheat Sheet
 
-## Ziel des Projekts
+## Zweck dieser Datei
 
-- **Backend:** Java + Spring Boot
-- **Frontend:** React + Vite
-- **Datenquelle:** `CSV\members.csv`
-- **Funktionalität:** Members anzeigen, hinzufügen, bearbeiten, löschen
+Diese Cheat Sheet soll dir helfen, **ein aehnliches Programm von Grund auf selbst zu bauen**:
+
+- **Backend mit Java + Spring Boot**
+- **Frontend mit React + Vite**
+- **REST-API zwischen Frontend und Backend**
+- **CSV-Dateien als einfache Persistenz**
+- **Docker + Docker Compose fuer Transport und Deployment**
+
+Sie basiert auf der Architektur und den Techniken dieses Projekts.
 
 ---
 
-## Architektur
+## 1. Verwendeter Stack
+
+| Bereich | Technologie | Zweck |
+|---|---|---|
+| IDE | IntelliJ IDEA | Java/Spring entwickeln |
+| Editor/IDE | WebStorm / VS Code / IntelliJ | React-Frontend entwickeln |
+| Sprache Backend | Java 17 | API und Business-Logik |
+| Framework Backend | Spring Boot | Webserver, REST, Konfiguration, DI |
+| Build Backend | Maven | Abhaengigkeiten, Build, JAR |
+| Sprache Frontend | JavaScript | UI-Logik |
+| Framework Frontend | React | Komponenten, State, Routing |
+| Dev-Server Frontend | Vite | schnelles lokales Frontend |
+| Styling | Tailwind CSS | UI-Styling |
+| Routing Frontend | react-router-dom | Seiten im SPA-Frontend |
+| Persistenz | CSV-Dateien | einfache Datenspeicherung ohne Datenbank |
+| Containerisierung | Docker | portable Laufumgebung |
+| Orchestrierung | Docker Compose | mehrere Container zusammen starten |
+| Webserver im Frontend-Container | Nginx | React-Build ausliefern + API weiterleiten |
+
+---
+
+## 2. Werkzeuge, die du installiert brauchst
+
+## Fuer lokale Entwicklung
 
 ### Backend
 
-- `model\Member.java`  
-  Datenmodell
-
-- `repository\MemberCsvRepository.java`  
-  Liest und schreibt die CSV
-
-- `controller\MemberController.java`  
-  Stellt die HTTP-Endpunkte für React bereit
+- Java 17
+- IntelliJ IDEA
+- Maven Wrapper oder Maven lokal
 
 ### Frontend
 
-- `pages\HomePage.jsx`  
-  Startseite
+- Node.js
+- npm
 
-- `pages\MembersPage.jsx`  
-  Members-Tabelle + Button-Logik
+### Versionsverwaltung
 
-- `components\member\MemberAddEdit.jsx`  
-  Gemeinsames Modal für Add und Edit
+- Git
 
----
+## Fuer Docker-Betrieb
 
-## Wichtige Grundideen
+- Docker
+- Docker Compose
 
-### Java
-
-- `String` kann `null` sein
-- `List<Member>` ist nur der Typ, echte Liste mit `new ArrayList<>()`
-- Exceptions:
-  - `catch` = hier behandeln
-  - `throws` = nach oben weitergeben
-
-### Repository
-
-Repository ist **kein Java-Feature**, sondern ein Pattern.
-
-Es kapselt den Datenzugriff:
-
-- laden
-- speichern
-- add
-- update
-- delete
-
-### CSV-Ansatz
-
-CSV wird nicht sauber "in place" bearbeitet. Normaler Weg:
-
-1. alles laden
-2. Liste im Speicher ändern
-3. komplette Datei neu speichern
+Unter Windows normalerweise ueber **Docker Desktop**.  
+Wichtig: **Docker Desktop muss wirklich laufen** - nur installiert reicht nicht.
 
 ---
 
-## Projektstruktur
+## 3. Grundidee der Architektur
 
-```text
-ASZ_Inventory
-├─ CSV
-│  └─ members.csv
-├─ frontend
-│  ├─ package.json
-│  └─ src
-│     ├─ components
-│     │  └─ member
-│     │     └─ MemberAddEdit.jsx
-│     ├─ pages
-│     │  ├─ HomePage.jsx
-│     │  └─ MembersPage.jsx
-│     ├─ App.jsx
-│     └─ main.jsx
-├─ pom.xml
-└─ src
-   └─ main
-      ├─ java
-      │  └─ de\tobi\asz_inventory_api
-      │     ├─ AszInventoryApiApplication.java
-      │     ├─ controller
-      │     │  └─ MemberController.java
-      │     ├─ model
-      │     │  └─ Member.java
-      │     └─ repository
-      │        └─ MemberCsvRepository.java
-      └─ resources
-         └─ application.properties
+Dieses Projekt ist eine **klassische 3-Schichten-Anwendung** im Backend plus **SPA-Frontend**.
+
+## Backend-Schichten
+
+### 1. Model
+Reine Datenobjekte, z. B.:
+
+- `Member`
+- `Drink`
+- `BwBooking`
+- `BwDeposit`
+
+Diese Klassen beschreiben nur Daten:
+
+- Attribute
+- Getter/Setter
+- evtl. `updateFrom(...)`
+
+### 2. Repository
+Kapselt den Datenzugriff.
+
+Hier konkret:
+
+- CSV-Datei lesen
+- CSV-Datei schreiben
+- Datei anlegen, wenn sie fehlt
+- Header schreiben, wenn Datei leer ist
+
+### 3. Service
+Enthaelt die **Business-Logik**.
+
+Beispiele in diesem Projekt:
+
+- naechste freie ID berechnen
+- Preise berechnen
+- Gesamtwert berechnen
+- Kontostand eines Members aendern
+- Getraenkebestand bei Buchungen veraendern
+
+### 4. Controller
+Stellt die **HTTP-Endpunkte** bereit.
+
+Beispiele:
+
+- `GET /members`
+- `POST /members`
+- `PUT /members/{id}`
+- `DELETE /members/{id}`
+
+Das ist die **REST-API**.
+
+---
+
+## 4. Was ist eine REST-API?
+
+REST bedeutet vereinfacht:
+
+- Daten werden ueber **HTTP-Endpunkte** bereitgestellt
+- das Frontend spricht diese Endpunkte per `fetch(...)` an
+- Daten werden meist als **JSON** uebertragen
+
+## Typische HTTP-Methoden
+
+| Methode | Zweck |
+|---|---|
+| GET | Daten lesen |
+| POST | neuen Datensatz anlegen |
+| PUT | bestehenden Datensatz aktualisieren |
+| DELETE | Datensatz loeschen |
+
+## Beispiel
+
+### Members lesen
+
+```http
+GET /members
+```
+
+Antwort:
+
+```json
+[
+  {
+    "id": 1,
+    "firstName": "Tobias",
+    "lastName": "Bittermann",
+    "email": "tobi@example.com",
+    "balance": 50.0
+  }
+]
+```
+
+### Neues Member anlegen
+
+```http
+POST /members
+Content-Type: application/json
+```
+
+```json
+{
+  "firstName": "Max",
+  "lastName": "Mustermann",
+  "email": "max@example.com",
+  "balance": 10.0
+}
 ```
 
 ---
 
-## Neues Projekt Schritt für Schritt
+## 5. Projektstruktur - Denkmodell
 
-## 1. Spring Boot Backend anlegen
+Die konkrete Ordnerstruktur kann variieren, aber dieses Muster ist sehr gut:
 
-Mit `start.spring.io`:
+```text
+repo-root/
+├─ CSV/
+│  ├─ members.csv
+│  ├─ drinks.csv
+│  ├─ bwbookings.csv
+│  └─ bwdeposits.csv
+├─ frontend/
+│  ├─ package.json
+│  ├─ vite.config.js
+│  └─ src/
+│     ├─ components/
+│     ├─ pages/
+│     ├─ App.jsx
+│     └─ main.jsx
+├─ src/
+│  └─ main/
+│     ├─ java/
+│     │  └─ de/tobi/asz_inventory_api/
+│     │     ├─ config/
+│     │     ├─ member/
+│     │     ├─ drink/
+│     │     ├─ bwBooking/
+│     │     ├─ bwDeposit/
+│     │     └─ AszInventoryApiApplication.java
+│     └─ resources/
+│        └─ application.properties
+├─ pom.xml
+├─ Dockerfile.backend
+├─ Dockerfile.frontend
+├─ docker-compose.yml
+└─ nginx.conf
+```
+
+---
+
+## 6. Datenmodell zuerst planen
+
+Bevor du Code schreibst, plane zuerst:
+
+1. Welche Objekte gibt es?
+2. Welche Attribute haben sie?
+3. Welche Beziehungen haben sie?
+4. Welche Regeln gibt es?
+
+## In diesem Projekt
+
+### Member
+
+- `id`
+- `firstName`
+- `lastName`
+- `email`
+- `balance`
+
+### Drink
+
+- `id`
+- `name`
+- `purchasePrice`
+- `sellingPrice`
+- `factor`
+- `amount`
+- `totalValue`
+
+### BwBooking
+
+- `id`
+- `memberId`
+- `drinkId`
+- `amountDrink`
+- `bookingDate`
+- `bookingCost`
+
+### BwDeposit
+
+- `id`
+- `memberId`
+- `deposit`
+- `depositDate`
+- `description`
+
+## Wichtige Regel
+
+**Erst Datenmodell und Fachlogik verstehen, dann UI bauen.**
+
+---
+
+## 7. Backend von Grund auf bauen
+
+## 7.1 Spring Boot Projekt anlegen
+
+Uebliche Wahl:
 
 - Project: **Maven**
 - Language: **Java**
+- Java Version: **17**
 - Dependency: **Spring Web**
-- Java: **17+**
 
-Wichtig:
-
-- `src\main\java` muss **Source Root** sein
-- Package-Namen ohne `main.java...`
-
-Beispiel:
-
-```java
-package de.tobi.asz_inventory_api;
-```
+In diesem Projekt ist das Backend ein **Spring Boot Web MVC**-Projekt.
 
 ---
 
-## 2. Model anlegen
+## 7.2 Model-Klassen anlegen
 
-Beispiel:
+Eine Model-Klasse ist ein einfacher Datentraeger.
+
+### Typisches Muster
 
 ```java
 public class Member {
@@ -137,675 +296,996 @@ public class Member {
     private String lastName;
     private String email;
     private double balance;
+
+    public Member() {}
+
+    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
 }
 ```
 
-Dazu Getter und Setter.
+### Gute Praxis
+
+- leeren Konstruktor haben
+- Getter/Setter sauber schreiben
+- `updateFrom(...)` kann hilfreich sein
+- Logik nicht in die DTO/Model-Klasse stopfen
 
 ---
 
-## 3. CSV-Repository bauen
+## 7.3 Repository-Schicht
 
-Aufgaben:
+Das Repository kuemmert sich um Speicherzugriff.
 
-- Datei anlegen, falls sie fehlt
-- Header schreiben
-- Members aus CSV lesen
-- Liste wieder in CSV speichern
+In diesem Projekt:
 
-Wichtige Methoden:
+- `MemberCsvRepository`
+- `DrinkCsvRepository`
+- `BwBookingCsvRepository`
+- `BwDepositCsvRepository`
+
+## Typisches Vorgehen beim CSV-Ansatz
+
+1. Dateipfad pruefen
+2. Datei anlegen, wenn sie fehlt
+3. Header schreiben, wenn sie leer ist
+4. komplette Datei lesen
+5. Liste im Speicher aendern
+6. komplette Datei wieder speichern
+
+## Wichtig
+
+CSV wird hier **nicht direkt zeilenweise aktualisiert**, sondern:
+
+1. alles laden
+2. im RAM aendern
+3. alles zurueckschreiben
+
+Das ist fuer kleine Tools vollkommen okay.
+
+---
+
+## 7.4 Service-Schicht
+
+Die Service-Schicht enthaelt **fachliche Logik**.
+
+### Beispiele aus diesem Projekt
+
+#### MemberService
+
+- alle Members laden
+- neue ID berechnen
+- Member speichern
+
+#### DrinkService
+
+- `sellingPrice = purchasePrice * factor`
+- `totalValue = purchasePrice * amount`
+
+#### BwDepositService
+
+- Einzahlung speichern
+- anschliessend `Member.balance` erhoehen
+
+#### BwBookingService
+
+- Buchung speichern
+- `Member.balance` reduzieren
+- `Drink.amount` reduzieren
+
+## Gute Regel
+
+**Controller = HTTP**
+  
+**Repository = Speicher**
+  
+**Service = Fachlogik**
+
+---
+
+## 7.5 Controller-Schicht
+
+Ein Controller nimmt HTTP-Requests an und ruft Services auf.
+
+### Beispiel
 
 ```java
-public List<Member> getAllMembers(String filePath) throws IOException
-public void addMember(List<Member> members, Member member)
-public void updateMember(List<Member> members, Member updatedMember)
-public void deleteMember(List<Member> members, long id)
-public void saveMembers(String filePath, List<Member> members) throws IOException
+@RestController
+public class MemberController {
+
+    @GetMapping("/members")
+    public List<Member> getAllMembers() throws IOException {
+        ...
+    }
+
+    @PostMapping("/members")
+    public void addMember(@RequestBody Member member) throws IOException {
+        ...
+    }
+}
+```
+
+## Typische Annotationen
+
+| Annotation | Bedeutung |
+|---|---|
+| `@RestController` | Klasse liefert JSON/HTTP-Antworten |
+| `@GetMapping` | GET-Endpunkt |
+| `@PostMapping` | POST-Endpunkt |
+| `@PutMapping` | PUT-Endpunkt |
+| `@DeleteMapping` | DELETE-Endpunkt |
+| `@PathVariable` | Wert aus URL lesen |
+| `@RequestBody` | JSON aus Request lesen |
+
+---
+
+## 7.6 Dependency Injection
+
+Spring erstellt Objekte fuer dich und injiziert sie in Konstruktoren.
+
+### Beispiel
+
+```java
+public MemberService(MemberCsvRepository repository,
+                     @Value("${app.members.csv-path}") String filePath) {
+    this.repository = repository;
+    this.filePath = filePath;
+}
+```
+
+## Was hier passiert
+
+- Spring kennt das `MemberCsvRepository`, weil es mit `@Repository` markiert ist
+- Spring liest den Property-Wert aus `application.properties`
+- Spring uebergibt beides an den Konstruktor
+
+## Vorteile
+
+- weniger `new ...`
+- Konfiguration zentral
+- besser testbar
+
+---
+
+## 7.7 Konfiguration mit `application.properties`
+
+In diesem Projekt werden dort u. a. konfiguriert:
+
+- CORS-Origin
+- CSV-Dateipfade
+
+### Beispiel
+
+```properties
+app.frontend.origin=http://localhost:5173
+app.members.csv-path=CSV/members.csv
+```
+
+## Wichtig
+
+Den Wert liest du in Java so:
+
+```java
+@Value("${app.members.csv-path}")
+```
+
+### Haeufiger Fehler
+
+Falsch:
+
+```java
+@Value("{app.members.csv-path}")
+```
+
+Richtig:
+
+```java
+@Value("${app.members.csv-path}")
 ```
 
 ---
 
-## 4. Spring Controller bauen
+## 8. CORS verstehen
 
-Der Controller ist die HTTP-Schnittstelle für React.
+CORS betrifft Browser-Sicherheit.
 
-Typische Endpunkte:
+Wenn Frontend und Backend auf **verschiedenen Origins** laufen, braucht das Backend eine Erlaubnis.
+
+## Beispiel lokal
+
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:8080`
+
+Das ist **Cross-Origin**.
+
+Darum gibt es in diesem Projekt:
 
 ```java
-@GetMapping("/members")
-@PostMapping("/members")
-@PutMapping("/members/{id}")
-@DeleteMapping("/members/{id}")
+registry.addMapping("/**")
+        .allowedOrigins(frontendOrigin)
+        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
 ```
 
-Wichtig für React:
+## Wichtig
 
-```java
-@CrossOrigin(origins = "http://localhost:5173")
-```
-
-Wenn CORS zickt: **Backend neu starten**.
+CORS ist **kein Docker-Thema**, sondern ein **Browser-Thema**.
 
 ---
 
-## 5. React Frontend anlegen
+## 9. Frontend von Grund auf bauen
 
-Node.js installieren, dann:
+## 9.1 React + Vite anlegen
 
-```powershell
+```bash
 npm create vite@latest frontend
 cd frontend
 npm install
 npm run dev
 ```
 
-Zusätzlich:
+## Was ist Vite?
 
-```powershell
-npm install react-router-dom
+Vite ist nicht React selbst, sondern:
+
+- Dev-Server
+- Build-Tool
+- schneller Frontend-Builder
+
+**React** baut die UI.  
+**Vite** startet und baut das Frontend.
+
+---
+
+## 9.2 Routing im Frontend
+
+In diesem Projekt wird `react-router-dom` verwendet.
+
+### Grundmuster
+
+```jsx
+<BrowserRouter>
+  <Routes>
+    <Route path="/" element={<HomePage />} />
+    <Route path="/member" element={<MembersPage />} />
+    <Route path="/bierwart" element={<BierwartPage />} />
+  </Routes>
+</BrowserRouter>
+```
+
+## Merke
+
+- `Route path=...` definiert Seiten
+- `Link to=...` navigiert im Frontend
+- API-Pfade wie `/members` sind etwas **anderes** als Seiten wie `/member`
+
+---
+
+## 9.3 React-Grundmuster in diesem Projekt
+
+### State
+
+```jsx
+const [members, setMembers] = useState([]);
+```
+
+### Daten beim Laden holen
+
+```jsx
+useEffect(() => {
+    loadMembers();
+}, []);
+```
+
+### API-Aufruf
+
+```jsx
+const response = await fetch("/members");
+const data = await response.json();
+setMembers(data);
+```
+
+### Modal oeffnen
+
+```jsx
+const [isModalOpen, setIsModalOpen] = useState(false);
+```
+
+### Ausgewaehlten Datensatz speichern
+
+```jsx
+const [selectedMember, setSelectedMember] = useState(null);
 ```
 
 ---
 
-## 6. Routing einrichten
+## 9.4 Controlled Components
 
-`App.jsx`:
+Die Formulare in diesem Projekt sind **controlled components**.
 
-```jsx
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import MembersPage from "./pages/MembersPage";
-
-function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/members" element={<MembersPage />} />
-      </Routes>
-    </BrowserRouter>
-  );
-}
-
-export default App;
-```
-
-`HomePage.jsx`:
+### Beispiel
 
 ```jsx
-import { Link } from "react-router-dom";
+const [firstName, setFirstName] = useState("");
 
-function HomePage() {
-  return (
-    <div>
-      <p>Hello friend!</p>
-      <Link to="/members">
-        <button type="button">Members</button>
-      </Link>
-    </div>
-  );
-}
-
-export default HomePage;
+<input
+  value={firstName}
+  onChange={(event) => setFirstName(event.target.value)}
+/>
 ```
+
+## Vorteil
+
+React kontrolliert den Formwert.  
+Dadurch kannst du:
+
+- Werte initial setzen
+- editieren
+- validieren
+- beim Submit gesammelt senden
 
 ---
 
-## Docker Kurzbefehle
+## 9.5 Add/Edit-Modal-Muster
 
-### Images bauen
+Dieses Projekt nutzt wiederverwendbare Form-Komponenten wie:
+
+- `MemberAddEdit`
+- `DrinkAddEdit`
+- `BwBookingAddEdit`
+- `BwDepositAddEdit`
+
+## Typischer Ablauf
+
+1. Parent-Komponente oeffnet Modal
+2. uebergibt ausgewaehltes Objekt oder `null`
+3. Formular fuellt Felder via `useEffect`
+4. `handleSubmit(...)` baut ein Objekt
+5. `onSave(...)` geht zur Parent-Komponente
+6. Parent sendet Request an Backend
+7. Liste wird neu geladen
+
+---
+
+## 9.6 CRUD-Fluss im Frontend
+
+### Create
+
+```jsx
+fetch("/members", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(member)
+});
+```
+
+### Update
+
+```jsx
+fetch(`/members/${member.id}`, {
+  method: "PUT",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(member)
+});
+```
+
+### Delete
+
+```jsx
+fetch(`/members/${id}`, {
+  method: "DELETE"
+});
+```
+
+### Danach
+
+```jsx
+await loadMembers();
+```
+
+Das ist das Standardmuster in diesem Projekt.
+
+---
+
+## 9.7 Vite-Proxy fuer lokale Entwicklung
+
+Damit relative API-Calls wie `/members` lokal funktionieren, nutzt dieses Projekt in `vite.config.js`:
+
+```js
+server: {
+  proxy: {
+    "/members": "http://localhost:8080",
+    "/drinks": "http://localhost:8080",
+    "/bwbookings": "http://localhost:8080",
+    "/bwdeposits": "http://localhost:8080",
+  }
+}
+```
+
+## Warum?
+
+Damit kann das Frontend lokal auf `localhost:5173` laufen, waehrend Requests intern ans Backend auf `localhost:8080` gehen.
+
+---
+
+## 10. Styling
+
+Das Projekt nutzt:
+
+- Tailwind CSS
+- React Icons
+- React Tooltip
+
+## Was du daraus lernen solltest
+
+- Styling lieber komponentennah halten
+- wiederkehrende Button-Muster erkennen
+- UI verbessern, ohne die Logik zu vermischen
+
+---
+
+## 11. Fachlogik in diesem Projekt
+
+Dieses Projekt ist nicht nur CRUD.
+
+Es enthaelt bereits **abgeleitete Fachlogik**:
+
+### Drinks
+
+- Verkaufspreis wird berechnet
+- Gesamtwert wird berechnet
+
+### Bookings
+
+- Buchung reduziert Member-Guthaben
+- Buchung reduziert Getraenkebestand
+- Update/Loeschen muss alte Werte rueckgaengig machen
+
+### Deposits
+
+- Einzahlung erhoeht Member-Guthaben
+- Update muss nur die Differenz verrechnen
+
+## Wichtige Lektion
+
+Sobald Entitaeten sich gegenseitig beeinflussen, gehoert das in die **Service-Schicht**, nicht in den Controller und nicht ins Frontend.
+
+---
+
+## 12. CSV statt Datenbank
+
+Dieses Projekt verwendet bewusst CSV-Dateien.
+
+## Vorteile
+
+- sehr einfach
+- leicht lesbar
+- schnell fuer kleine Tools
+- keine DB-Einrichtung
+
+## Nachteile
+
+- keine echten Relationen
+- keine Queries
+- bei wachsender Datenmenge unpraktisch
+- konkurrierende Schreibzugriffe problematisch
+
+## Wann okay?
+
+- kleine interne Tools
+- Lernprojekte
+- sehr einfache Single-User- oder Small-Team-Anwendungen
+
+## Wann spaeter Datenbank?
+
+Wenn du brauchst:
+
+- Benutzerverwaltung
+- viele Datensaetze
+- Suchfunktionen
+- parallele Nutzer
+- sichere Datenintegritaet
+
+Dann ist z. B. PostgreSQL sinnvoller.
+
+---
+
+## 13. Lokaler Entwicklungsablauf
+
+## Backend starten
+
+In IntelliJ oder per Maven:
+
+```bash
+mvn spring-boot:run
+```
+
+## Frontend starten
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## Dann
+
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:8080`
+
+---
+
+## 14. Docker verstehen
+
+## Was Docker hier loest
+
+- gleiche Laufumgebung auf anderen PCs
+- Java/Node nicht manuell lokal einrichten
+- Frontend und Backend als reproduzierbare Pakete
+
+## Was Docker **nicht automatisch** loest
+
+- Firewall
+- Netzwerkerreichbarkeit
+- Domain
+- Browser-CORS-Verhalten
+
+---
+
+## 15. Dockerfiles in diesem Projekt
+
+## Backend
+
+`Dockerfile.backend`
+
+Muster:
+
+1. Maven + Java 17 zum Bauen
+2. JAR erzeugen
+3. schlankes Runtime-Image mit JRE
+4. JAR starten
+
+### Prinzip
+
+```dockerfile
+FROM maven:... AS build
+...
+RUN mvn clean package -DskipTests
+
+FROM eclipse-temurin:17-jre
+COPY --from=build ...
+CMD ["java", "-jar", "app.jar"]
+```
+
+## Frontend
+
+`Dockerfile.frontend`
+
+Muster:
+
+1. Node-Image zum Build
+2. `npm install`
+3. `npm run build`
+4. fertiges `dist/` in Nginx-Image kopieren
+
+### Prinzip
+
+```dockerfile
+FROM node:... AS build
+...
+RUN npm run build
+
+FROM nginx:alpine
+COPY nginx.conf ...
+COPY --from=build /app/dist ...
+```
+
+## Wichtige Erkenntnis
+
+Im Docker-Betrieb laeuft **nicht `npm run dev`**, sondern das **fertig gebaute Frontend**.
+
+---
+
+## 16. Nginx im Frontend-Container
+
+Nginx hat hier zwei Aufgaben:
+
+1. React-Build ausliefern
+2. API-Requests ans Backend weiterleiten
+
+### React-Fallback
+
+```nginx
+location / {
+    try_files $uri $uri/ /index.html;
+}
+```
+
+Das ist wichtig fuer Frontend-Routing.
+
+### API-Proxy
+
+```nginx
+location /members {
+    proxy_pass http://backend:8080;
+}
+```
+
+## Warum `backend`?
+
+Weil Docker Compose einen internen Service-Namen bereitstellt.
+
+---
+
+## 17. Docker Compose
+
+Compose startet **mehrere Container als Gesamtsystem**.
+
+In diesem Projekt:
+
+- `backend`
+- `frontend`
+
+## Compose uebernimmt
+
+- Images bauen
+- Container starten
+- Netzwerk erstellen
+- Service-Namen verfuegbar machen
+- Volumes mounten
+
+---
+
+## 18. Persistente Daten mit Volumes
+
+In Compose:
+
+```yaml
+volumes:
+  - ./CSV:/data
+```
+
+## Bedeutung
+
+- links: Ordner auf deinem Rechner
+- rechts: Ordner **im Container**
+
+Also:
+
+- Host: `./CSV`
+- Container: `/data`
+
+Die Umgebungsvariablen zeigen dann auf:
+
+```yaml
+APP_MEMBERS_CSV_PATH: /data/members.csv
+```
+
+## Vorteil
+
+Container koennen geloescht werden, die Daten bleiben erhalten.
+
+---
+
+## 19. Umgebungsvariablen
+
+Spring kann Properties durch Environment Variables ueberschreiben.
+
+### Mapping-Regel
+
+`app.members.csv-path`
+
+wird zu:
+
+`APP_MEMBERS_CSV_PATH`
+
+### In Compose
+
+```yaml
+environment:
+  APP_FRONTEND_ORIGIN: http://localhost:8081
+  APP_MEMBERS_CSV_PATH: /data/members.csv
+```
+
+## Vorteil
+
+Du kannst:
+
+- lokal mit `application.properties` arbeiten
+- in Docker andere Werte setzen
+- spaeter auf Servern wieder andere Werte setzen
+
+---
+
+## 20. CORS im Docker-Setup
+
+Die saubere Loesung dieses Projekts ist:
+
+- CORS wird **im Backend** konfiguriert
+- die erlaubte Frontend-Origin wird ueber `APP_FRONTEND_ORIGIN` gesetzt
+
+### Lokal mit Docker
+
+```yaml
+APP_FRONTEND_ORIGIN: http://localhost:8081
+```
+
+### Im LAN ueber einen anderen PC
+
+```yaml
+APP_FRONTEND_ORIGIN: http://192.168.x.x:8081
+```
+
+### Spaeter auf echter Domain
+
+```yaml
+APP_FRONTEND_ORIGIN: https://app.meine-domain.de
+```
+
+## Wichtige Lektion
+
+Du erlaubst **nicht die Benutzer-IP**, sondern die **Origin deiner Web-App**.
+
+---
+
+## 21. Deployment-Denkweise
+
+## Lokal
+
+- Frontend: `localhost:5173` oder `localhost:8081`
+- Backend: `localhost:8080`
+
+## Im LAN
+
+- App laeuft auf einem Rechner
+- andere Geraete greifen ueber `http://<IP>:8081` zu
+
+## Auf Server
+
+Am besten:
+
+- eine feste Domain
+- Frontend und API unter derselben Domain
+- Nginx liefert Frontend aus und proxyt intern ans Backend
+
+Dann bleibt CORS einfach.
+
+---
+
+## 22. Auf einen anderen PC uebertragen
+
+## Was du brauchst
+
+- komplettes Repo
+- Docker
+- Docker Compose
+
+## Wege
+
+- Git clone
+- ZIP
+- USB
+
+## Dann
+
+```bash
+docker compose up --build
+```
+
+Unter Windows:
+
+- Docker Desktop muss laufen
+- erst dann funktionieren `docker`-Befehle
+
+---
+
+## 23. Wichtige Docker-Befehle
+
+## Images bauen
 
 ```bash
 docker build -f Dockerfile.backend -t asz-backend .
 docker build -f Dockerfile.frontend -t asz-frontend .
 ```
 
-### Einzelne Container starten
+## Einzelne Container testen
 
 ```bash
 docker run --name asz-backend-test -p 8080:8080 asz-backend
 docker run --name asz-frontend-test -p 8081:80 asz-frontend
 ```
 
-### Container anzeigen
+## Container anzeigen
 
 ```bash
-sudo docker ps
-sudo docker ps -a
-sudo docker compose ps
+docker ps
+docker ps -a
+docker compose ps
 ```
 
-### Container stoppen/löschen
+## Container stoppen / loeschen
 
 ```bash
 docker stop asz-backend-test
-docker stop asz-frontend-test
 docker rm asz-backend-test
-docker rm asz-frontend-test
 docker rm -f asz-frontend-test
 ```
 
-### Compose
+## Compose
 
 ```bash
-sudo docker compose up --build
-sudo docker compose down
-sudo docker compose logs -f backend
-sudo docker compose logs -f frontend
+docker compose up --build
+docker compose down
+docker compose logs -f backend
+docker compose logs -f frontend
 ```
 
 ---
 
-## 7. Members laden
+## 24. Typische Fehler und ihre Bedeutung
 
-`MembersPage.jsx`:
+## `docker command not found`
 
-```jsx
-const [members, setMembers] = useState([]);
+- Docker nicht installiert
+- Docker Desktop nicht gestartet
+- Terminal neu oeffnen
 
-function loadMembers() {
-  fetch("http://localhost:8080/members")
-    .then((response) => response.json())
-    .then((data) => setMembers(data));
-}
+## `failed to connect to docker api`
 
-useEffect(() => {
-  loadMembers();
-}, []);
-```
+- Docker Engine laeuft nicht
+- Docker Desktop noch nicht fertig gestartet
 
----
+## `vite: not found` im Frontend-Build
 
-## 8. Tabelle anzeigen
+- `npm install` im Dockerfile vergessen
 
-```jsx
-<table>
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Vorname</th>
-      <th>Nachname</th>
-      <th>E-Mail</th>
-      <th>Kontostand</th>
-    </tr>
-  </thead>
-  <tbody>
-    {members.map((member) => (
-      <tr key={member.id}>
-        <td>{member.id}</td>
-        <td>{member.firstName}</td>
-        <td>{member.lastName}</td>
-        <td>{member.email}</td>
-        <td>{member.balance}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-```
+## `rewrite or internal redirection cycle`
+
+- `nginx.conf` falsch
+- z. B. falscher `root`-Pfad
+
+## Daten werden gelesen, aber nicht gespeichert
+
+Moegliche Ursachen:
+
+- CORS blockiert POST/PUT/DELETE
+- falsche Save-Buttons
+- Fehler in `fetch(...)`
+- CSV-Pfade falsch
+- Backend-Logs pruefen
+
+## Docker liest leere CSVs statt echter Dateien
+
+- `@Value(...)` im Service falsch
+- Compose-Pfade falsch
+- Dateiname nicht konsistent
 
 ---
 
-## 9. Modal für Add/Edit
+## 25. Lernreihenfolge fuer aehnliche Projekte
 
-Ein Modal ist in React einfach:
+Wenn du ein neues Verwaltungs-Tool bauen willst, gehe am besten so vor:
 
-- eigener Component
-- `isModalOpen` State
-- bedingtes Rendern
-
-Beispiel:
-
-```jsx
-{isModalOpen && (
-  <MemberAddEdit
-    member={selectedMember}
-    onClose={() => setIsModalOpen(false)}
-    onSave={handleSaveMember}
-  />
-)}
-```
-
----
-
-## 10. Add und Edit mit einem Modal
-
-State in `MembersPage.jsx`:
-
-```jsx
-const [selectedMember, setSelectedMember] = useState(null);
-const [isModalOpen, setIsModalOpen] = useState(false);
-```
-
-### Add
-
-```jsx
-function handleAddClick() {
-  setSelectedMember(null);
-  setIsModalOpen(true);
-}
-```
-
-### Edit
-
-```jsx
-function handleEditClick(member) {
-  setSelectedMember(member);
-  setIsModalOpen(true);
-}
-```
-
-### Modal unterscheiden
-
-Im Modal:
-
-```jsx
-<h2>{member ? "Edit Member" : "Add Member"}</h2>
-```
-
-Felder vorbelegen:
-
-```jsx
-useEffect(() => {
-  if (member) {
-    setFirstName(member.firstName);
-    setLastName(member.lastName);
-    setEmail(member.email);
-    setBalance(member.balance);
-  } else {
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setBalance("");
-  }
-}, [member]);
-```
+1. **Fachproblem verstehen**
+2. **Datenmodell entwerfen**
+3. **REST-Endpunkte festlegen**
+4. **Model-Klassen bauen**
+5. **Repository bauen**
+6. **Service-Logik bauen**
+7. **Controller bauen**
+8. **Frontend-Seiten und Tabellen bauen**
+9. **Modal-/Form-Komponenten bauen**
+10. **Frontend mit API verbinden**
+11. **lokal testen**
+12. **Dockerfiles schreiben**
+13. **Nginx-Proxy schreiben**
+14. **Compose bauen**
+15. **Deployment auf anderem Geraet testen**
 
 ---
 
-## 11. Save-Logik für Add + Edit
+## 26. Gute Prinzipien, die du mitnehmen solltest
 
-```jsx
-async function handleSaveMember(member) {
-  const isEditMode = member.id && member.id > 0;
+## Backend
 
-  const url = isEditMode
-    ? `http://localhost:8080/members/${member.id}`
-    : "http://localhost:8080/members";
+- Controller duenn halten
+- Business-Logik in Services
+- Speicherlogik in Repositorys
+- Konfiguration nicht hart codieren
+- Abhaengigkeiten per Konstruktor injizieren
 
-  const method = isEditMode ? "PUT" : "POST";
+## Frontend
 
-  const response = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(member)
-  });
+- relative API-URLs nutzen
+- State lokal und klar halten
+- Formulare als controlled components bauen
+- nach Speichern Listen neu laden
+- Routen und API-Pfade sauber trennen
 
-  if (!response.ok) {
-    throw new Error("Member could not be saved!");
-  }
+## Docker
 
-  await loadMembers();
-}
-```
+- Backend und Frontend getrennt containerisieren
+- Multi-Stage-Builds nutzen
+- Daten ueber Volumes persistent halten
+- Compose als Hauptstartpunkt nutzen
 
 ---
 
-## 12. Delete
+## 27. Was du mit diesem Projekt schon gelernt hast
 
-Frontend:
+Mit diesem Projekt hast du bereits folgende Standardverfahren praktisch genutzt:
 
-```jsx
-async function handleDeleteMember(id) {
-  const response = await fetch(`http://localhost:8080/members/${id}`, {
-    method: "DELETE"
-  });
+- SPA-Frontend
+- React Hooks (`useState`, `useEffect`)
+- Client-seitiges Routing
+- REST-API
+- JSON-Kommunikation
+- CRUD
+- Service/Repository-Architektur
+- Konfiguration ueber Properties
+- Dependency Injection
+- CORS
+- Reverse Proxy
+- Docker Multi-Stage-Builds
+- Docker Compose
+- persistente Volume-Mounts
+- Deployment auf einen zweiten Rechner
 
-  if (!response.ok) {
-    throw new Error("Member could not be deleted!");
-  }
-
-  await loadMembers();
-}
-```
-
-Backend:
-
-```java
-@DeleteMapping("/members/{id}")
-public void deleteMember(@PathVariable long id) throws IOException {
-    List<Member> members = repository.getAllMembers(filePath);
-
-    repository.deleteMember(members, id);
-    repository.saveMembers(filePath, members);
-}
-```
-
-Wichtig: Bei `DELETE` **kein** `@RequestBody Member member`, wenn keiner gesendet wird.
+Das ist fuer ein erstes eigenes Full-Stack-Verwaltungstool bereits sehr stark.
 
 ---
 
-## Unterschiede, die wichtig waren
+## 28. Naechste sinnvolle Ausbaustufen
 
-## C# vs Java
+Wenn du dein Wissen weiter vertiefen willst, sind diese Schritte sinnvoll:
 
-- `typeof(Member)` in Java:
-
-```java
-Member.class
-```
-
-- Klassenname als String:
-
-```java
-Member.class.getSimpleName()
-```
-
-- `async/await` gibt es nicht direkt wie in C#
-- Für Async in Java eher `CompletableFuture`
-
-## Python vs Java Datei-Zugriff
-
-Python:
-
-```python
-with open(...)
-```
-
-Java:
-
-```java
-try (BufferedReader reader = ...) {
-}
-```
+1. Fehlerbehandlung im Frontend sichtbar machen
+2. Form-Validierung verbessern
+3. Tests einfuehren
+4. DTOs / Mapper lernen
+5. von CSV auf Datenbank wechseln
+6. Benutzer/Authentifizierung einfuehren
+7. echtes Production-Deployment mit Domain + HTTPS
+8. CI/CD lernen
 
 ---
 
-## React Basics, die wichtig waren
+## 29. Merksaetze
 
-- `App.jsx` bleibt der technische Einstieg
-- Seiten liegen unter `src\pages`
-- wiederverwendbare UI unter `src\components`
-- `Link` braucht immer:
-
-```jsx
-import { Link } from "react-router-dom";
-```
-
-- Komponente exportieren:
-
-```jsx
-export default HomePage;
-```
-
-- Props weitergeben:
-
-```jsx
-<MemberAddEdit member={selectedMember} onSave={handleSaveMember} />
-```
-
-- Funktionen **übergeben**, nicht direkt aufrufen:
-
-Richtig:
-
-```jsx
-onSave={handleSaveMember}
-```
-
-Falsch:
-
-```jsx
-onSave={handleSaveMember()}
-```
+- **REST ist die Sprache zwischen Frontend und Backend.**
+- **Service enthaelt die Logik, Controller nur die HTTP-Schnittstelle.**
+- **Repository kapselt den Datenzugriff.**
+- **Relative Frontend-URLs machen Docker und Deployment viel leichter.**
+- **Docker macht Software portabel, aber Netzwerk und CORS musst du trotzdem verstehen.**
+- **Eine Domain ersetzt spaeter nicht die Logik, sondern gibt deiner App nur eine stabile Adresse.**
 
 ---
 
-## Typische Fehler aus dem Projekt
-
-- `react-router-dom` im falschen Ordner installiert
-- `Link` nicht importiert
-- `export default` vergessen
-- Route `/member` und Link `/members` verwechselt
-- Save-Button außerhalb des `<form>`
-- `onSave={handleSaveMember()}` statt `onSave={handleSaveMember}`
-- CORS-Fehler nach Backend-Änderung -> **Spring neu starten**
-- `DELETE` mit unnötigem `@RequestBody`
-- `main.java...` versehentlich im Package-Namen
-
----
-
-## Starten des Projekts
+## 30. Mini-Checkliste fuer ein neues Projekt
 
 ### Backend
 
-Spring Boot Startklasse ausführen:
-
-```java
-AszInventoryApiApplication
-```
-
-Backend läuft auf:
-
-```text
-http://localhost:8080
-```
+- [ ] Spring Boot Projekt
+- [ ] Model-Klassen
+- [ ] Repository-Schicht
+- [ ] Service-Schicht
+- [ ] Controller mit REST-Endpunkten
+- [ ] `application.properties`
 
 ### Frontend
 
-Im `frontend`-Ordner:
+- [ ] React + Vite
+- [ ] Routing
+- [ ] Tabellenansicht
+- [ ] Form-Komponenten
+- [ ] `fetch(...)` fuer CRUD
+- [ ] Proxy in Vite
+
+### Docker
+
+- [ ] `Dockerfile.backend`
+- [ ] `Dockerfile.frontend`
+- [ ] `nginx.conf`
+- [ ] `docker-compose.yml`
+- [ ] Volume fuer Daten
+- [ ] CORS-Origin sauber setzen
 
-```powershell
-npm run dev
-```
-
-Frontend läuft auf:
-
-```text
-http://localhost:5173
-```
-
-Beide müssen parallel laufen.
-
----
-
-## Wenn ich das Projekt neu bauen würde
-
-1. Spring Boot Projekt anlegen
-2. `Member` Modell anlegen
-3. CSV-Repository bauen
-4. `GET /members` testen
-5. React mit Vite anlegen
-6. Router einbauen
-7. `HomePage` und `MembersPage` anlegen
-8. Members per `fetch` laden
-9. Tabelle anzeigen
-10. Add-Modal bauen
-11. `POST /members`
-12. Edit mit gleichem Modal
-13. `PUT /members/{id}`
-14. Delete Button
-15. `DELETE /members/{id}`
-
----
-
-## Veröffentlichen auf dem Raspberry Pi
-
-Ziel: App läuft auf dem Pi, erreichbar im WLAN unter `http://<pi-ip>`
-
-### Strategie: Frontend und Backend getrennt hosten
-
-- **Backend** → Spring Boot JAR läuft als Dienst auf Port 8080
-- **Frontend** → nginx liefert die gebauten React-Dateien auf Port 80
-
-Das ist die korrekte Produktions-Architektur: Jede Schicht ist unabhängig deploybar und austauschbar.
-
----
-
-### Schritt 1: CORS für den Pi anpassen
-
-Im Controller die Pi-IP erlauben:
-
-```java
-@CrossOrigin(origins = "http://<pi-ip>")
-```
-
----
-
-### Schritt 2: Frontend bauen
-
-Im `frontend`-Ordner die API-URL auf den Pi zeigen lassen (in allen `fetch`-Aufrufen):
-
-```js
-fetch("http://<pi-ip>:8080/members")
-```
-
-Dann bauen:
-
-```bash
-npm run build
-```
-
-→ Erzeugt `frontend/dist/`
-
----
-
-### Schritt 3: JAR bauen
-
-Im Projektroot:
-
-```bash
-./mvnw package -DskipTests
-```
-
-→ Erzeugt `target/asz_inventory_api-0.0.1-SNAPSHOT.jar`
-
----
-
-### Schritt 4: Dateien auf den Pi kopieren
-
-```bash
-# Backend
-scp target/*.jar pi@<pi-ip>:/home/pi/app/
-
-# CSV-Daten
-scp -r CSV pi@<pi-ip>:/home/pi/app/
-
-# Frontend
-scp -r frontend/dist/* pi@<pi-ip>:/home/pi/frontend/
-```
-
----
-
-### Schritt 5: Pi einrichten (einmalig)
-
-```bash
-# Java installieren
-sudo apt update
-sudo apt install openjdk-21-jre
-
-# nginx installieren
-sudo apt install nginx
-```
-
----
-
-### Schritt 6: nginx konfigurieren
-
-```bash
-sudo nano /etc/nginx/sites-available/asz-inventory
-```
-
-Inhalt:
-
-```nginx
-server {
-    listen 80;
-
-    root /home/pi/frontend;
-    index index.html;
-
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-}
-```
-
-Aktivieren:
-
-```bash
-sudo ln -s /etc/nginx/sites-available/asz-inventory /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl restart nginx
-```
-
----
-
-### Schritt 7: Backend als Dienst einrichten
-
-Damit das Backend beim Pi-Start automatisch startet:
-
-```bash
-sudo nano /etc/systemd/system/asz-inventory.service
-```
-
-Inhalt:
-
-```ini
-[Unit]
-Description=ASZ Inventory Backend
-After=network.target
-
-[Service]
-ExecStart=java -jar /home/pi/app/asz_inventory_api-0.0.1-SNAPSHOT.jar --app.drinks.csv-path=/home/pi/app/CSV/drinks.csv
-WorkingDirectory=/home/pi/app
-Restart=always
-User=pi
-
-[Install]
-WantedBy=multi-user.target
-```
-
-Aktivieren und starten:
-
-```bash
-sudo systemctl enable asz-inventory
-sudo systemctl start asz-inventory
-sudo systemctl status asz-inventory
-```
-
----
-
-### Ergebnis
-
-| Dienst   | Port | URL                       |
-|----------|------|---------------------------|
-| Frontend | 80   | `http://<pi-ip>`          |
-| Backend  | 8080 | `http://<pi-ip>:8080`     |
-
-### Pi-IP herausfinden
-
-Auf dem Pi:
-
-```bash
-hostname -I
-```
-
-### Typische Fehler
-
-- CORS-Fehler → Pi-IP im `@CrossOrigin` nicht eingetragen
-- API-URL im Frontend zeigt noch auf `localhost` → fetch-URLs anpassen vor dem Build
-- Backend startet nicht → `sudo journalctl -u asz-inventory -n 50`
-- nginx zeigt Standardseite → default-Konfiguration deaktivieren: `sudo rm /etc/nginx/sites-enabled/default`
-
----
-
-## Späterer Ausbau
-
-- PostgreSQL statt CSV
-- Repository austauschen
-- evtl. `Service`-Schicht einziehen
-- Validierung
-- schöneres Modal / Styling
-- echtes DataGrid
-- Fehleranzeigen im UI
