@@ -2,6 +2,8 @@ package de.tobi.asz_inventory_api.bwDeposit;
 
 import de.tobi.asz_inventory_api.member.Member;
 import de.tobi.asz_inventory_api.member.MemberCsvRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ public class BwDepositService {
     private final MemberCsvRepository memberRepository;
     private final String filePath;
     private final String memberFilePath;
+    private static final Logger log = LoggerFactory.getLogger(BwDepositService.class);
 
     public BwDepositService(BwDepositCsvRepository repository, MemberCsvRepository memberCsvRepository, @Value("${app.bwdeposits.csv-path}") String filePath, @Value("${app.members.csv-path}") String memberFilePath) {
         this.repository = repository;
@@ -23,7 +26,10 @@ public class BwDepositService {
     }
 
     public List<BwDeposit> getAllBwDeposits() throws IOException {
-        return repository.getAllBwDeposits(filePath);
+        List<BwDeposit> deposits = repository.getAllBwDeposits(filePath);
+        log.debug("BwDepositsService loaded {} deposits.", deposits.size());
+
+        return deposits;
     }
 
     public void addBwDeposit(BwDeposit deposit) throws IOException {
@@ -40,6 +46,8 @@ public class BwDepositService {
         repository.saveBwDeposit(filePath, deposits);
 
         changeBalance(deposit.getMemberId(), deposit.getDeposit());
+
+        log.info("BwDepositService added deposit with id {}", deposit.getId());
     }
 
     public void updateBwDeposit(long id, BwDeposit deposit) throws IOException {
@@ -59,6 +67,8 @@ public class BwDepositService {
         double newDeposit = deposit.getDeposit() - depositToCorrect;
 
         changeBalance(deposit.getMemberId(), newDeposit);
+
+        log.info("BwDepositService updated deposit with id {}", deposit.getId());
     }
 
     public void deleteBwDeposit(long id) throws IOException {
@@ -70,6 +80,8 @@ public class BwDepositService {
         repository.saveBwDeposit(filePath, deposits);
 
         changeBalance(deposit.getMemberId(), -deposit.getDeposit());
+
+        log.info("BwDepositService deleted deposit with id {}", deposit.getId());
     }
 
     public void changeBalance(long memberId, double amountDeposit) throws IOException {
@@ -80,10 +92,19 @@ public class BwDepositService {
                 .findAny()
                 .orElseThrow();
 
+        Double oldBalance = member.getBalance();
+
         member.setBalance(member.getBalance() + amountDeposit);
 
         memberRepository.updateMember(members, member);
         memberRepository.saveMembers(memberFilePath, members);
+
+        log.info("BwDepositService updated balance from member {} {} with id {} from {} to {}",
+                member.getFirstName(),
+                member.getLastName(),
+                member.getId(),
+                oldBalance,
+                member.getBalance());
     }
 
 }

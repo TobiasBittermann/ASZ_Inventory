@@ -31,5 +31,6 @@ bin/
 
 ### Java Project
 CSV/
+logs/
 .idea/
 .iml

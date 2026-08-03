@@ -1,14 +1,13 @@
 package de.tobi.asz_inventory_api.bwBooking;
 
-import de.tobi.asz_inventory_api.bwDeposit.BwDeposit;
 import de.tobi.asz_inventory_api.drink.Drink;
 import de.tobi.asz_inventory_api.drink.DrinkCsvRepository;
-import de.tobi.asz_inventory_api.drink.DrinkService;
 import de.tobi.asz_inventory_api.member.Member;
 import de.tobi.asz_inventory_api.member.MemberCsvRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.accept.MediaTypeFileExtensionResolver;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +20,7 @@ public class BwBookingService {
     private final String filePath;
     private final String memberFilePath;
     private final String drinkFilePath;
-
+    private static final Logger log = LoggerFactory.getLogger(BwBookingService.class);
 
     public BwBookingService(BwBookingCsvRepository repository,
                             MemberCsvRepository memberRepository,
@@ -38,7 +37,10 @@ public class BwBookingService {
     }
 
     public List<BwBooking> getAllBwBookings() throws IOException {
-        return repository.getAllBwBookings(filePath);
+        List<BwBooking> bookings = repository.getAllBwBookings(filePath);
+        log.debug("BwBookingsService loaded {} bookings.", bookings.size());
+
+        return bookings;
     }
 
     public void addBwBooking(BwBooking booking) throws IOException {
@@ -56,6 +58,8 @@ public class BwBookingService {
 
         changeBalance(booking, false);
         changeAmountDrinks(booking, false);
+
+        log.info("BwBookingService added booking with id {}", booking.getId());
     }
 
     public void updateBwBooking(long id, BwBooking booking) throws IOException {
@@ -73,6 +77,8 @@ public class BwBookingService {
 
         changeAmountDrinks(booking, false);
         changeBalance(booking, false);
+
+        log.info("BwBookingService updated booking with id {}", booking.getId());
     }
 
     public void deleteBwBooking(long id) throws IOException {
@@ -85,26 +91,33 @@ public class BwBookingService {
 
         changeBalance(booking, true);
         changeAmountDrinks(booking, true);
+
+        log.info("BwBookingService deleted booking with id {}", id);
     }
 
 
     private void changeBalance(BwBooking booking, boolean x) throws IOException {
         List<Member> members = memberRepository.getAllMembers(memberFilePath);
-        List<Drink> drinks = drinkRepository.getAllDrinks(drinkFilePath);
 
         Member member = members.stream().filter(m -> m.getId() == booking.getMemberId()).findAny().orElseThrow();
-        Drink drink = drinks.stream().filter(d -> d.getId() == booking.getDrinkId()).findAny().orElseThrow();
 
         double price = booking.getBookingCost();
 
-        if (x){
+        if (x) {
             price = -price;
         }
-
+        Double oldBalance = member.getBalance();
         member.setBalance(member.getBalance() - price);
 
         memberRepository.updateMember(members, member);
         memberRepository.saveMembers(memberFilePath, members);
+
+        log.info("BwBookingService updated balance from member {} {} with id {} from {} to {}",
+                member.getFirstName(),
+                member.getLastName(),
+                member.getId(),
+                oldBalance,
+                member.getBalance());
     }
 
     private void changeAmountDrinks(BwBooking booking, boolean x) throws IOException {
@@ -118,9 +131,16 @@ public class BwBookingService {
             amount = -amount;
         }
 
+        Integer oldAmount = drink.getAmount();
         drink.setAmount(drink.getAmount() - amount);
 
         drinkRepository.updateDrink(drinks, drink);
         drinkRepository.saveDrinks(drinkFilePath, drinks);
+
+        log.info("BwBookingService updated amount drinks from drink {} with id {} from {} to {}",
+                drink.getName(),
+                drink.getId(),
+                oldAmount,
+                drink.getAmount());
     }
 }
