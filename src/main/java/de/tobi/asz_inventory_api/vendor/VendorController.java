@@ -1,0 +1,36 @@
+package de.tobi.asz_inventory_api.vendor;
+
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
+
+@RestController
+public class VendorController {
+
+    private final VendorService vendorService;
+
+    public VendorController(VendorService vendorService) {
+        this.vendorService = vendorService;
+    }
+
+    @GetMapping("CSV/vendors")
+    public List<Vendor> getAllVendors() throws IOException {
+        return vendorService.getAllVendors();
+    }
+
+    @PostMapping("CSV/vendors")
+    public void addVendor(@RequestBody Vendor vendor) throws IOException {
+        vendorService.addVendor(vendor);
+    }
+
+    @PutMapping("CSV/vendors/{id}")
+    public void updateVendor(@PathVariable long id, @RequestBody Vendor vendor) throws IOException {
+        vendorService.updateVendor(id, vendor);
+    }
+
+    @DeleteMapping("CSV/vendors/{id}")
+    public void deleteVendor(@PathVariable long id) throws IOException {
+        vendorService.deleteVendor(id);
+    }
+}

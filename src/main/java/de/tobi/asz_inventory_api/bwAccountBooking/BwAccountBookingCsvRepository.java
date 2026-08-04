@@ -1,4 +1,4 @@
-package de.tobi.asz_inventory_api.bwBooking;
+package de.tobi.asz_inventory_api.bwAccountBooking;
 
 import org.springframework.stereotype.Repository;
 
@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -13,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class BwBookingCsvRepository {
+public class BwAccountBookingCsvRepository {
 
-    private String getBwBookingsHeader() {
-        Field[] fields = BwBooking.class.getDeclaredFields();
+    private String getBwAccountBookingsHeader() {
+        Field[] fields = BwAccountBooking.class.getDeclaredFields();
         StringBuilder header = new StringBuilder();
 
         for (int i = 0; i < fields.length; i++) {
@@ -29,12 +30,12 @@ public class BwBookingCsvRepository {
         return header.toString();
     }
 
-    public List<BwBooking> getAllBwBookings(String filePath) throws IOException {
+    public List<BwAccountBooking> getAllBwAccountBookings(String filePath) throws IOException {
         if (filePath == null || filePath.isBlank()) {
-            throw new IllegalArgumentException("CSV file path must not be blank");
+            throw new IllegalArgumentException("CSV file path must not be blank.");
         }
 
-        List<BwBooking> bookings = new ArrayList<>();
+        List<BwAccountBooking> bookings = new ArrayList<>();
         Path path = Path.of(filePath);
 
         if (Files.notExists(path)) {
@@ -46,7 +47,7 @@ public class BwBookingCsvRepository {
         }
 
         if (Files.size(path) == 0) {
-            Files.writeString(path, getBwBookingsHeader() + System.lineSeparator());
+            Files.writeString(path, getBwAccountBookingsHeader() + System.lineSeparator());
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(path.toFile()))) {
@@ -65,13 +66,13 @@ public class BwBookingCsvRepository {
 
                 String[] values = line.split(",");
 
-                BwBooking booking = new BwBooking();
+                BwAccountBooking booking = new BwAccountBooking();
                 booking.setId(Long.parseLong(values[0]));
-                booking.setMemberId(Long.parseLong(values[1]));
-                booking.setDrinkId(Long.parseLong(values[2]));
-                booking.setAmountDrink(Integer.parseInt(values[3]));
-                booking.setBookingDate(LocalDateTime.parse(values[4]));
-                booking.setBookingCost(Double.parseDouble(values[5]));
+                booking.setSupplierId(Long.parseLong(values[1]));
+                booking.setAmount(new BigDecimal(values[2]));
+                booking.setInvoiceNumber(values[3]);
+                booking.setDate(LocalDateTime.parse(values[4]));
+                booking.setNote(values[5]);
 
                 bookings.add(booking);
             }
@@ -79,12 +80,12 @@ public class BwBookingCsvRepository {
         }
     }
 
-    public void addBwBooking(List<BwBooking> bookings, BwBooking booking) {
+    public void addBwAccountBooking(List<BwAccountBooking> bookings, BwAccountBooking booking) {
         bookings.add(booking);
     }
 
-    public void updateBwBooking(List<BwBooking> bookings, BwBooking updatedBooking) {
-        for (BwBooking booking : bookings) {
+    public void updateBwAccountBooking(List<BwAccountBooking> bookings, BwAccountBooking updatedBooking) {
+        for (BwAccountBooking booking : bookings) {
             if (booking.getId() == updatedBooking.getId()) {
                 booking.updateFrom(updatedBooking);
                 return;
@@ -92,11 +93,11 @@ public class BwBookingCsvRepository {
         }
     }
 
-    public void deleteBwBooking(List<BwBooking> bookings, long id) {
+    public void deleteBwAccountBooking(List<BwAccountBooking> bookings, long id) {
         bookings.removeIf(booking -> booking.getId() == id);
     }
 
-    public void saveBwBooking(String filePath, List<BwBooking> bookings) throws IOException {
+    public void saveBwAccountBooking(String filePath, List<BwAccountBooking> bookings) throws IOException {
         if (filePath == null || filePath.isBlank()) {
             throw new IllegalArgumentException("CSV path must not be blank");
         }
@@ -106,24 +107,23 @@ public class BwBookingCsvRepository {
         if (parent != null) {
             Files.createDirectories(parent);
         }
-        if(Files.notExists(path)){
+        if (Files.notExists(path)) {
             Files.createFile(path);
         }
 
         StringBuilder content = new StringBuilder();
-        content.append(getBwBookingsHeader()).append(System.lineSeparator());
+        content.append(getBwAccountBookingsHeader()).append(System.lineSeparator());
 
-        for (BwBooking booking: bookings){
+        for (BwAccountBooking booking : bookings) {
             content.append(booking.getId()).append(",")
-                    .append(booking.getMemberId()).append(",")
-                    .append(booking.getDrinkId()).append(",")
-                    .append(booking.getAmountDrink()).append(",")
-                    .append(booking.getBookingDate()).append(",")
-                    .append(booking.getBookingCost())
+                    .append(booking.getSupplierId()).append(",")
+                    .append(booking.getAmount()).append(",")
+                    .append(booking.getInvoiceNumber()).append(",")
+                    .append(booking.getDate()).append(",")
+                    .append(booking.getNote())
                     .append(System.lineSeparator());
         }
 
         Files.writeString(path, content.toString());
     }
 }
-

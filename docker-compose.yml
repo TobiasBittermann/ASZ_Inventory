@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile.backend
     volumes:
       - ./CSV:/data
+      - ./logs:/app/logs
     environment:
       APP_FRONTEND_ORIGIN: http://localhost:8081
       APP_MEMBERS_CSV_PATH: /data/members.csv
