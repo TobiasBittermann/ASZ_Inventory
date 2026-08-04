@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public class BwAccountBooking {
     private long id;
-    private long supplierId;
+    private long vendorId;
     private BigDecimal amount;
     private String invoiceNumber;
     private LocalDateTime date;
@@ -15,7 +15,7 @@ public class BwAccountBooking {
 
     public BwAccountBooking(BwAccountBooking other){
         this.id = other.id;
-        this.supplierId = other.supplierId;
+        this.vendorId = other.vendorId;
         this.amount = other.amount;
         this.invoiceNumber = other.invoiceNumber;
         this.date = other.date;
@@ -30,12 +30,12 @@ public class BwAccountBooking {
         this.id = id;
     }
 
-    public long getSupplierId() {
-        return supplierId;
+    public long getVendorId() {
+        return vendorId;
     }
 
-    public void setSupplierId(long supplierId) {
-        this.supplierId = supplierId;
+    public void setVendorId(long vendorId) {
+        this.vendorId = vendorId;
     }
 
     public BigDecimal getAmount() {
@@ -72,7 +72,7 @@ public class BwAccountBooking {
 
     public void updateFrom(BwAccountBooking booking){
         this.id = booking.id;
-        this.supplierId = booking.supplierId;
+        this.vendorId = booking.vendorId;
         this.amount = booking.amount;
         this.invoiceNumber = booking.invoiceNumber;
         this.date = booking.date;

@@ -3,18 +3,15 @@ package de.tobi.asz_inventory_api.member;
 import java.io.IOException;
 import java.util.List;
 
-import de.tobi.asz_inventory_api.drink.DrinkService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MemberController {
 
     private final MemberService memberService;
-    private final DrinkService drinkService;
 
-    public MemberController(MemberService memberService, DrinkService drinkService) {
+    public MemberController(MemberService memberService) {
         this.memberService = memberService;
-        this.drinkService = drinkService;
     }
 
     @GetMapping("/members")

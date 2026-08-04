@@ -14,7 +14,7 @@ public class BwAccountSnapshotService {
     private final String filePath;
     private static final Logger log = LoggerFactory.getLogger(BwAccountSnapshotService.class);
 
-    public BwAccountSnapshotService(BwAccountSnapshotCsvRepository repository, @Value("CSV/bwsnapshots.csv") String filePath){
+    public BwAccountSnapshotService(BwAccountSnapshotCsvRepository repository, @Value("${app.bwsnapshots.csv-path}") String filePath){
         this.repository = repository;
         this.filePath = filePath;
     }

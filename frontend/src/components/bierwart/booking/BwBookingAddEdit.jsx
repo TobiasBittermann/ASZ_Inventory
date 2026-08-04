@@ -11,8 +11,8 @@ function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
     const [memberId, setMemberId] = useState("");
     const [drinkId, setDrinkId] = useState("");
     const [amountDrink, setAmountDrink] = useState("");
-    const [bookingDate, setBookingDate] = useState("")
-    const [bookingCost, setBookingCost] = useState("")
+    const [bookingDate, setBookingDate] = useState("");
+    const [bookingCost, setBookingCost] = useState("");
 
     useEffect(() => {
         if (booking) {

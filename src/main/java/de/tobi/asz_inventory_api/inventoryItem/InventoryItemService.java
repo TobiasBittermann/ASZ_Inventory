@@ -15,7 +15,7 @@ public class InventoryItemService {
     private final String filePath;
     private static final Logger log = LoggerFactory.getLogger(InventoryItemService.class);
 
-    public InventoryItemService(InventoryItemCsvRepository repository, @Value("CSV/inventoryitems.csv") String filePath) {
+    public InventoryItemService(InventoryItemCsvRepository repository, @Value("${app.inventoryitems.csv-path}") String filePath) {
         this.repository = repository;
         this.filePath = filePath;
     }

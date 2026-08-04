@@ -2,6 +2,8 @@ import {useState} from "react";
 import DrinksTab from "../components/bierwart/drink/DrinksTab.jsx";
 import BookingsTab from "../components/bierwart/booking/BookingsTab.jsx";
 import DepositsTab from "../components/bierwart/deposit/DepositsTab.jsx";
+import AccountBookingsTab from "../components/bierwart/accountBooking/AccountBookingsTab.jsx";
+import VendorTab from "../components/bierwart/vendor/VendorTab.jsx";
 
 function BierwartPage() {
     const [activeTab, setActiveTab] = useState("bookings");
@@ -38,12 +40,30 @@ function BierwartPage() {
                     onClick={() => setActiveTab("deposits")}>
                     Einzahlungen
                 </button>
+                <button
+                    className={`hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-1 transition 
+                    ${activeTab === "accountBookings"
+                        ? "bg-green-500 text-white scale-105"
+                        : "bg-green-300 text-black hover:bg-green-500 hover:scale-105"}`}
+                    onClick={() => setActiveTab("accountBookings")}>
+                    Kassenbuchungen
+                </button>
+                <button
+                    className={`hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-1 transition 
+                    ${activeTab === "vendors"
+                        ? "bg-green-500 text-white scale-105"
+                        : "bg-green-300 text-black hover:bg-green-500 hover:scale-105"}`}
+                    onClick={() => setActiveTab("vendors")}>
+                    Lieferanten
+                </button>
             </div>
 
             {/* content */}
             {activeTab === "bookings" && <BookingsTab/>}
             {activeTab === "drinks" && <DrinksTab/>}
             {activeTab === "deposits" && <DepositsTab/>}
+            {activeTab === "accountBookings" && <AccountBookingsTab/>}
+            {activeTab === "vendors" && <VendorTab/>}
         </div>
 
     )

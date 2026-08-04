@@ -14,7 +14,7 @@ public class VendorService {
     private final String filePath;
     private static final Logger log = LoggerFactory.getLogger(VendorService.class);
 
-    public VendorService(VendorCsvRepository repository, @Value("CSV/vendors") String filePath) {
+    public VendorService(VendorCsvRepository repository, @Value("${app.vendors.csv-path}") String filePath) {
         this.repository = repository;
         this.filePath = filePath;
     }

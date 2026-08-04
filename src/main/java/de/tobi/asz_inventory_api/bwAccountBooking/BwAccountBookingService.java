@@ -14,7 +14,7 @@ public class BwAccountBookingService {
     private final String filePath;
     private static final Logger log = LoggerFactory.getLogger(BwAccountBookingService.class);
 
-    public BwAccountBookingService(BwAccountBookingCsvRepository repository, @Value("CSV/bwaccountbookings.csv") String filePath) {
+    public BwAccountBookingService(BwAccountBookingCsvRepository repository, @Value("${app.bwaccountbookings.csv-path}") String filePath) {
         this.repository = repository;
         this.filePath = filePath;
     }

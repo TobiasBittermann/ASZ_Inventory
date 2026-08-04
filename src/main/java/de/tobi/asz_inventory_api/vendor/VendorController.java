@@ -14,22 +14,22 @@ public class VendorController {
         this.vendorService = vendorService;
     }
 
-    @GetMapping("CSV/vendors")
+    @GetMapping("vendors")
     public List<Vendor> getAllVendors() throws IOException {
         return vendorService.getAllVendors();
     }
 
-    @PostMapping("CSV/vendors")
+    @PostMapping("vendors")
     public void addVendor(@RequestBody Vendor vendor) throws IOException {
         vendorService.addVendor(vendor);
     }
 
-    @PutMapping("CSV/vendors/{id}")
+    @PutMapping("vendors/{id}")
     public void updateVendor(@PathVariable long id, @RequestBody Vendor vendor) throws IOException {
         vendorService.updateVendor(id, vendor);
     }
 
-    @DeleteMapping("CSV/vendors/{id}")
+    @DeleteMapping("vendors/{id}")
     public void deleteVendor(@PathVariable long id) throws IOException {
         vendorService.deleteVendor(id);
     }

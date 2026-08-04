@@ -107,7 +107,7 @@ function DrinksTab() {
                     </thead>
                     <tbody className={"divide-y divide-gray-100"}>
                     {drinks.map(drink => (
-                        <tr key={drink.id} className={"hover:gb-gray-50 transition"}>
+                        <tr key={drink.id} className={"hover:bg-gray-50 transition"}>
                             <td className={"px-6 py-3"}>{drink.id}</td>
                             <td className={"px-6 py-3"}>{drink.name}</td>
                             <td className={"px-6 py-3"}>{drink.purchasePrice}</td>

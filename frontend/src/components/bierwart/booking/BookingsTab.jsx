@@ -177,7 +177,6 @@ function BwBookingsTab() {
                     ))}
                     </tbody>
                 </table>
-
                 <Tooltip id={"edit-tip"}/>
                 <Tooltip id={"delete-tip"}/>
             </div>

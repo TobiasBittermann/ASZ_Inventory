@@ -68,7 +68,7 @@ public class BwAccountBookingCsvRepository {
 
                 BwAccountBooking booking = new BwAccountBooking();
                 booking.setId(Long.parseLong(values[0]));
-                booking.setSupplierId(Long.parseLong(values[1]));
+                booking.setVendorId(Long.parseLong(values[1]));
                 booking.setAmount(new BigDecimal(values[2]));
                 booking.setInvoiceNumber(values[3]);
                 booking.setDate(LocalDateTime.parse(values[4]));
@@ -116,7 +116,7 @@ public class BwAccountBookingCsvRepository {
 
         for (BwAccountBooking booking : bookings) {
             content.append(booking.getId()).append(",")
-                    .append(booking.getSupplierId()).append(",")
+                    .append(booking.getVendorId()).append(",")
                     .append(booking.getAmount()).append(",")
                     .append(booking.getInvoiceNumber()).append(",")
                     .append(booking.getDate()).append(",")

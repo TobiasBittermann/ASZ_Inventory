@@ -18,7 +18,7 @@ public class BwDepositService {
     private final String memberFilePath;
     private static final Logger log = LoggerFactory.getLogger(BwDepositService.class);
 
-    public BwDepositService(BwDepositCsvRepository repository, MemberCsvRepository memberCsvRepository, @Value("${app.bwdeposits.csv-path}") String filePath, @Value("${app.members.csv-path}") String memberFilePath) {
+    public BwDepositService(BwDepositCsvRepository repository, MemberCsvRepository memberCsvRepository, @Value("${app.deposits.csv-path}") String filePath, @Value("${app.members.csv-path}") String memberFilePath) {
         this.repository = repository;
         this.memberRepository = memberCsvRepository;
         this.filePath = filePath;

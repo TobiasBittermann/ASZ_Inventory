@@ -32,7 +32,7 @@ function DrinkAddEdit({drink, onClose, onSave}) {
 
         const savedDrink = {
             id: drink ? drink.id : 0,
-            name,
+            name: name,
             purchasePrice: Number(purchasePrice),
             sellingPrice: Number(sellingPrice),
             factor: Number(factor),

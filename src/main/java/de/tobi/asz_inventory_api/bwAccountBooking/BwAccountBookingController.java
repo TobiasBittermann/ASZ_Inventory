@@ -14,22 +14,22 @@ public class BwAccountBookingController {
         this.bookingService = bookingService;
     }
 
-    @GetMapping("CSV/bwaccountbookings")
+    @GetMapping("bwaccountbookings")
     public List<BwAccountBooking> getAllBwAccountBookings() throws IOException {
         return bookingService.getAllBwAccountBookings();
     }
 
-    @PostMapping("CSV/bwaccountbookings")
+    @PostMapping("bwaccountbookings")
     public void addBwAccountBooking(@RequestBody BwAccountBooking booking) throws IOException {
         bookingService.addBwAccountBooking(booking);
     }
 
-    @PutMapping("CSV/bwaccountbookings/{id}")
+    @PutMapping("bwaccountbookings/{id}")
     public void updateBwAccountBooking(@PathVariable long id, @RequestBody BwAccountBooking booking) throws IOException {
         bookingService.updateBwAccountBooking(id, booking);
     }
 
-    @DeleteMapping("CSV/bwaccountbookings/{id}")
+    @DeleteMapping("bwaccountbookings/{id}")
     public void deleteBwAccountBooking(@PathVariable long id) throws IOException {
         bookingService.deleteBwAccountBooking(id);
     }
