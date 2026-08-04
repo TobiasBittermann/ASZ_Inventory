@@ -5,9 +5,9 @@ function HomePage() {
     return (
         <div className={"min-h-screen flex flex-col items-center justify-center bg-cover bg-center"}
         style={{backgroundImage:`url(${houseImage})`}}>
-            <div className={"bg-white/50 backdrop-blur-sm shadow-lg rounded-2xl p-10 flex flex-col items-center gap-6 w-240"}>
+            <div className={"bg-white/50 backdrop-blur-sm shadow-lg rounded-2xl p-6 md:p-10 flex flex-col items-center gap-6 w-full max-w-4xl"}>
 
-                <h1 className={"text-3xl font-bold text-gray-800 text-center"}>
+                <h1 className={"text-2xl md:text-3xl font-bold text-gray-800 text-center"}>
                     AV! Albingia-Schwarzwald-Zaringia
                 </h1>
 
@@ -15,17 +15,17 @@ function HomePage() {
                     Was möchtest du verwalten?
                 </p>
                 <p>
-                    <Link to="/member">
+                    <Link to="/member" className="w-full flex justify-center">
                         <button
-                            className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md rounded px-6 py-2 w-48 transition"}>
+                            className={"w-full max-w-xs bg-green-300 hover:bg-green-500 text-black shadow-md rounded px-6 py-2 transition hover:scale-105"}>
                             Mitglieder
                         </button>
                     </Link>
                 </p>
                 <p>
-                    <Link to={"/bierwart"}>
+                    <Link to={"/bierwart"} className="w-full flex justify-center">
                         <button
-                            className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md rounded px-6 py-2 w-48 transition"}>
+                            className={"w-full max-w-xs bg-green-300 hover:bg-green-500 text-black shadow-md rounded px-6 py-2 transition hover:scale-105"}>
                             Bierwart
                         </button>
                     </Link>

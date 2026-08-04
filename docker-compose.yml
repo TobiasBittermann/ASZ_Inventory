@@ -7,7 +7,7 @@ services:
       - ./CSV:/data
       - ./logs:/app/logs
     environment:
-      APP_FRONTEND_ORIGIN: http://localhost:8081
+      APP_FRONTEND_ORIGIN: http://localhost:8081,http://192.168.0.152:8081
       APP_MEMBERS_CSV_PATH: /data/members.csv
       APP_DRINKS_CSV_PATH: /data/drinks.csv
       APP_BWBOOKINGS_CSV_PATH: /data/bwbookings.csv
