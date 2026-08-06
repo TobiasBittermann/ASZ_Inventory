@@ -1,16 +1,11 @@
 import {useEffect, useState} from "react";
+import {getAccountTypeLable} from "../../../utils/namingUtils.jsx";
+import {getCurrentLocalDateTime} from "../../../utils/dateUtils.jsx";
 
-
-//TODO: outsource this
-function getCurrentLocalDateTime() {
-    const now = new Date();
-    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-    return local.toISOString().slice(0, 16);
-}
-
-function BwDepositAddEdit({bwDeposit, members, onSave, onClose}) {
+function BwDepositAddEdit({bwDeposit, members, accountTypes, onSave, onClose}) {
     const [memberId, setMemberId] = useState("");
     const [deposit, setDeposit] = useState("");
+    const [accountType, setAccountType] = useState("")
     const [depositDate, setDepositDate] = useState("");
     const [description, setDescription] = useState("");
 
@@ -18,11 +13,13 @@ function BwDepositAddEdit({bwDeposit, members, onSave, onClose}) {
         if (bwDeposit) {
             setMemberId(bwDeposit.memberId)
             setDeposit(bwDeposit.deposit)
+            setAccountType(bwDeposit.accountType)
             setDepositDate(bwDeposit.depositDate)
             setDescription(bwDeposit.description)
         } else {
             setMemberId("")
             setDeposit("")
+            setAccountType("")
             setDepositDate(getCurrentLocalDateTime())
             setDescription("")
         }
@@ -35,6 +32,7 @@ function BwDepositAddEdit({bwDeposit, members, onSave, onClose}) {
             id: bwDeposit ? bwDeposit.id : 0,
             memberId: Number(memberId),
             deposit: Number(deposit),
+            accountType: accountType,
             depositDate: depositDate,
             description: description
         }
@@ -79,6 +77,21 @@ function BwDepositAddEdit({bwDeposit, members, onSave, onClose}) {
                         value={deposit}
                         onChange={event => setDeposit(event.target.value)}
                     />
+
+                    <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
+                        Einzahlung auf:
+                    </label>
+                    <select
+                        className={"w-full border border-gray-300 rounded-xl px-4 py-2 text-gray-800 shadow-sm cursor-pointer hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400"}
+                        value={accountType}
+                        onChange={e => setAccountType(e.target.value)}>
+                        <option value={""}>Bitte Kontotyp auswählen</option>
+                        {accountTypes.map(type => (
+                            <option key={type} value={type}>
+                                {getAccountTypeLable(type)}
+                            </option>
+                        ))}
+                    </select>
 
                     <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
                         Kommentar:

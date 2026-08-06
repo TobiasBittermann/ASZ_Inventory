@@ -1,5 +1,6 @@
 package de.tobi.asz_inventory_api.bwDeposit;
 
+import de.tobi.asz_inventory_api.enums.AccountType;
 import org.springframework.stereotype.Repository;
 
 import java.io.BufferedReader;
@@ -68,8 +69,9 @@ public class BwDepositCsvRepository {
                 deposit.setId(Long.parseLong(values[0]));
                 deposit.setMemberId(Long.parseLong(values[1]));
                 deposit.setDeposit(Double.parseDouble(values[2]));
-                deposit.setDepositDate(LocalDateTime.parse(values[3]));
-                deposit.setDescription(values[4]);
+                deposit.setAccountType(AccountType.valueOf(values[3]));
+                deposit.setDepositDate(LocalDateTime.parse(values[4]));
+                deposit.setDescription(values[5]);
 
                 deposits.add(deposit);
             }
@@ -116,6 +118,7 @@ public class BwDepositCsvRepository {
             content.append(deposit.getId()).append(",");
             content.append(deposit.getMemberId()).append(",");
             content.append(deposit.getDeposit()).append(",");
+            content.append(deposit.getAccountType()).append(",");
             content.append(deposit.getDepositDate()).append(",");
             content.append(deposit.getDescription());
             content.append(System.lineSeparator());

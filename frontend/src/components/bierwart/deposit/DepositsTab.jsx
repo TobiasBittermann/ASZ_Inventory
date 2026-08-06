@@ -2,61 +2,29 @@ import {useEffect, useState} from "react";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
 import {Tooltip} from "react-tooltip";
 import BwDepositAddEdit from "./BwDepositAddEdit.jsx";
+import {getAccountTypeLable, getMemberName} from "../../../utils/namingUtils.jsx";
+import {loadAccountTypes, loadBwDeposits, loadMembers} from "../../../utils/loadUtils.jsx";
+import {saveEntity} from "../../../utils/crudUtils.js";
 
 function BwDepositsTab() {
     const [bwDeposits, setBwDeposit] = useState([]);
     const [members, setMembers] = useState([]);
+    const [accountTypes, setAccountTypes] = useState([])
     const [selectedBwDeposit, setSelectedBwDeposit] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        loadBwDeposits();
-        loadMembers();
+        loadBwDeposits(setBwDeposit);
+        loadMembers(setMembers);
+        loadAccountTypes(setAccountTypes)
     }, [])
 
-    async function loadBwDeposits() {
-        const response = await fetch("/bwdeposits");
-
-        if (!response.ok) {
-            throw new Error("Loading deposits failed");
-        }
-
-        const data = await response.json();
-        setBwDeposit(data);
+    async function handleSaveBwDeposit(deposit){
+        saveEntity(deposit, "bwdeposits", loadBwDeposits, setBwDeposit)
     }
 
-    async function loadMembers() {
-        const response = await fetch("/members")
-
-        if (!response.ok) {
-            throw new Error("Loading members failed")
-        }
-
-        const data = await response.json()
-        setMembers(data);
-    }
-
-    async function handleSaveBwDeposit(deposit) {
-        const isEditMode = deposit.id && deposit.id > 0;
-        const url = isEditMode
-            ? `/bwdeposits/${deposit.id}`
-            : "/bwdeposits";
-
-        const method = isEditMode ? "PUT" : "POST";
-
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(deposit)
-        });
-
-        if (!response.ok) {
-            throw new Error("BW deposit could not be saved!")
-        }
-
-        await loadBwDeposits();
+    async function handleDeleteBwDeposit(id){
+        deleteEntity(id, "bwdeposits", loadBwDeposits, setBwDeposit)
     }
 
     function handleEditClick(deposit) {
@@ -67,25 +35,6 @@ function BwDepositsTab() {
     function handleAddClick() {
         setSelectedBwDeposit(null);
         setIsModalOpen(true);
-    }
-
-    async function handleDeleteBwDeposit(id) {
-        const response = await fetch(`/bwdeposits/${id}`, {
-            method: "DELETE"
-        });
-        if (!response.ok) {
-            throw new Error("Deposit could not be deleted!");
-        }
-
-        await loadBwDeposits();
-    }
-
-    function getMemberName(members, deposit) {
-        const member = members.find(member => member.id === deposit.memberId);
-
-        return member
-            ? `${member.firstName} ${member.lastName}`
-            : "Unbekannt";
     }
 
     return (
@@ -108,6 +57,7 @@ function BwDepositsTab() {
                     <BwDepositAddEdit
                         bwDeposit={selectedBwDeposit}
                         members={members}
+                        accountTypes={accountTypes}
                         onClose={() => setIsModalOpen(false)}
                         onSave={handleSaveBwDeposit}/>
                 )}
@@ -120,6 +70,7 @@ function BwDepositsTab() {
                         <th className={"px-6 py-3"}>Id</th>
                         <th className={"px-6 py-3"}>Mitglied</th>
                         <th className={"px-6 py-3"}>Einzahlung in €</th>
+                        <th className={"px-6 py-3"}>Einzahlung auf</th>
                         <th className={"px-6 py-3"}>Buchungsdatum</th>
                         <th className={"px-6 py-3"}>Aktionen</th>
                     </tr>
@@ -130,6 +81,7 @@ function BwDepositsTab() {
                             <td className={"px-6 py-3"}>{deposit.id}</td>
                             <td className={"px-6 py-3"}>{getMemberName(members, deposit)}</td>
                             <td className={"px-6 py-3"}>{deposit.deposit}</td>
+                            <td className={"px-6 py-3"}>{getAccountTypeLable(deposit.accountType)}</td>
                             <td className={"px-6 py-3"}>{deposit.depositDate}</td>
                             <td>
                                 <button

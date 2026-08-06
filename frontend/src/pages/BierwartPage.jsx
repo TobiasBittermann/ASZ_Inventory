@@ -4,6 +4,7 @@ import BookingsTab from "../components/bierwart/booking/BookingsTab.jsx";
 import DepositsTab from "../components/bierwart/deposit/DepositsTab.jsx";
 import AccountBookingsTab from "../components/bierwart/accountBooking/AccountBookingsTab.jsx";
 import VendorTab from "../components/bierwart/vendor/VendorTab.jsx";
+import SnapshotTab from "../components/bierwart/snapshot/SnapshotTab.jsx";
 
 function BierwartPage() {
     const [activeTab, setActiveTab] = useState("bookings");
@@ -56,6 +57,14 @@ function BierwartPage() {
                     onClick={() => setActiveTab("vendors")}>
                     Lieferanten
                 </button>
+                <button
+                    className={`hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-1 transition 
+                    ${activeTab === "snapshots"
+                        ? "bg-green-500 text-white scale-105"
+                        : "bg-green-300 text-black hover:bg-green-500 hover:scale-105"}`}
+                    onClick={() => setActiveTab("snapshots")}>
+                    Kassenstände
+                </button>
             </div>
 
             {/* content */}
@@ -64,6 +73,7 @@ function BierwartPage() {
             {activeTab === "deposits" && <DepositsTab/>}
             {activeTab === "accountBookings" && <AccountBookingsTab/>}
             {activeTab === "vendors" && <VendorTab/>}
+            {activeTab === "snapshots" && <SnapshotTab/>}
         </div>
 
     )

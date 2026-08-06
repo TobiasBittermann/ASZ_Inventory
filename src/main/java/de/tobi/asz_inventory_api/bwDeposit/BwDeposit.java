@@ -1,11 +1,14 @@
 package de.tobi.asz_inventory_api.bwDeposit;
 
+import de.tobi.asz_inventory_api.enums.AccountType;
+
 import java.time.LocalDateTime;
 
 public class BwDeposit {
     private long id;
     private long memberId;
     private double deposit;
+    private AccountType accountType;
     private LocalDateTime depositDate;
     private String description;
 
@@ -16,6 +19,7 @@ public class BwDeposit {
         this.id = other.id;
         this.memberId = other.memberId;
         this.deposit = other.deposit;
+        this.accountType = other.accountType;
         this.depositDate = other.depositDate;
         this.description = other.description;
     }
@@ -60,10 +64,19 @@ public class BwDeposit {
         this.description = description;
     }
 
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
+    }
+
     public void updateFrom(BwDeposit bwDeposit){
         this.id = bwDeposit.id;
         this.memberId = bwDeposit.memberId;
         this.deposit = bwDeposit.deposit;
+        this.accountType = bwDeposit.accountType;
         this.depositDate = bwDeposit.depositDate;
         this.description = bwDeposit.description;
     }

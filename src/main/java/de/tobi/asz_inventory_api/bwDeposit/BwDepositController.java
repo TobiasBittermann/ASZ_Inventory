@@ -1,5 +1,6 @@
 package de.tobi.asz_inventory_api.bwDeposit;
 
+import de.tobi.asz_inventory_api.enums.AccountType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -9,27 +10,32 @@ import java.util.List;
 public class BwDepositController {
     private final BwDepositService depositService;
 
-    public BwDepositController(BwDepositService depositService){
+    public BwDepositController(BwDepositService depositService) {
         this.depositService = depositService;
     }
 
     @GetMapping("/bwdeposits")
-    public List<BwDeposit> getAllBwDeposits() throws IOException{
+    public List<BwDeposit> getAllBwDeposits() throws IOException {
         return depositService.getAllBwDeposits();
     }
 
+    @GetMapping("/account-types")
+    public AccountType[] getAccountTypes() {
+        return AccountType.values();
+    }
+
     @PostMapping("/bwdeposits")
-    public void addBwDeposit(@RequestBody BwDeposit deposit) throws IOException{
+    public void addBwDeposit(@RequestBody BwDeposit deposit) throws IOException {
         depositService.addBwDeposit(deposit);
     }
 
     @PutMapping("/bwdeposits/{id}")
-    public void updateBwDeposit(@PathVariable long id, @RequestBody BwDeposit deposit) throws IOException{
+    public void updateBwDeposit(@PathVariable long id, @RequestBody BwDeposit deposit) throws IOException {
         depositService.updateBwDeposit(id, deposit);
     }
 
     @DeleteMapping("/bwdeposits/{id}")
-    public void deleteBwDeposit(@PathVariable long id) throws IOException{
+    public void deleteBwDeposit(@PathVariable long id) throws IOException {
         depositService.deleteBwDeposit(id);
     }
 }

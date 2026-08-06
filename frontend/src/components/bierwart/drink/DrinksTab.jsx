@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi"
 import {Tooltip} from "react-tooltip";
 import DrinkAddEdit from "./DrinkAddEdit.jsx";
+import {loadDrinks} from "../../../utils/loadUtils.jsx";
+import {deleteEntity, saveEntity} from "../../../utils/crudUtils.js";
 
 function DrinksTab() {
     const [drinks, setDrinks] = useState([]);
@@ -9,41 +11,15 @@ function DrinksTab() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        loadDrinks();
+        loadDrinks(setDrinks);
     }, [])
 
-    async function loadDrinks() {
-        const response = await fetch("/drinks");
-
-        if(!response.ok){
-            throw new Error("Loading drinks failed");
-        }
-
-        const data = await response.json();
-        setDrinks(data);
+    async function handleSaveDrink(drink){
+        saveEntity(drink, "/drinks", loadDrinks, setDrinks)
     }
 
-    async function handleSaveDrink(drink) {
-        const isEditMode = drink.id && drink.id > 0;
-        const url = isEditMode
-            ? `/drinks/${drink.id}`
-            : "/drinks";
-
-        const method = isEditMode ? "PUT" : "POST";
-
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(drink)
-        });
-
-        if (!response.ok) {
-            throw new Error("Drink could not be saved!")
-        }
-
-        await loadDrinks();
+    async function handleDeleteDrink(id){
+        deleteEntity(id, "/drinks", loadDrinks, setDrinks)
     }
 
     function handleEditClick(drink) {
@@ -54,17 +30,6 @@ function DrinksTab() {
     function handleAddClick() {
         setSelectedDrink(null);
         setIsModalOpen(true);
-    }
-
-    async function handleDeleteDrink(id) {
-        const response = await fetch(`/drinks/${id}`, {
-            method: "DELETE"
-        });
-        if (!response.ok) {
-            throw new Error("Drink could not be deleted!");
-        }
-
-        await loadDrinks();
     }
 
     return (

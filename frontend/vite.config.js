@@ -10,11 +10,12 @@ export default defineConfig({
       "/members" : "http://localhost:8080",
       "/drinks" : "http://localhost:8080",
       "/bwbookings" : "http://localhost:8080",
-      "/deposits" : "http://localhost:8080",
+      "/bwdeposits" : "http://localhost:8080",
       "/bwaccountbookings" : "http://localhost:8080",
       "/vendors" : "http://localhost:8080",
       "/inventoryitems" : "http://localhost:8080",
       "/bwsnapshots" : "http://localhost:8080",
+      "/account-types" : "http://localhost:8080",
     }
   }
 })

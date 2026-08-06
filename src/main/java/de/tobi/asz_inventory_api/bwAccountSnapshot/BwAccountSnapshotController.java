@@ -14,22 +14,22 @@ public class BwAccountSnapshotController {
         this.snapshotService = snapshotService;
     }
 
-    @GetMapping("CSV/bwsnapshots")
+    @GetMapping("/bwsnapshots")
     public List<BwAccountSnapshot> getAllBwAccountSnapshots() throws IOException{
         return snapshotService.getAllBwAccountSnapshots();
     }
 
-    @PostMapping("CSV/bwsnapshots")
+    @PostMapping("/bwsnapshots")
     public void addBwAccountSnapshot(@RequestBody BwAccountSnapshot snapshot) throws IOException{
         snapshotService.addBwAccountSnapshot(snapshot);
     }
 
-    @PutMapping("CSV/bwsnapshots/{id}")
+    @PutMapping("/bwsnapshots/{id}")
     public void updateBwAccountSnapshot(@PathVariable long id, @RequestBody BwAccountSnapshot snapshot) throws IOException{
         snapshotService.updateBwAccountSnapshot(id, snapshot);
     }
 
-    @DeleteMapping("CSV/bwsnapshots/{id}")
+    @DeleteMapping("/bwsnapshots/{id}")
     public void deleteBwAccountSnapshot(@PathVariable long id) throws IOException{
         snapshotService.deleteBwAccountSnapshot(id);
     }
