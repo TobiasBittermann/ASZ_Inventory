@@ -28,7 +28,7 @@ export async function loadBwDeposits(setBwDeposits) {
     }
 
     const data = await response.json();
-    setBwDeposit(data);
+    setBwDeposits(data);
 }
 
 export async function loadDrinks(setDrinks) {
@@ -40,4 +40,48 @@ export async function loadDrinks(setDrinks) {
 
     const data = await response.json();
     setDrinks(data);
+}
+
+export async function loadAccountBookings(setAccountBookings) {
+    const response = await fetch("/bwaccountbookings");
+
+    if (!response.ok) {
+        throw new Error("Loading bookings failed")
+    }
+
+    const data = await response.json();
+    setAccountBookings(data);
+}
+
+export     async function loadVendors(setVendors) {
+    const response = await fetch("/vendors")
+
+    if (!response.ok) {
+        throw new Error("Loading vendors dailed")
+    }
+
+    const data = await response.json();
+    setVendors(data);
+}
+
+export     async function loadBwBookings(setBwBookings) {
+    const response = await fetch("/bwbookings");
+
+    if (!response.ok) {
+        throw new Error("Loading bookings failed");
+    }
+
+    const data = await response.json();
+    setBwBookings(data);
+}
+
+export     async function loadSnapshots(setSnapshots) {
+    const response = await fetch("/bwsnapshots");
+
+    if (!response.ok) {
+        throw new Error("Loading snapshots failed");
+    }
+
+    const data = await response.json();
+    setSnapshots(data)
 }

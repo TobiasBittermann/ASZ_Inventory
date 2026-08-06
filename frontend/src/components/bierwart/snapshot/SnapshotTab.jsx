@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
 import SnapshotAddEdit from "./SnapshotAddEdit.jsx";
 import {Tooltip} from "react-tooltip";
+import {loadSnapshots} from "../../../utils/loadUtils.jsx";
+import {deleteEntity, saveEntity} from "../../../utils/crudUtils.js";
 
 function SnapshotTab() {
     const [snapshots, setSnapshots] = useState([])
@@ -9,41 +11,17 @@ function SnapshotTab() {
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     useEffect(() => {
-        loadSnapshots();
+        loadSnapshots(setSnapshots);
     }, [])
 
-    async function loadSnapshots() {
-        const response = await fetch("/bwsnapshots");
 
-        if (!response.ok) {
-            throw new Error("Loading snapshots failed");
-        }
-
-        const data = await response.json();
-        setSnapshots(data)
-    }
 
     async function handleSaveSnapshot(snapshot) {
-        const isEditMode = snapshot.id && snapshot.id > 0;
-        const url = isEditMode
-            ? `/bwsnapshots/${snapshot.id}`
-            : "/bwsnapshots";
+        await saveEntity(snapshot, "/bwsnapshots", loadSnapshots, setSnapshots)
+    }
 
-        const method = isEditMode ? "PUT" : "POST";
-
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(snapshot)
-        });
-
-        if (!response.ok) {
-            throw new Error("Snapshot could not be saved!")
-        }
-
-        await loadSnapshots();
+    async function handleDeleteSnapshot(id) {
+        await deleteEntity(id, "/bwsnapshots", loadSnapshots, setSnapshots)
     }
 
     function handleEditClick(snapshot) {
@@ -54,17 +32,6 @@ function SnapshotTab() {
     function handleAddClick() {
         setSelectedSnapshot(null);
         setIsModalOpen(true);
-    }
-
-    async function handleDeleteSnapshot(id) {
-        const response = await fetch(`/bwsnapshots/${id}`, {
-            method: "DELETE"
-        });
-        if (!response.ok) {
-            throw new Error("Snapshot could not be deleted!");
-        }
-
-        await loadSnapshots();
     }
 
     return (

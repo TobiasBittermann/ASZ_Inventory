@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
 import {Tooltip} from "react-tooltip";
 import VendorAddEdit from "./VendorAddEdit.jsx";
+import {loadVendors} from "../../../utils/loadUtils.jsx";
+import {deleteEntity, saveEntity} from "../../../utils/crudUtils.js";
 
 function VendorTab() {
     const [vendors, setVendors] = useState([])
@@ -9,41 +11,15 @@ function VendorTab() {
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     useEffect(() => {
-        loadVendors();
+        loadVendors(setVendors);
     }, [])
 
-    async function loadVendors() {
-        const response = await fetch("/vendors")
-
-        if (!response.ok) {
-            throw new Error("Loading vendors failed")
-        }
-
-        const data = await response.json()
-        setVendors(data)
+    async function handleSaveVendor(vendor) {
+        await saveEntity(vendor, "/vendors", loadVendors, setVendors)
     }
 
-    async function handleSaveVendor(vendor) {
-        const isEditMode = vendor.id && vendor.id > 0;
-        const url = isEditMode
-            ? `/vendors/${vendor.id}`
-            : "/vendors";
-
-        const method = isEditMode ? "PUT" : "POST";
-
-        const response = await fetch(url,{
-            method: method,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(vendor)
-        });
-
-        if (!response.ok){
-            throw new Error("Vendor could not be saved!")
-        }
-
-        await loadVendors();
+    async function handleDeleteVendor(id){
+        await deleteEntity(id, "/vendors", loadVendors, setVendors)
     }
 
     function handeEditClick(vendor){
@@ -54,17 +30,6 @@ function VendorTab() {
     function handleAddClick(){
         setSelectedVendor(null);
         setIsModalOpen(true);
-    }
-
-    async function handleDeleteVendor(id){
-        const response = await fetch (`/vendors/${id}`, {
-            method: "DELETE"
-        });
-        if(!response.ok){
-            throw new Error("Vendor could not be deleted!");
-        }
-
-        await loadVendors();
     }
 
     return (

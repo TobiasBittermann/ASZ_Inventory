@@ -15,11 +15,11 @@ function DrinksTab() {
     }, [])
 
     async function handleSaveDrink(drink){
-        saveEntity(drink, "/drinks", loadDrinks, setDrinks)
+        await saveEntity(drink, "/drinks", loadDrinks, setDrinks)
     }
 
     async function handleDeleteDrink(id){
-        deleteEntity(id, "/drinks", loadDrinks, setDrinks)
+        await deleteEntity(id, "/drinks", loadDrinks, setDrinks)
     }
 
     function handleEditClick(drink) {

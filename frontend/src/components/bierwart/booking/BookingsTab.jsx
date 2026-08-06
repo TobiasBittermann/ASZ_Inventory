@@ -2,6 +2,9 @@ import {useEffect, useState} from "react";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
 import {Tooltip} from "react-tooltip";
 import BwBookingAddEdit from "./BwBookingAddEdit.jsx";
+import {loadBwBookings, loadDrinks, loadMembers} from "../../../utils/loadUtils.jsx";
+import {deleteEntity, saveEntity} from "../../../utils/crudUtils.js";
+import {getDrinkName, getMemberName} from "../../../utils/namingUtils.jsx";
 
 function BwBookingsTab() {
     const [bwBookings, setBwBookings] = useState([]);
@@ -11,67 +14,17 @@ function BwBookingsTab() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        loadBwBookings();
-        loadMembers();
-        loadDrinks();
+        loadBwBookings(setBwBookings);
+        loadMembers(setMembers);
+        loadDrinks(setDrinks);
     }, [])
 
-
-    //TODO: outsource this part
-    async function loadBwBookings() {
-        const response = await fetch("/bwbookings");
-
-        if (!response.ok) {
-            throw new Error("Loading bookings failed");
-        }
-
-        const data = await response.json();
-        setBwBookings(data);
-    }
-
-    async function loadMembers() {
-        const response = await fetch("/members");
-
-        if (!response.ok) {
-            throw new Error("Loading members failed");
-        }
-
-        const data = await response.json();
-        setMembers(data);
-    }
-
-    async function loadDrinks() {
-        const response = await fetch("/drinks");
-
-        if (!response.ok) {
-            throw new Error("Loading drinks failed");
-        }
-
-        const data = await response.json();
-        setDrinks(data);
-    }
-
     async function handleSaveBwBooking(booking) {
-        const isEditMode = booking.id && booking.id > 0;
-        const url = isEditMode
-            ? `/bwbookings/${booking.id}`
-            : "/bwbookings";
+        await saveEntity(booking, "/bwbookings", loadBwBookings, setBwBookings)
+    }
 
-        const method = isEditMode ? "PUT" : "POST";
-
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(booking)
-        });
-
-        if (!response.ok) {
-            throw new Error("BW booking could not be saved!")
-        }
-
-        await loadBwBookings();
+    async function handleDeleteBwBooking(id){
+        await deleteEntity(id, "/bwbookings", loadBwBookings, setBwBookings)
     }
 
     function handleEditClick(booking) {
@@ -82,31 +35,6 @@ function BwBookingsTab() {
     function handleAddClick() {
         setSelectedBwBooking(null);
         setIsModalOpen(true);
-    }
-
-    async function handleDeleteBwBooking(id) {
-        const response = await fetch(`/bwbookings/${id}`, {
-            method: "DELETE"
-        });
-        if (!response.ok) {
-            throw new Error("Bw booking could not be deleted!");
-        }
-
-        await loadBwBookings();
-    }
-
-    function  getMemberName(members, booking){
-        const member = members.find(member => member.id === booking.memberId);
-
-        return member
-            ? `${member.firstName} ${member.lastName}`
-        :"Unbekannt";
-    }
-
-    function getDrinkName(drinks, booking){
-        const drink = drinks.find(drink => drink.id ===booking.drinkId);
-
-        return drink ? `${drink.name}` : "Unbekannt";
     }
 
     return (
@@ -153,8 +81,8 @@ function BwBookingsTab() {
                         <tr key={booking.id} className={"hover:bg-gray-50 transition"}>
                             <td className={"px-6 py-3"}>{booking.id}</td>
                             <td className={"px-6 py-3"}>{booking.bookingDate}</td>
-                            <td className={"px-6 py-3"}>{getMemberName(members, booking)}</td>
-                            <td className={"px-6 py-3"}>{getDrinkName(drinks, booking)}</td>
+                            <td className={"px-6 py-3"}>{getMemberName(members, booking.memberId)}</td>
+                            <td className={"px-6 py-3"}>{getDrinkName(drinks, booking.drinkId)}</td>
                             <td className={"px-6 py-3"}>{booking.amountDrink}</td>
                             <td className={"px-6 py-3"}>{booking.bookingCost}</td>
                             <td>

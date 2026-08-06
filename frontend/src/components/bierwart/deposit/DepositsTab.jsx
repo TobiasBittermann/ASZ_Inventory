@@ -4,7 +4,7 @@ import {Tooltip} from "react-tooltip";
 import BwDepositAddEdit from "./BwDepositAddEdit.jsx";
 import {getAccountTypeLable, getMemberName} from "../../../utils/namingUtils.jsx";
 import {loadAccountTypes, loadBwDeposits, loadMembers} from "../../../utils/loadUtils.jsx";
-import {saveEntity} from "../../../utils/crudUtils.js";
+import {deleteEntity, saveEntity} from "../../../utils/crudUtils.js";
 
 function BwDepositsTab() {
     const [bwDeposits, setBwDeposit] = useState([]);
@@ -20,11 +20,11 @@ function BwDepositsTab() {
     }, [])
 
     async function handleSaveBwDeposit(deposit){
-        saveEntity(deposit, "bwdeposits", loadBwDeposits, setBwDeposit)
+        await saveEntity(deposit, "bwdeposits", loadBwDeposits, setBwDeposit)
     }
 
     async function handleDeleteBwDeposit(id){
-        deleteEntity(id, "bwdeposits", loadBwDeposits, setBwDeposit)
+        await deleteEntity(id, "bwdeposits", loadBwDeposits, setBwDeposit)
     }
 
     function handleEditClick(deposit) {
@@ -79,7 +79,7 @@ function BwDepositsTab() {
                     {bwDeposits.map(deposit => (
                         <tr key={deposit.id} className={"hover:bg-gray-50 transition"}>
                             <td className={"px-6 py-3"}>{deposit.id}</td>
-                            <td className={"px-6 py-3"}>{getMemberName(members, deposit)}</td>
+                            <td className={"px-6 py-3"}>{getMemberName(members, deposit.memberId)}</td>
                             <td className={"px-6 py-3"}>{deposit.deposit}</td>
                             <td className={"px-6 py-3"}>{getAccountTypeLable(deposit.accountType)}</td>
                             <td className={"px-6 py-3"}>{deposit.depositDate}</td>

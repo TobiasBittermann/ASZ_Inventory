@@ -2,6 +2,9 @@ import {useEffect, useState} from "react";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
 import {Tooltip} from "react-tooltip";
 import AccountBookingAddEdit from "./AccountBookingAddEdit.jsx";
+import {loadAccountBookings, loadVendors} from "../../../utils/loadUtils.jsx";
+import {deleteEntity, saveEntity} from "../../../utils/crudUtils.js";
+import {getVendorName} from "../../../utils/namingUtils.jsx";
 
 function AccountBookingsTab() {
     const [accountBookings, setAccountBookings] = useState([]);
@@ -10,53 +13,16 @@ function AccountBookingsTab() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        loadAccountBookings();
-        loadVendors();
+        loadAccountBookings(setAccountBookings);
+        loadVendors(setVendors);
     }, [])
 
-    async function loadAccountBookings() {
-        const response = await fetch("/bwaccountbookings");
-
-        if (!response.ok) {
-            throw new Error("Loading bookings failed")
-        }
-
-        const data = await response.json();
-        setAccountBookings(data);
-    }
-
-    async function loadVendors() {
-        const response = await fetch("/vendors")
-
-        if (!response.ok) {
-            throw new Error("Loading vendors dailed")
-        }
-
-        const data = await response.json();
-        setVendors(data);
-    }
-
     async function handleSaveAccountBooking(booking) {
-        const isEditMode = booking.id && booking.id > 0;
-        const url = isEditMode
-            ? `/bwaccountbookings/${booking.id}`
-            : "/bwaccountbookings"
+        await saveEntity(booking, "/bwaccountbookings", loadAccountBookings, setAccountBookings)
+    }
 
-        const method = isEditMode ? "PUT" : "POST";
-
-        const response = await fetch(url, {
-            method: method,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(booking)
-        });
-
-        if (!response.ok) {
-            throw new Error("Account booking could not be saved!")
-        }
-
-        await loadAccountBookings();
+    async function handleDeleteAccountBooking(id) {
+        await deleteEntity(id, "/bwaccountbookings", loadAccountBookings, setAccountBookings)
     }
 
     function handleEditClick(booking) {
@@ -67,23 +33,6 @@ function AccountBookingsTab() {
     function handleAddClick() {
         setSelectedAccountBooking(null);
         setIsModalOpen(true);
-    }
-
-    async function handleDeleteAccountBooking(id) {
-        const response = await fetch(`/bwaccountbookings/${id}`, {
-            method: "DELETE"
-        });
-        if (!response.ok) {
-            throw new Error("Account booking could not be deleted!");
-        }
-
-        await loadAccountBookings();
-    }
-
-    function getVendorName(vendors, booking){
-        const vendor = vendors.find(vendor => vendor.id === booking.vendorId);
-
-        return vendor ? `${vendor.name}` : "Unbekannt";
     }
 
     return (
