@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -68,7 +69,7 @@ public class BwDepositCsvRepository {
                 BwDeposit deposit = new BwDeposit();
                 deposit.setId(Long.parseLong(values[0]));
                 deposit.setMemberId(Long.parseLong(values[1]));
-                deposit.setDeposit(Double.parseDouble(values[2]));
+                deposit.setDeposit(new BigDecimal(values[2]));
                 deposit.setAccountType(AccountType.valueOf(values[3]));
                 deposit.setDepositDate(LocalDateTime.parse(values[4]));
                 deposit.setDescription(values[5]);

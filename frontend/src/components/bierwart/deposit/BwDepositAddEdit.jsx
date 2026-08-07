@@ -54,6 +54,17 @@ function BwDepositAddEdit({bwDeposit, members, accountTypes, onSave, onClose}) {
                     onSubmit={handleSubmit}>
 
                     <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
+                        Buchungsdatum:
+                    </label>
+                    <input
+                        className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
+                        type={"datetime-local"}
+                        value={depositDate}
+                        onChange={event => setDepositDate(event.target.value)}
+                        disabled
+                    />
+
+                    <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
                         Mitglied:
                     </label>
                     <select
@@ -86,7 +97,9 @@ function BwDepositAddEdit({bwDeposit, members, accountTypes, onSave, onClose}) {
                         value={accountType}
                         onChange={e => setAccountType(e.target.value)}>
                         <option value={""}>Bitte Kontotyp auswählen</option>
-                        {accountTypes.map(type => (
+                        {accountTypes
+                            .filter(type => type !== "INVENTORY")
+                            .map(type => (
                             <option key={type} value={type}>
                                 {getAccountTypeLable(type)}
                             </option>
@@ -101,17 +114,6 @@ function BwDepositAddEdit({bwDeposit, members, accountTypes, onSave, onClose}) {
                         type={"text"}
                         value={description}
                         onChange={event => setDescription(event.target.value)}
-                    />
-
-                    <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
-                        Buchungsdatum:
-                    </label>
-                    <input
-                        className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
-                        type={"datetime-local"}
-                        value={depositDate}
-                        onChange={event => setDepositDate(event.target.value)}
-                        disabled
                     />
 
                     <div className={"col-span-2 flex justify-end gap-3 mt-2"}>

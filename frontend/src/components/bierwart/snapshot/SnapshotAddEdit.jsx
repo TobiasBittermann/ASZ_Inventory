@@ -1,10 +1,5 @@
 import {useEffect, useState} from "react";
-
-function getCurrentLocalDateTime() {
-    const now = new Date();
-    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-    return local.toISOString().slice(0, 16)
-}
+import {getCurrentLocalDateTime} from "../../../utils/dateUtils.jsx";
 
 function SnapshotAddEdit({snapshot, onClose, onSave}) {
     const [bankAccount, setBankAccount] = useState("")

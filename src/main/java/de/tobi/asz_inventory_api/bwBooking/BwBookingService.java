@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -101,13 +102,13 @@ public class BwBookingService {
 
         Member member = members.stream().filter(m -> m.getId() == booking.getMemberId()).findAny().orElseThrow();
 
-        double price = booking.getBookingCost();
+        BigDecimal price = booking.getBookingCost();
 
         if (x) {
-            price = -price;
+            price = price.negate();
         }
-        Double oldBalance = member.getBalance();
-        member.setBalance(member.getBalance() - price);
+        BigDecimal oldBalance = member.getBalance();
+        member.setBalance(member.getBalance().subtract(price));
 
         memberRepository.updateMember(members, member);
         memberRepository.saveMembers(memberFilePath, members);

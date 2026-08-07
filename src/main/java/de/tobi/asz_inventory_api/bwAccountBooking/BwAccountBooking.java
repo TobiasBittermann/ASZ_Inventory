@@ -1,5 +1,7 @@
 package de.tobi.asz_inventory_api.bwAccountBooking;
 
+import de.tobi.asz_inventory_api.enums.AccountType;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -8,16 +10,19 @@ public class BwAccountBooking {
     private long vendorId;
     private BigDecimal amount;
     private String invoiceNumber;
+    private AccountType accountType;
     private LocalDateTime date;
     private String note;
 
-    public BwAccountBooking(){}
+    public BwAccountBooking() {
+    }
 
-    public BwAccountBooking(BwAccountBooking other){
+    public BwAccountBooking(BwAccountBooking other) {
         this.id = other.id;
         this.vendorId = other.vendorId;
         this.amount = other.amount;
         this.invoiceNumber = other.invoiceNumber;
+        this.accountType = other.accountType;
         this.date = other.date;
         this.note = other.note;
     }
@@ -70,11 +75,20 @@ public class BwAccountBooking {
         this.note = note;
     }
 
-    public void updateFrom(BwAccountBooking booking){
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
+    }
+
+    public void updateFrom(BwAccountBooking booking) {
         this.id = booking.id;
         this.vendorId = booking.vendorId;
         this.amount = booking.amount;
         this.invoiceNumber = booking.invoiceNumber;
+        this.accountType = booking.accountType;
         this.date = booking.date;
         this.note = booking.note;
     }

@@ -1,5 +1,7 @@
 package de.tobi.asz_inventory_api.member;
 
+import java.math.BigDecimal;
+
 /**
  * Represents a member with basic personal data and an account balance.
  */
@@ -8,7 +10,7 @@ public class Member {
     private String firstName;
     private String lastName;
     private String email;
-    private double balance;
+    private BigDecimal balance;
 
     /**
      * Creates an empty member.
@@ -106,7 +108,7 @@ public class Member {
      *
      * @return the current balance
      */
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
@@ -115,7 +117,7 @@ public class Member {
      *
      * @param balance the new balance
      */
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

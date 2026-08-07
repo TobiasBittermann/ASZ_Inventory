@@ -1,5 +1,6 @@
 package de.tobi.asz_inventory_api.bwAccountBooking;
 
+import de.tobi.asz_inventory_api.bwAccountSnapshot.BwAccountSnapshotService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,11 +12,15 @@ import java.util.List;
 @Service
 public class BwAccountBookingService {
     private final BwAccountBookingCsvRepository repository;
+    private final BwAccountSnapshotService snapshotService;
     private final String filePath;
     private static final Logger log = LoggerFactory.getLogger(BwAccountBookingService.class);
 
-    public BwAccountBookingService(BwAccountBookingCsvRepository repository, @Value("${app.bwaccountbookings.csv-path}") String filePath) {
+    public BwAccountBookingService(BwAccountBookingCsvRepository repository,
+                                   BwAccountSnapshotService snapshotService,
+                                   @Value("${app.bwaccountbookings.csv-path}") String filePath) {
         this.repository = repository;
+        this.snapshotService = snapshotService;
         this.filePath = filePath;
     }
 
@@ -40,6 +45,9 @@ public class BwAccountBookingService {
         repository.saveBwAccountBooking(filePath, bookings);
 
         log.info("BwAccountBookingService added booking with id {}", booking.getId());
+
+        String note = String.format("Automatische Buchung: %s %s", booking.getInvoiceNumber(), booking.getNote());
+        snapshotService.addTransactionSnapshot(booking.getAmount(), booking.getAccountType(), note);
     }
 
     public void updateBwAccountBooking(long id, BwAccountBooking booking) throws IOException {
@@ -62,5 +70,9 @@ public class BwAccountBookingService {
         repository.saveBwAccountBooking(filePath, bookings);
 
         log.info("BwAccountBookingService deleted booking with id {}", booking.getId());
+
+        String note = String.format("Automatische Rückbuchung: %s %s", booking.getInvoiceNumber(), booking.getNote());
+        snapshotService.addTransactionSnapshot(booking.getAmount().negate(), booking.getAccountType(), note);
     }
 }
+

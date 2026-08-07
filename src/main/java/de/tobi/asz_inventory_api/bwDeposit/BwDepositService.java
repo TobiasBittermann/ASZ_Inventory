@@ -1,5 +1,6 @@
 package de.tobi.asz_inventory_api.bwDeposit;
 
+import de.tobi.asz_inventory_api.bwAccountSnapshot.BwAccountSnapshotService;
 import de.tobi.asz_inventory_api.member.Member;
 import de.tobi.asz_inventory_api.member.MemberCsvRepository;
 import org.slf4j.Logger;
@@ -8,19 +9,22 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 public class BwDepositService {
     private final BwDepositCsvRepository repository;
     private final MemberCsvRepository memberRepository;
+    private final BwAccountSnapshotService snapshotService;
     private final String filePath;
     private final String memberFilePath;
     private static final Logger log = LoggerFactory.getLogger(BwDepositService.class);
 
-    public BwDepositService(BwDepositCsvRepository repository, MemberCsvRepository memberCsvRepository, @Value("${app.deposits.csv-path}") String filePath, @Value("${app.members.csv-path}") String memberFilePath) {
+    public BwDepositService(BwDepositCsvRepository repository, MemberCsvRepository memberCsvRepository, BwAccountSnapshotService snapshotService, @Value("${app.deposits.csv-path}") String filePath, @Value("${app.members.csv-path}") String memberFilePath) {
         this.repository = repository;
         this.memberRepository = memberCsvRepository;
+        this.snapshotService = snapshotService;
         this.filePath = filePath;
         this.memberFilePath = memberFilePath;
     }
@@ -48,6 +52,9 @@ public class BwDepositService {
         changeBalance(deposit.getMemberId(), deposit.getDeposit());
 
         log.info("BwDepositService added deposit with id {}", deposit.getId());
+
+        String note = String.format("Automatische Buchung: %s %s", deposit.getMemberId(), deposit.getDescription());
+        snapshotService.addTransactionSnapshot(deposit.getDeposit(), deposit.getAccountType(), note);
     }
 
     public void updateBwDeposit(long id, BwDeposit deposit) throws IOException {
@@ -58,13 +65,13 @@ public class BwDepositService {
         // Get old deposit to cerrect the number
         BwDeposit oldDeposit = deposits.stream().filter(od -> od.getId() == id).findAny().orElseThrow();
 
-        double depositToCorrect = oldDeposit.getDeposit();
+        BigDecimal depositToCorrect = oldDeposit.getDeposit();
 
         repository.updateBwDeposit(deposits, deposit);
         repository.saveBwDeposit(filePath, deposits);
 
         // Calculate new deposit
-        double newDeposit = deposit.getDeposit() - depositToCorrect;
+        BigDecimal newDeposit = deposit.getDeposit().subtract(depositToCorrect);
 
         changeBalance(deposit.getMemberId(), newDeposit);
 
@@ -79,12 +86,15 @@ public class BwDepositService {
         repository.deleteBwDeposit(deposits, id);
         repository.saveBwDeposit(filePath, deposits);
 
-        changeBalance(deposit.getMemberId(), -deposit.getDeposit());
+        changeBalance(deposit.getMemberId(), deposit.getDeposit().negate());
 
         log.info("BwDepositService deleted deposit with id {}", deposit.getId());
+
+        String note = String.format("Automatische Rückbuchung: %s %s", deposit.getMemberId(), deposit.getDescription());
+        snapshotService.addTransactionSnapshot(deposit.getDeposit().negate(), deposit.getAccountType(), note);
     }
 
-    public void changeBalance(long memberId, double amountDeposit) throws IOException {
+    public void changeBalance(long memberId, BigDecimal amountDeposit) throws IOException {
         List<Member> members = memberRepository.getAllMembers(memberFilePath);
 
         Member member = members.stream()
@@ -92,9 +102,9 @@ public class BwDepositService {
                 .findAny()
                 .orElseThrow();
 
-        Double oldBalance = member.getBalance();
+        BigDecimal oldBalance = member.getBalance();
 
-        member.setBalance(member.getBalance() + amountDeposit);
+        member.setBalance(member.getBalance().add(amountDeposit));
 
         memberRepository.updateMember(members, member);
         memberRepository.saveMembers(memberFilePath, members);

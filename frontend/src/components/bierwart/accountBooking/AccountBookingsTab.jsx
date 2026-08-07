@@ -2,19 +2,21 @@ import {useEffect, useState} from "react";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
 import {Tooltip} from "react-tooltip";
 import AccountBookingAddEdit from "./AccountBookingAddEdit.jsx";
-import {loadAccountBookings, loadVendors} from "../../../utils/loadUtils.jsx";
+import {loadAccountBookings, loadAccountTypes, loadVendors} from "../../../utils/loadUtils.jsx";
 import {deleteEntity, saveEntity} from "../../../utils/crudUtils.js";
-import {getVendorName} from "../../../utils/namingUtils.jsx";
+import {getAccountTypeLable, getVendorName} from "../../../utils/namingUtils.jsx";
 
 function AccountBookingsTab() {
     const [accountBookings, setAccountBookings] = useState([]);
     const [vendors, setVendors] = useState([]);
+    const [accountTypes, setAccountTypes] = useState([]);
     const [selectedAccountBooking, setSelectedAccountBooking] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         loadAccountBookings(setAccountBookings);
         loadVendors(setVendors);
+        loadAccountTypes(setAccountTypes);
     }, [])
 
     async function handleSaveAccountBooking(booking) {
@@ -55,6 +57,7 @@ function AccountBookingsTab() {
                     <AccountBookingAddEdit
                         booking={selectedAccountBooking}
                         vendors={vendors}
+                        accountTypes={accountTypes}
                         onClose={() => setIsModalOpen(false)}
                         onSave={handleSaveAccountBooking}/>
                 )}
@@ -68,6 +71,7 @@ function AccountBookingsTab() {
                         <th className={"px-6 py-3"}>Lieferant</th>
                         <th className={"px-6 py-3"}>Betrag</th>
                         <th className={"px-6 py-3"}>Rechnungsnummer</th>
+                        <th className={"px-6 py-3"}>Konto</th>
                         <th className={"px-6 py-3"}>Kommentar</th>
                         <th className={"px-6 py-3"}>Aktionen</th>
                     </tr>
@@ -80,6 +84,7 @@ function AccountBookingsTab() {
                             <td className={"px-6 py-3"}>{getVendorName(vendors, booking)}</td>
                             <td className={"px-6 py-3"}>{booking.amount}</td>
                             <td className={"px-6 py-3"}>{booking.invoiceNumber}</td>
+                            <td className={"px-6 py-3"}>{getAccountTypeLable(booking.accountType)}</td>
                             <td className={"px-6 py-3"}>{booking.note}</td>
                             <td>
                                 <button

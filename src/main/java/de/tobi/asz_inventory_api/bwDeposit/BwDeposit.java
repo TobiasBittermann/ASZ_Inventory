@@ -2,12 +2,13 @@ package de.tobi.asz_inventory_api.bwDeposit;
 
 import de.tobi.asz_inventory_api.enums.AccountType;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class BwDeposit {
     private long id;
     private long memberId;
-    private double deposit;
+    private BigDecimal deposit;
     private AccountType accountType;
     private LocalDateTime depositDate;
     private String description;
@@ -40,11 +41,11 @@ public class BwDeposit {
         this.memberId = memberId;
     }
 
-    public double getDeposit() {
+    public BigDecimal getDeposit() {
         return deposit;
     }
 
-    public void setDeposit(double deposit) {
+    public void setDeposit(BigDecimal deposit) {
         this.deposit = deposit;
     }
 

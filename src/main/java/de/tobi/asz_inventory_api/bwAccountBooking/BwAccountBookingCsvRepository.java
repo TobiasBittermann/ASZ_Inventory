@@ -1,5 +1,6 @@
 package de.tobi.asz_inventory_api.bwAccountBooking;
 
+import de.tobi.asz_inventory_api.enums.AccountType;
 import org.springframework.stereotype.Repository;
 
 import java.io.BufferedReader;
@@ -71,8 +72,9 @@ public class BwAccountBookingCsvRepository {
                 booking.setVendorId(Long.parseLong(values[1]));
                 booking.setAmount(new BigDecimal(values[2]));
                 booking.setInvoiceNumber(values[3]);
-                booking.setDate(LocalDateTime.parse(values[4]));
-                booking.setNote(values[5]);
+                booking.setAccountType(AccountType.valueOf(values[4]));
+                booking.setDate(LocalDateTime.parse(values[5]));
+                booking.setNote(values[6]);
 
                 bookings.add(booking);
             }
@@ -119,6 +121,7 @@ public class BwAccountBookingCsvRepository {
                     .append(booking.getVendorId()).append(",")
                     .append(booking.getAmount()).append(",")
                     .append(booking.getInvoiceNumber()).append(",")
+                    .append(booking.getAccountType()).append(",")
                     .append(booking.getDate()).append(",")
                     .append(booking.getNote())
                     .append(System.lineSeparator());

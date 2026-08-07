@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -71,7 +72,7 @@ public class BwBookingCsvRepository {
                 booking.setDrinkId(Long.parseLong(values[2]));
                 booking.setAmountDrink(Integer.parseInt(values[3]));
                 booking.setBookingDate(LocalDateTime.parse(values[4]));
-                booking.setBookingCost(Double.parseDouble(values[5]));
+                booking.setBookingCost(new BigDecimal(values[5]));
 
                 bookings.add(booking);
             }

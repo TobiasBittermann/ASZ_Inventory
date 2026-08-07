@@ -1,5 +1,6 @@
 package de.tobi.asz_inventory_api.bwBooking;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class BwBooking {
@@ -8,7 +9,7 @@ public class BwBooking {
     private long drinkId;
     private int amountDrink;
     private LocalDateTime bookingDate;
-    private double bookingCost;
+    private BigDecimal bookingCost;
 
     public BwBooking() {
     }
@@ -62,11 +63,11 @@ public class BwBooking {
         this.bookingDate = bookingDate;
     }
 
-    public double getBookingCost() {
+    public BigDecimal getBookingCost() {
         return bookingCost;
     }
 
-    public void setBookingCost(double bookingCost) {
+    public void setBookingCost(BigDecimal bookingCost) {
         this.bookingCost = bookingCost;
     }
 

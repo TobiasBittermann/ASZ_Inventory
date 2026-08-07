@@ -9,74 +9,60 @@ import SnapshotTab from "../components/bierwart/snapshot/SnapshotTab.jsx";
 function BierwartPage() {
     const [activeTab, setActiveTab] = useState("bookings");
 
+    const tabs = [
+        {id: "snapshots", label: "Kassenstände"},
+        {id: "bookings", label: "Kühlschrankbuchungen"},
+        {id: "deposits", label: "Einzahlungen"},
+        {id: "accountBookings", label: "Kassenbuchungen"},
+        {id: "drinks", label: "Getränke"},
+        {id: "vendors", label: "Lieferanten"},
+    ];
+
     return (
-        <div className={"p-8"}>
-            <h1 className={"text-3xl font-bold text-gray-800 text-center mb-6"}>
-                Bierwart
-            </h1>
+        <div className="flex min-h-screen p-8">
 
-            {/* Tab Buttons*/}
-            <div className={"flex gap-4 mb-6"}>
-                <button
-                    className={`hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-1 transition 
-                    ${activeTab === "bookings"
-                        ? "bg-green-500 text-white scale-105"
-                        : "bg-green-300 text-black hover:bg-green-500 hover:scale-105"}`}
-                    onClick={() => setActiveTab("bookings")}>
-                    Buchungen
-                </button>
-                <button
-                    className={`hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-1 transition 
-                    ${activeTab === "drinks"
-                        ? "bg-green-500 text-white scale-105"
-                        : "bg-green-300 text-black hover:bg-green-500 hover:scale-105"}`}
-                    onClick={() => setActiveTab("drinks")}>
-                    Getränke
-                </button>
-                <button
-                    className={`hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-1 transition 
-                    ${activeTab === "deposits"
-                        ? "bg-green-500 text-white scale-105"
-                        : "bg-green-300 text-black hover:bg-green-500 hover:scale-105"}`}
-                    onClick={() => setActiveTab("deposits")}>
-                    Einzahlungen
-                </button>
-                <button
-                    className={`hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-1 transition 
-                    ${activeTab === "accountBookings"
-                        ? "bg-green-500 text-white scale-105"
-                        : "bg-green-300 text-black hover:bg-green-500 hover:scale-105"}`}
-                    onClick={() => setActiveTab("accountBookings")}>
-                    Kassenbuchungen
-                </button>
-                <button
-                    className={`hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-1 transition 
-                    ${activeTab === "vendors"
-                        ? "bg-green-500 text-white scale-105"
-                        : "bg-green-300 text-black hover:bg-green-500 hover:scale-105"}`}
-                    onClick={() => setActiveTab("vendors")}>
-                    Lieferanten
-                </button>
-                <button
-                    className={`hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-1 transition 
-                    ${activeTab === "snapshots"
-                        ? "bg-green-500 text-white scale-105"
-                        : "bg-green-300 text-black hover:bg-green-500 hover:scale-105"}`}
-                    onClick={() => setActiveTab("snapshots")}>
-                    Kassenstände
-                </button>
-            </div>
+            {/* Sidebar */}
+            <aside className="w-55 bg-gray-100 rounded-lg shadow-md p-2">
 
-            {/* content */}
-            {activeTab === "bookings" && <BookingsTab/>}
-            {activeTab === "drinks" && <DrinksTab/>}
-            {activeTab === "deposits" && <DepositsTab/>}
-            {activeTab === "accountBookings" && <AccountBookingsTab/>}
-            {activeTab === "vendors" && <VendorTab/>}
-            {activeTab === "snapshots" && <SnapshotTab/>}
+                <nav className="flex flex-col gap-2">
+                    {tabs.map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveTab(tab.id)}
+                            className={`
+                                text-left px-4 py-3 rounded transition
+                                ${
+                                activeTab === tab.id
+                                    ? "bg-green-500 text-white"
+                                    : "bg-green-200 hover:bg-green-400"
+                            }
+                            `}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
+                </nav>
+            </aside>
+
+
+            {/* Content */}
+            <main className="flex-1 ml-8">
+
+                <h1 className="text-3xl font-bold text-gray-800 mb-6">
+                    Bierwart
+                </h1>
+
+                {activeTab === "bookings" && <BookingsTab/>}
+                {activeTab === "deposits" && <DepositsTab/>}
+                {activeTab === "accountBookings" && <AccountBookingsTab/>}
+                {activeTab === "snapshots" && <SnapshotTab/>}
+                {activeTab === "drinks" && <DrinksTab/>}
+                {activeTab === "vendors" && <VendorTab/>}
+
+            </main>
+
         </div>
-
-    )
+    );
 }
 
 export default BierwartPage;

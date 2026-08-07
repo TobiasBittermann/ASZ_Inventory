@@ -11,7 +11,11 @@ public class BwAccountSnapshot {
     private LocalDateTime snapshotDate;
     private String note;
 
-    public BwAccountSnapshot(){}
+    public BwAccountSnapshot(){
+        this.bankAccount = BigDecimal.ZERO;
+        this.cashRegister = BigDecimal.ZERO;
+        this.inventoryValue = BigDecimal.ZERO;
+    }
 
     public BwAccountSnapshot(BwAccountSnapshot other){
         this.id = other.id;

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.lang.reflect.Field;
@@ -71,7 +72,7 @@ public class MemberCsvRepository {
                 member.setFirstName(values[1]);
                 member.setLastName(values[2]);
                 member.setEmail(values[3]);
-                member.setBalance(Double.parseDouble(values[4]));
+                member.setBalance(new BigDecimal(values[4]));
 
                 members.add(member);
             }

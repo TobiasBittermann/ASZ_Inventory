@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {getAccountTypeLable} from "../../../utils/namingUtils.jsx";
 
 function getCurrentLokalDateTime() {
     const now = new Date();
@@ -6,10 +7,11 @@ function getCurrentLokalDateTime() {
     return local.toISOString().slice(0, 16);
 }
 
-function AccountBookingAddEdit({booking, vendors, onClose, onSave}) {
+function AccountBookingAddEdit({booking, vendors, accountTypes, onClose, onSave}) {
     const [vendorId, setVendorId] = useState("");
     const [amount, setAmount] = useState("");
     const [invoiceNumber, setInvoiceNumber] = useState("");
+    const [accountType, setAccountType] = useState("")
     const [date, setDate] = useState("");
     const [note, setNote] = useState("");
 
@@ -18,12 +20,14 @@ function AccountBookingAddEdit({booking, vendors, onClose, onSave}) {
             setVendorId(booking.vendorId)
             setAmount(booking.amount)
             setInvoiceNumber(booking.invoiceNumber)
+            setAccountType(booking.accountType)
             setDate(booking.date)
             setNote(booking.note)
         } else {
             setVendorId("")
             setAmount("")
             setInvoiceNumber("")
+            setAccountType("")
             setDate(getCurrentLokalDateTime())
             setNote("")
         }
@@ -37,6 +41,7 @@ function AccountBookingAddEdit({booking, vendors, onClose, onSave}) {
             vendorId: Number(vendorId),
             amount: Number(amount),
             invoiceNumber: invoiceNumber,
+            accountType: accountType,
             date: date,
             note: note
         }
@@ -56,6 +61,16 @@ function AccountBookingAddEdit({booking, vendors, onClose, onSave}) {
                 <form
                     className={"grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-4"}
                     onSubmit={handleSubmit}>
+
+                    <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
+                        Buchungsdatum:
+                    </label>
+                    <input
+                        className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
+                        type={"datetime-local"}
+                        value={date}
+                        onChange={event => setDate(event.target.value)}
+                    />
 
                     <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
                         Lieferant:
@@ -93,14 +108,21 @@ function AccountBookingAddEdit({booking, vendors, onClose, onSave}) {
                     />
 
                     <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
-                        Buchungsdatum:
+                        Einzahlung auf:
                     </label>
-                    <input
-                        className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
-                        type={"datetime-local"}
-                        value={date}
-                        onChange={event => setDate(event.target.value)}
-                    />
+                    <select
+                        className={"w-full border border-gray-300 rounded-xl px-4 py-2 text-gray-800 shadow-sm cursor-pointer hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400"}
+                        value={accountType}
+                        onChange={e => setAccountType(e.target.value)}>
+                        <option value={""}>Bitte Kontotyp auswählen</option>
+                        {accountTypes
+                            .filter(type => type !== "INVENTORY")
+                            .map(type => (
+                            <option key={type} value={type}>
+                                {getAccountTypeLable(type)}
+                            </option>
+                        ))}
+                    </select>
 
                     <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
                         Notiz:
@@ -124,9 +146,7 @@ function AccountBookingAddEdit({booking, vendors, onClose, onSave}) {
                             Close
                         </button>
                     </div>
-
                 </form>
-
             </div>
         </div>
     )
