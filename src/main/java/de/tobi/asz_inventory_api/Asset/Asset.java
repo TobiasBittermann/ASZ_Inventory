@@ -1,13 +1,13 @@
-package de.tobi.asz_inventory_api.inventoryItem;
+package de.tobi.asz_inventory_api.Asset;
 
-public class InventoryItem {
+public class Asset {
     private long id;
     private String name;
     private int amount;
 
-    public InventoryItem() {}
+    public Asset() {}
 
-    public InventoryItem(InventoryItem other){
+    public Asset(Asset other){
         this.id = other.id;
         this.name = other.name;
         this.amount = other.amount;
@@ -37,7 +37,7 @@ public class InventoryItem {
         this.amount = amount;
     }
 
-    public void updateFrom(InventoryItem item){
+    public void updateFrom(Asset item){
         this.id = item.id;
         this.name = item.name;
         this.amount = item.amount;

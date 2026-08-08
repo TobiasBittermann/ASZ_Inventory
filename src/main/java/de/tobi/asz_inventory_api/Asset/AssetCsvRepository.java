@@ -1,4 +1,4 @@
-package de.tobi.asz_inventory_api.inventoryItem;
+package de.tobi.asz_inventory_api.Asset;
 
 import org.springframework.stereotype.Repository;
 
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class InventoryItemCsvRepository {
+public class AssetCsvRepository {
 
-    private String getInventoriesHeader() {
-        Field[] fields = InventoryItem.class.getDeclaredFields();
+    private String getAssetHeader() {
+        Field[] fields = Asset.class.getDeclaredFields();
         StringBuilder header = new StringBuilder();
 
         for (int i = 0; i < fields.length; i++) {
@@ -28,12 +28,12 @@ public class InventoryItemCsvRepository {
         return header.toString();
     }
 
-    public List<InventoryItem> getAllInventories(String filePath) throws IOException {
+    public List<Asset> getAllAssets(String filePath) throws IOException {
         if (filePath == null || filePath.isBlank()) {
             throw new IllegalArgumentException("CSV file path must not be blank");
         }
 
-        List<InventoryItem> inventoryItems = new ArrayList<>();
+        List<Asset> assets = new ArrayList<>();
         Path path = Path.of(filePath);
 
         if (Files.notExists(path)) {
@@ -45,7 +45,7 @@ public class InventoryItemCsvRepository {
         }
 
         if (Files.size(path) == 0) {
-            Files.writeString(path, getInventoriesHeader() + System.lineSeparator());
+            Files.writeString(path, getAssetHeader() + System.lineSeparator());
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(path.toFile()))) {
@@ -64,35 +64,35 @@ public class InventoryItemCsvRepository {
 
                 String[] values = line.split(",");
 
-                InventoryItem item = new InventoryItem();
+                Asset item = new Asset();
                 item.setId(Long.parseLong(values[0]));
                 item.setName(values[1]);
                 item.setAmount(Integer.parseInt(values[2]));
 
-                inventoryItems.add(item);
+                assets.add(item);
             }
         }
-        return inventoryItems;
+        return assets;
     }
 
-    public void addInventory(List<InventoryItem> inventoryItems, InventoryItem item) {
-        inventoryItems.add(item);
+    public void addAssets(List<Asset> assets, Asset asset) {
+        assets.add(asset);
     }
 
-    public void updateInventory(List<InventoryItem> inventoryItems, InventoryItem updatedItem) {
-        for (InventoryItem item : inventoryItems) {
-            if (item.getId() == updatedItem.getId()) {
-                item.updateFrom(updatedItem);
+    public void updateAsset(List<Asset> assets, Asset updatedAsset) {
+        for (Asset item : assets) {
+            if (item.getId() == updatedAsset.getId()) {
+                item.updateFrom(updatedAsset);
                 return;
             }
         }
     }
 
-    public void deleteInventory(List<InventoryItem> inventoryItems, long id) {
-        inventoryItems.removeIf(item -> item.getId() == id);
+    public void deleteAsset(List<Asset> assets, long id) {
+        assets.removeIf(item -> item.getId() == id);
     }
 
-    public void saveInventories(String filePath, List<InventoryItem> inventoryItems) throws IOException {
+    public void saveAssets(String filePath, List<Asset> assets) throws IOException {
         if (filePath == null || filePath.isBlank()) {
             throw new IllegalArgumentException("CSV file path must not be blank");
         }
@@ -107,9 +107,9 @@ public class InventoryItemCsvRepository {
         }
 
         StringBuilder content = new StringBuilder();
-        content.append(getInventoriesHeader()).append(System.lineSeparator());
+        content.append(getAssetHeader()).append(System.lineSeparator());
 
-        for (InventoryItem item : inventoryItems) {
+        for (Asset item : assets) {
             content.append(item.getId()).append(",")
                     .append(item.getName()).append(",")
                     .append(item.getAmount())
