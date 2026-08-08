@@ -2,8 +2,6 @@
 
 Die ASZ Management Suite ist ein Programm zum Verwalten von Mitgliedern, Inventar, Finanzbuchungen und Veranstaltungen. Das Backend basiert auf SpringBoot, das Frontend auf React. Die Anwendung kann über Docker gestartet werden.
 
-___
-
 ## Features
 
 #### Bereits umgesetzt
@@ -47,8 +45,6 @@ ___
 - Docker
 - Docker Compose
 
-___
-
 ## Vorassetzungen
 
 Vor der installation müssen folgende Programme installiert sein:
@@ -70,8 +66,6 @@ Danach ist die Anwendung erreichbar unter:
 Backend:
 
 'http://localhost:8080'
-
-___
 
 ## Projektstruktur
 
