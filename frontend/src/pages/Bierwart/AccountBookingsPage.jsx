@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
 import {Tooltip} from "react-tooltip";
-import AccountBookingAddEdit from "../../components/bierwart/accountBooking/AccountBookingAddEdit.jsx";
+import AccountBookingAddEdit from "../../components/bierwart/AccountBookingAddEdit.jsx";
 import {loadAccountBookings, loadAccountTypes, loadVendors} from "../../utils/loadUtils.jsx";
 import {deleteEntity, saveEntity} from "../../utils/crudUtils.js";
 import {getAccountTypeLable, getVendorName} from "../../utils/namingUtils.jsx";

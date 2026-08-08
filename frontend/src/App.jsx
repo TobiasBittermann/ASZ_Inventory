@@ -2,7 +2,6 @@ import './App.css'
 import {BrowserRouter, Routes, Route} from "react-router-dom"
 import LoginPage from "./pages/LoginPage.jsx"
 import MembersPage from "./pages/MembersPage.jsx";
-import BierwartPage from "./pages/BierwartPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import AppLayout from "./components/layout/AppLayout.jsx";
 import DrinksPage from "./pages/Bierwart/DrinksPage.jsx";
@@ -22,7 +21,6 @@ function App() {
                 <Route element={<AppLayout/>}>
                     <Route path={"/home"} element={<HomePage/>}/>
                     <Route path="/member" element={<MembersPage/>}/>
-                    <Route path={"/bierwart"} element={<BierwartPage/>}/>
 
                     <Route path={"/bierwart/accountBookings"} element={<AccountBookingsPage/>}/>
                     <Route path={"/bierwart/bookings"} element={<BookingsPage/>}/>

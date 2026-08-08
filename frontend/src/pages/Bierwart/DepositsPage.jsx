@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
 import {Tooltip} from "react-tooltip";
-import BwDepositAddEdit from "../../components/bierwart/deposit/BwDepositAddEdit.jsx";
+import BwDepositAddEdit from "../../components/bierwart/BwDepositAddEdit.jsx";
 import {getAccountTypeLable, getMemberName} from "../../utils/namingUtils.jsx";
 import {loadAccountTypes, loadBwDeposits, loadMembers} from "../../utils/loadUtils.jsx";
 import {deleteEntity, saveEntity} from "../../utils/crudUtils.js";
@@ -20,11 +20,11 @@ function BwDepositsTab() {
     }, [])
 
     async function handleSaveBwDeposit(deposit){
-        await saveEntity(deposit, "bwdeposits", loadBwDeposits, setBwDeposit)
+        await saveEntity(deposit, "/bwdeposits", loadBwDeposits, setBwDeposit)
     }
 
     async function handleDeleteBwDeposit(id){
-        await deleteEntity(id, "bwdeposits", loadBwDeposits, setBwDeposit)
+        await deleteEntity(id, "/bwdeposits", loadBwDeposits, setBwDeposit)
     }
 
     function handleEditClick(deposit) {

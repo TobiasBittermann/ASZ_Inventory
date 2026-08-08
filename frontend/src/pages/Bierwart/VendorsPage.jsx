@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
 import {Tooltip} from "react-tooltip";
-import VendorAddEdit from "../../components/bierwart/vendor/VendorAddEdit.jsx";
+import VendorAddEdit from "../../components/bierwart/VendorAddEdit.jsx";
 import {loadVendors} from "../../utils/loadUtils.jsx";
 import {deleteEntity, saveEntity} from "../../utils/crudUtils.js";
 

@@ -12,7 +12,7 @@ function LoginPage() {
                 </h1>
 
                 <p className={"text-gray-800 text-sm"}>
-                    Bitte logge dich ein um alle Funktionen 
+                    Bitte logge dich ein um alle Funktionen
                 </p>
                 <p>
                     <Link to="/member" className="w-full flex justify-center">

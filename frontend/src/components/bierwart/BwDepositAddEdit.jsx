@@ -1,52 +1,43 @@
 import {useEffect, useState} from "react";
-import {getAccountTypeLable} from "../../../utils/namingUtils.jsx";
+import {getAccountTypeLable} from "../../utils/namingUtils.jsx";
+import {getCurrentLocalDateTime} from "../../utils/dateUtils.jsx";
 
-function getCurrentLokalDateTime() {
-    const now = new Date();
-    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-    return local.toISOString().slice(0, 16);
-}
-
-function AccountBookingAddEdit({booking, vendors, accountTypes, onClose, onSave}) {
-    const [vendorId, setVendorId] = useState("");
-    const [amount, setAmount] = useState("");
-    const [invoiceNumber, setInvoiceNumber] = useState("");
+function BwDepositAddEdit({bwDeposit, members, accountTypes, onSave, onClose}) {
+    const [memberId, setMemberId] = useState("");
+    const [deposit, setDeposit] = useState("");
     const [accountType, setAccountType] = useState("")
-    const [date, setDate] = useState("");
-    const [note, setNote] = useState("");
+    const [depositDate, setDepositDate] = useState("");
+    const [description, setDescription] = useState("");
 
     useEffect(() => {
-        if (booking) {
-            setVendorId(booking.vendorId)
-            setAmount(booking.amount)
-            setInvoiceNumber(booking.invoiceNumber)
-            setAccountType(booking.accountType)
-            setDate(booking.date)
-            setNote(booking.note)
+        if (bwDeposit) {
+            setMemberId(bwDeposit.memberId)
+            setDeposit(bwDeposit.deposit)
+            setAccountType(bwDeposit.accountType)
+            setDepositDate(bwDeposit.depositDate)
+            setDescription(bwDeposit.description)
         } else {
-            setVendorId("")
-            setAmount("")
-            setInvoiceNumber("")
+            setMemberId("")
+            setDeposit("")
             setAccountType("")
-            setDate(getCurrentLokalDateTime())
-            setNote("")
+            setDepositDate(getCurrentLocalDateTime())
+            setDescription("")
         }
-    }, [booking]);
+    }, [bwDeposit])
 
     async function handleSubmit(event) {
         event.preventDefault();
 
-        const savedAccountBooking = {
-            id: booking ? booking.id : 0,
-            vendorId: Number(vendorId),
-            amount: Number(amount),
-            invoiceNumber: invoiceNumber,
+        const savedBwDeposit = {
+            id: bwDeposit ? bwDeposit.id : 0,
+            memberId: Number(memberId),
+            deposit: Number(deposit),
             accountType: accountType,
-            date: date,
-            note: note
+            depositDate: depositDate,
+            description: description
         }
 
-        await onSave(savedAccountBooking)
+        await onSave(savedBwDeposit);
         onClose();
     }
 
@@ -55,7 +46,7 @@ function AccountBookingAddEdit({booking, vendors, accountTypes, onClose, onSave}
             <div className={"bg-white rounded-2xl shadow-xl p-8 w-full max-w-md"}>
 
                 <h2 className={"text-2xl font-bold text-gray-800 mb-6"}>
-                    {booking ? "Edit Booking" : "Add Booking"}
+                    {bwDeposit ? "Edit Deposit" : "Add Deposit"}
                 </h2>
 
                 <form
@@ -68,43 +59,34 @@ function AccountBookingAddEdit({booking, vendors, accountTypes, onClose, onSave}
                     <input
                         className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
                         type={"datetime-local"}
-                        value={date}
-                        onChange={event => setDate(event.target.value)}
+                        value={depositDate}
+                        onChange={event => setDepositDate(event.target.value)}
+                        disabled
                     />
 
                     <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
-                        Lieferant:
+                        Mitglied:
                     </label>
                     <select
                         className={"w-full border border-gray-300 rounded-xl px-4 py-2 text-gray-800 shadow-sm cursor-pointer hover:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-400"}
-                        value={vendorId}
-                        onChange={e => setVendorId(e.target.value)}>
-                        <option value={""}>Bitte Lieferant auswählen</option>
-                        {vendors.map(vendor => (
-                            <option key={vendor.id} value={vendor.id}>
-                                {vendor.name}
+                        value={memberId}
+                        onChange={e => setMemberId(e.target.value)}>
+                        <option value={""}>Bitte Mitglied auswählen</option>
+                        {members.map(member => (
+                            <option key={member.id} value={member.id}>
+                                {member.firstName} {member.lastName}
                             </option>
                         ))}
                     </select>
 
                     <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
-                        Betrag:
+                        Betrag Einzahlung:
                     </label>
                     <input
                         className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
                         type={"number"}
-                        value={amount}
-                        onChange={event => setAmount(event.target.value)}
-                    />
-
-                    <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
-                        Rechnungsnummer:
-                    </label>
-                    <input
-                        className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
-                        type={"text"}
-                        value={invoiceNumber}
-                        onChange={event => setInvoiceNumber(event.target.value)}
+                        value={deposit}
+                        onChange={event => setDeposit(event.target.value)}
                     />
 
                     <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
@@ -125,13 +107,13 @@ function AccountBookingAddEdit({booking, vendors, accountTypes, onClose, onSave}
                     </select>
 
                     <label className={"text-sm font-medium text-gray-600 justify-self-start mr-2"}>
-                        Notiz:
+                        Kommentar:
                     </label>
                     <input
                         className={"border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"}
                         type={"text"}
-                        value={note}
-                        onChange={event => setNote(event.target.value)}
+                        value={description}
+                        onChange={event => setDescription(event.target.value)}
                     />
 
                     <div className={"col-span-2 flex justify-end gap-3 mt-2"}>
@@ -152,4 +134,4 @@ function AccountBookingAddEdit({booking, vendors, accountTypes, onClose, onSave}
     )
 }
 
-export default AccountBookingAddEdit;
+export default BwDepositAddEdit;

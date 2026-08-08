@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
-import SnapshotAddEdit from "../../components/bierwart/snapshot/SnapshotAddEdit.jsx";
+import SnapshotAddEdit from "../../components/bierwart/SnapshotAddEdit.jsx";
 import {Tooltip} from "react-tooltip";
 import {loadSnapshots} from "../../utils/loadUtils.jsx";
 import {deleteEntity, saveEntity} from "../../utils/crudUtils.js";

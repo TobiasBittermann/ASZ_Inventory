@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {getCurrentLocalDateTime} from "../../../utils/dateUtils.jsx";
+import {getCurrentLocalDateTime} from "../../utils/dateUtils.jsx";
 
 function SnapshotAddEdit({snapshot, onClose, onSave}) {
     const [bankAccount, setBankAccount] = useState("")

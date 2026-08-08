@@ -48,7 +48,7 @@ public class BwAccountBookingService {
 
         log.info("BwAccountBookingService added booking with id {}", booking.getId());
 
-        String note = String.format("Automatische Buchung: %s %s", booking.getInvoiceNumber(), booking.getNote());
+        String note = String.format("Automatische Buchung: %s vom %s %s €", booking.getInvoiceNumber(), booking.getDate(), booking.getAmount());
         snapshotService.addTransactionSnapshot(booking.getAmount(), booking.getAccountType(), note);
     }
 
@@ -80,7 +80,7 @@ public class BwAccountBookingService {
 
         log.info("BwAccountBookingService deleted booking with id {}", booking.getId());
 
-        String note = String.format("Automatische Rückbuchung: %s %s", booking.getInvoiceNumber(), booking.getNote());
+        String note = String.format("Automatische Rückbuchung: %s vom %s %s €", booking.getInvoiceNumber(), booking.getDate(), booking.getAmount());
         snapshotService.addTransactionSnapshot(booking.getAmount().negate(), booking.getAccountType(), note);
     }
 }
