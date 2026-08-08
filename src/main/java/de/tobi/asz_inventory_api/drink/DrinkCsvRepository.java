@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -67,11 +68,11 @@ public class DrinkCsvRepository {
                 Drink drink = new Drink();
                 drink.setId(Long.parseLong(values[0]));
                 drink.setName(values[1]);
-                drink.setPurchasePrice(Double.parseDouble(values[2]));
-                drink.setSellingPrice(Double.parseDouble(values[3]));
+                drink.setPurchasePrice(new BigDecimal(values[2]));
+                drink.setSellingPrice(new BigDecimal(values[3]));
                 drink.setFactor(Double.parseDouble(values[4]));
                 drink.setAmount(Integer.parseInt(values[5]));
-                drink.setTotalValue(Double.parseDouble(values[6]));
+                drink.setTotalValue(new BigDecimal(values[6]));
 
                 drinks.add(drink);
             }

@@ -62,39 +62,22 @@ function SnapshotTab() {
                     <thead className={"bg-gray-200 text-gray-600 uppercase text-xs"}>
                     <tr>
                         <th className={"px-6 py-3"}>Id</th>
+                        <th className={"px-6 py-3"}>Datum</th>
                         <th className={"px-6 py-3"}>Bierkonto</th>
                         <th className={"px-6 py-3"}>Bierkasse</th>
                         <th className={"px-6 py-3"}>Inventar</th>
                         <th className={"px-6 py-3"}>Kommantar</th>
-                        <th className={"px-6 py-3"}>Datum</th>
-                        <th className={"px-6 py-3"}>Aktionen</th>
                     </tr>
                     </thead>
                     <tbody className={"divide-y divide-gray-100"}>
                     {snapshots.map(snapshot => (
                         <tr key={snapshot.id} className={"hover:bg-gray-50 transition"}>
                             <td className={"px-6 py-3"}>{snapshot.id}</td>
+                            <td className={"px-6 py-3"}>{snapshot.snapshotDate}</td>
                             <td className={"px-6 py-3"}>{snapshot.bankAccount}</td>
                             <td className={"px-6 py-3"}>{snapshot.cashRegister}</td>
                             <td className={"px-6 py-3"}>{snapshot.inventoryValue}</td>
                             <td className={"px-6 py-3"}>{snapshot.note}</td>
-                            <td className={"px-6 py-3"}>{snapshot.snapshotDate}</td>
-                            <td>
-                                <button
-                                    className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}
-                                    data-tooltip-id={"edit-tip"}
-                                    data-tooltip-content={"Edit a member entry"}
-                                    onClick={() => handleEditClick(snapshot)}>
-                                    <FiEdit3 />
-                                </button>
-                                <button
-                                    className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}
-                                    data-tooltip-id={"delete-tip"}
-                                    data-tooltip-content={"Delete a member entry"}
-                                    onClick={() => handleDeleteSnapshot(snapshot.id)}>
-                                    <FiTrash2 />
-                                </button>
-                            </td>
                         </tr>
                     ))}
                     </tbody>

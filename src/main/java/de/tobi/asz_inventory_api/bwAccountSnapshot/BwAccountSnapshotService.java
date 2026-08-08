@@ -89,6 +89,9 @@ public class BwAccountSnapshotService {
                 newSnapshot.setCashRegister(newSnapshot.getCashRegister().add(amount));
                 newSnapshot.setNote(note);
                 break;
+            case INVENTORY:
+                newSnapshot.setInventoryValue(newSnapshot.getInventoryValue().add(amount));
+                newSnapshot.setNote(note);
         }
 
         newSnapshot.setId(nextId);

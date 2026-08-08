@@ -1,12 +1,14 @@
 package de.tobi.asz_inventory_api.bwAccountBooking;
 
 import de.tobi.asz_inventory_api.bwAccountSnapshot.BwAccountSnapshotService;
+import de.tobi.asz_inventory_api.bwBooking.BwBooking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -53,12 +55,19 @@ public class BwAccountBookingService {
     public void updateBwAccountBooking(long id, BwAccountBooking booking) throws IOException {
         List<BwAccountBooking> bookings = repository.getAllBwAccountBookings(filePath);
 
+        BwAccountBooking oldBooking = bookings.stream().filter(b -> b.getId() == id).findAny().orElseThrow();
+        BigDecimal oldValue = oldBooking.getAmount();
+
         booking.setId(id);
 
         repository.updateBwAccountBooking(bookings, booking);
         repository.saveBwAccountBooking(filePath, bookings);
 
         log.info("BwAccountBookingService updated booking with id {}", id);
+
+        BigDecimal valueIncrease = booking.getAmount().subtract(oldValue);
+        String note = String.format("Automatische Korrekturbuchung: %s vom %s %s €", booking.getInvoiceNumber(), booking.getDate(), valueIncrease);
+        snapshotService.addTransactionSnapshot(valueIncrease, booking.getAccountType(), note);
     }
 
     public void deleteBwAccountBooking(long id) throws IOException {

@@ -1,7 +1,9 @@
 package de.tobi.asz_inventory_api.bwBooking;
 
+import de.tobi.asz_inventory_api.bwAccountSnapshot.BwAccountSnapshotService;
 import de.tobi.asz_inventory_api.drink.Drink;
 import de.tobi.asz_inventory_api.drink.DrinkCsvRepository;
+import de.tobi.asz_inventory_api.enums.AccountType;
 import de.tobi.asz_inventory_api.member.Member;
 import de.tobi.asz_inventory_api.member.MemberCsvRepository;
 import org.slf4j.Logger;
@@ -18,6 +20,7 @@ public class BwBookingService {
     private final BwBookingCsvRepository repository;
     private final MemberCsvRepository memberRepository;
     private final DrinkCsvRepository drinkRepository;
+    private final BwAccountSnapshotService snapshotService;
     private final String filePath;
     private final String memberFilePath;
     private final String drinkFilePath;
@@ -26,12 +29,14 @@ public class BwBookingService {
     public BwBookingService(BwBookingCsvRepository repository,
                             MemberCsvRepository memberRepository,
                             DrinkCsvRepository drinkRepository,
+                            BwAccountSnapshotService snapshotService,
                             @Value("${app.bwbookings.csv-path}") String filePath,
                             @Value("${app.members.csv-path}") String memberFilePath,
                             @Value("${app.drinks.csv-path}") String drinkFilePath) {
         this.repository = repository;
         this.memberRepository = memberRepository;
         this.drinkRepository = drinkRepository;
+        this.snapshotService = snapshotService;
         this.filePath = filePath;
         this.memberFilePath = memberFilePath;
         this.drinkFilePath = drinkFilePath;
@@ -46,6 +51,7 @@ public class BwBookingService {
 
     public void addBwBooking(BwBooking booking) throws IOException {
         List<BwBooking> bookings = repository.getAllBwBookings(filePath);
+        List<Drink> drinks = drinkRepository.getAllDrinks(drinkFilePath);
 
         long nextId = bookings.stream()
                 .mapToLong(BwBooking::getId)
@@ -61,12 +67,19 @@ public class BwBookingService {
         changeAmountDrinks(booking, false);
 
         log.info("BwBookingService added booking with id {}", booking.getId());
+
+        Drink drink = drinks.stream().filter(d -> d.getId() == booking.getDrinkId()).findAny().orElseThrow();
+
+        String note = String.format("Automatische Inventarbuchung: %s %s", drink.getName(), booking.getBookingCost());
+        snapshotService.addTransactionSnapshot(booking.getBookingCost().negate(), AccountType.INVENTORY, note);
     }
 
     public void updateBwBooking(long id, BwBooking booking) throws IOException {
         List<BwBooking> bookings = repository.getAllBwBookings(filePath);
+        List<Drink> drinks = drinkRepository.getAllDrinks(drinkFilePath);
 
         BwBooking oldBooking = bookings.stream().filter(b -> b.getId() == id).findAny().orElseThrow();
+        BigDecimal oldCost = oldBooking.getBookingCost();
 
         changeAmountDrinks(oldBooking, true);
         changeBalance(oldBooking, true);
@@ -80,10 +93,17 @@ public class BwBookingService {
         changeBalance(booking, false);
 
         log.info("BwBookingService updated booking with id {}", booking.getId());
+
+        Drink drink = drinks.stream().filter(d -> d.getId() == booking.getDrinkId()).findAny().orElseThrow();
+
+        BigDecimal valueIncrease = booking.getBookingCost().subtract(oldCost);
+        String note = String.format("Automatische Inventarkorrekturbuchung: %s %s", drink.getName(), valueIncrease.negate());
+        snapshotService.addTransactionSnapshot(valueIncrease.negate(), AccountType.INVENTORY, note);
     }
 
     public void deleteBwBooking(long id) throws IOException {
         List<BwBooking> bookings = repository.getAllBwBookings(filePath);
+        List<Drink> drinks = drinkRepository.getAllDrinks(drinkFilePath);
 
         BwBooking booking = bookings.stream().filter(b -> b.getId() == id).findAny().orElseThrow();
 
@@ -94,6 +114,11 @@ public class BwBookingService {
         changeAmountDrinks(booking, true);
 
         log.info("BwBookingService deleted booking with id {}", id);
+
+        Drink drink = drinks.stream().filter(d -> d.getId() == booking.getDrinkId()).findAny().orElseThrow();
+
+        String note = String.format("Automatische Inventarrückbuchung: %s %s", drink.getName(), booking.getBookingCost());
+        snapshotService.addTransactionSnapshot(booking.getBookingCost(), AccountType.INVENTORY, note);
     }
 
 

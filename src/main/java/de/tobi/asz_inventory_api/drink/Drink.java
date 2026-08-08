@@ -1,13 +1,15 @@
 package de.tobi.asz_inventory_api.drink;
 
+import java.math.BigDecimal;
+
 public class Drink {
     private long id;
     private String name;
-    private double purchasePrice;
-    private double sellingPrice;
+    private BigDecimal purchasePrice;
+    private BigDecimal sellingPrice;
     private double factor;
     private int amount;
-    private double totalValue;
+    private BigDecimal totalValue;
 
     public Drink(){}
 
@@ -37,19 +39,19 @@ public class Drink {
         this.name = name;
     }
 
-    public double getPurchasePrice() {
+    public BigDecimal getPurchasePrice() {
         return purchasePrice;
     }
 
-    public void setPurchasePrice(double purchasePrice) {
+    public void setPurchasePrice(BigDecimal purchasePrice) {
         this.purchasePrice = purchasePrice;
     }
 
-    public double getSellingPrice() {
+    public BigDecimal getSellingPrice() {
         return sellingPrice;
     }
 
-    public void setSellingPrice(double sellingPrice) {
+    public void setSellingPrice(BigDecimal sellingPrice) {
         this.sellingPrice = sellingPrice;
     }
 
@@ -69,11 +71,11 @@ public class Drink {
         this.amount = amount;
     }
 
-    public double getTotalValue() {
+    public BigDecimal getTotalValue() {
         return totalValue;
     }
 
-    public void setTotalValue(double totalValue) {
+    public void setTotalValue(BigDecimal totalValue) {
         this.totalValue = totalValue;
     }
 

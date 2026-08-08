@@ -1,6 +1,7 @@
 package de.tobi.asz_inventory_api.bwDeposit;
 
 import de.tobi.asz_inventory_api.bwAccountSnapshot.BwAccountSnapshotService;
+import de.tobi.asz_inventory_api.enums.AccountType;
 import de.tobi.asz_inventory_api.member.Member;
 import de.tobi.asz_inventory_api.member.MemberCsvRepository;
 import org.slf4j.Logger;
@@ -38,6 +39,7 @@ public class BwDepositService {
 
     public void addBwDeposit(BwDeposit deposit) throws IOException {
         List<BwDeposit> deposits = repository.getAllBwDeposits(filePath);
+        List<Member> members = memberRepository.getAllMembers(memberFilePath);
 
         long nextId = deposits.stream()
                 .mapToLong(BwDeposit::getId)
@@ -53,33 +55,39 @@ public class BwDepositService {
 
         log.info("BwDepositService added deposit with id {}", deposit.getId());
 
-        String note = String.format("Automatische Buchung: %s %s", deposit.getMemberId(), deposit.getDescription());
+        Member member = members.stream().filter(m -> m.getId() == deposit.getMemberId()).findAny().orElseThrow();
+        String note = String.format("Automatische Buchung: %s %s %s €", member.getFirstName(), member.getLastName(), deposit.getDeposit());
         snapshotService.addTransactionSnapshot(deposit.getDeposit(), deposit.getAccountType(), note);
     }
 
     public void updateBwDeposit(long id, BwDeposit deposit) throws IOException {
         List<BwDeposit> deposits = repository.getAllBwDeposits(filePath);
+        List<Member> members = memberRepository.getAllMembers(memberFilePath);
 
         deposit.setId(id);
 
-        // Get old deposit to cerrect the number
+        // Get old deposit to correct the number
         BwDeposit oldDeposit = deposits.stream().filter(od -> od.getId() == id).findAny().orElseThrow();
-
         BigDecimal depositToCorrect = oldDeposit.getDeposit();
 
         repository.updateBwDeposit(deposits, deposit);
         repository.saveBwDeposit(filePath, deposits);
 
+        log.info("BwDepositService updated deposit with id {}", deposit.getId());
+
+        Member member = members.stream().filter(m -> m.getId() == deposit.getMemberId()).findAny().orElseThrow();
+
         // Calculate new deposit
         BigDecimal newDeposit = deposit.getDeposit().subtract(depositToCorrect);
-
         changeBalance(deposit.getMemberId(), newDeposit);
 
-        log.info("BwDepositService updated deposit with id {}", deposit.getId());
+        String note = String.format("Automatische Korrekturbuchung: %s %s %s €", member.getFirstName(), member.getLastName(), newDeposit);
+        snapshotService.addTransactionSnapshot(newDeposit, deposit.getAccountType(), note);
     }
 
     public void deleteBwDeposit(long id) throws IOException {
         List<BwDeposit> deposits = repository.getAllBwDeposits(filePath);
+        List<Member> members = memberRepository.getAllMembers(memberFilePath);
 
         BwDeposit deposit = deposits.stream().filter(d -> d.getId() == id).findAny(). orElseThrow();
 
@@ -90,7 +98,8 @@ public class BwDepositService {
 
         log.info("BwDepositService deleted deposit with id {}", deposit.getId());
 
-        String note = String.format("Automatische Rückbuchung: %s %s", deposit.getMemberId(), deposit.getDescription());
+        Member member = members.stream().filter(m -> m.getId() == deposit.getMemberId()).findAny().orElseThrow();
+        String note = String.format("Automatische Rückbuchung: %s %s vom %s", member.getFirstName(), member.getLastName(), deposit.getDepositDate());
         snapshotService.addTransactionSnapshot(deposit.getDeposit().negate(), deposit.getAccountType(), note);
     }
 
