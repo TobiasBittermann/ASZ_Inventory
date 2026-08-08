@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
 import {Tooltip} from "react-tooltip";
-import BwDepositAddEdit from "./BwDepositAddEdit.jsx";
-import {getAccountTypeLable, getMemberName} from "../../../utils/namingUtils.jsx";
-import {loadAccountTypes, loadBwDeposits, loadMembers} from "../../../utils/loadUtils.jsx";
-import {deleteEntity, saveEntity} from "../../../utils/crudUtils.js";
+import BwDepositAddEdit from "../../components/bierwart/deposit/BwDepositAddEdit.jsx";
+import {getAccountTypeLable, getMemberName} from "../../utils/namingUtils.jsx";
+import {loadAccountTypes, loadBwDeposits, loadMembers} from "../../utils/loadUtils.jsx";
+import {deleteEntity, saveEntity} from "../../utils/crudUtils.js";
 
 function BwDepositsTab() {
     const [bwDeposits, setBwDeposit] = useState([]);

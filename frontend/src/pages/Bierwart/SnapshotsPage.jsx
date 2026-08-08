@@ -1,11 +1,11 @@
 import {useEffect, useState} from "react";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
-import SnapshotAddEdit from "./SnapshotAddEdit.jsx";
+import SnapshotAddEdit from "../../components/bierwart/snapshot/SnapshotAddEdit.jsx";
 import {Tooltip} from "react-tooltip";
-import {loadSnapshots} from "../../../utils/loadUtils.jsx";
-import {deleteEntity, saveEntity} from "../../../utils/crudUtils.js";
+import {loadSnapshots} from "../../utils/loadUtils.jsx";
+import {deleteEntity, saveEntity} from "../../utils/crudUtils.js";
 
-function SnapshotTab() {
+function SnapshotsPage() {
     const [snapshots, setSnapshots] = useState([])
     const [selectedSnapshot, setSelectedSnapshot] = useState(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -14,7 +14,7 @@ function SnapshotTab() {
         loadSnapshots(setSnapshots);
     }, [])
 
-
+    const latestSnapshot = snapshots.length > 0 ? snapshots.reduce((latest, snapshot) => snapshot.id > latest.id ? snapshot : latest) : null;
 
     async function handleSaveSnapshot(snapshot) {
         await saveEntity(snapshot, "/bwsnapshots", loadSnapshots, setSnapshots)
@@ -39,6 +39,35 @@ function SnapshotTab() {
             <h3 className={"text-3xl font-bold text-gray-800 text-center"}>
                 Kassenstände
             </h3>
+
+            <div className="flex justify-center gap-4 my-6">
+                <div className={`px-4 py-2 rounded-full shadow ${
+                    latestSnapshot?.bankAccount > 0
+                        ? "bg-green-100 text-green-800"
+                        : latestSnapshot?.bankAccount < 0
+                            ? "bg-red-100 text.red-800"
+                            : "bg-gray-100 bg-gray-800"}`}>
+                    Bierkonto: {latestSnapshot?.bankAccount ?? "0.00"} €
+                </div>
+
+                <div className={`px-4 py-2 rounded-full shadow ${
+                    latestSnapshot?.cashRegister > 0
+                        ? "bg-green-100 text-green-800"
+                        : latestSnapshot?.cashRegister < 0
+                            ? "bg-red-100 text.red-800"
+                            : "bg-gray-100 bg-gray-800"}`}>
+                    Bierkasse: {latestSnapshot?.cashRegister ?? "0.00"} €
+                </div>
+
+                <div className={`px-4 py-2 rounded-full shadow ${
+                    latestSnapshot?.inventoryValue > 0
+                        ? "bg-green-100 text-green-800"
+                        : latestSnapshot?.inventoryValue < 0
+                            ? "bg-red-100 text.red-800"
+                            : "bg-gray-100 bg-gray-800"}`}>
+                    Inventar: {latestSnapshot?.inventoryValue ?? "0.00"} €
+                </div>
+            </div>
 
             <button
                 className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-3 transition"}
@@ -89,4 +118,4 @@ function SnapshotTab() {
     )
 }
 
-export default SnapshotTab;
+export default SnapshotsPage;

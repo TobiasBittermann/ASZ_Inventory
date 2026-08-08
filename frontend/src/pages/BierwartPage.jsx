@@ -1,10 +1,10 @@
 import {useState} from "react";
-import DrinksTab from "../components/bierwart/drink/DrinksTab.jsx";
-import BookingsTab from "../components/bierwart/booking/BookingsTab.jsx";
-import DepositsTab from "../components/bierwart/deposit/DepositsTab.jsx";
-import AccountBookingsTab from "../components/bierwart/accountBooking/AccountBookingsTab.jsx";
-import VendorTab from "../components/bierwart/vendor/VendorTab.jsx";
-import SnapshotTab from "../components/bierwart/snapshot/SnapshotTab.jsx";
+import DrinksPage from "./Bierwart/DrinksPage.jsx";
+import BookingsTab from "./Bierwart/BookingsPage.jsx";
+import DepositsTab from "./Bierwart/DepositsPage.jsx";
+import AccountBookingsPage from "./Bierwart/AccountBookingsPage.jsx";
+import VendorsPage from "./Bierwart/VendorsPage.jsx";
+import SnapshotsPage from "./Bierwart/SnapshotsPage.jsx";
 
 function BierwartPage() {
     const [activeTab, setActiveTab] = useState("bookings");
@@ -54,10 +54,10 @@ function BierwartPage() {
 
                 {activeTab === "bookings" && <BookingsTab/>}
                 {activeTab === "deposits" && <DepositsTab/>}
-                {activeTab === "accountBookings" && <AccountBookingsTab/>}
-                {activeTab === "snapshots" && <SnapshotTab/>}
-                {activeTab === "drinks" && <DrinksTab/>}
-                {activeTab === "vendors" && <VendorTab/>}
+                {activeTab === "accountBookings" && <AccountBookingsPage/>}
+                {activeTab === "snapshots" && <SnapshotsPage/>}
+                {activeTab === "drinks" && <DrinksPage/>}
+                {activeTab === "vendors" && <VendorsPage/>}
 
             </main>
 

@@ -545,7 +545,7 @@ In diesem Projekt wird `react-router-dom` verwendet.
 ```jsx
 <BrowserRouter>
   <Routes>
-    <Route path="/" element={<HomePage />} />
+    <Route path="/" element={<LoginPage />} />
     <Route path="/member" element={<MembersPage />} />
     <Route path="/bierwart" element={<BierwartPage />} />
   </Routes>

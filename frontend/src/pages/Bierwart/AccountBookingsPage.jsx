@@ -1,12 +1,12 @@
 import {useEffect, useState} from "react";
 import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
 import {Tooltip} from "react-tooltip";
-import AccountBookingAddEdit from "./AccountBookingAddEdit.jsx";
-import {loadAccountBookings, loadAccountTypes, loadVendors} from "../../../utils/loadUtils.jsx";
-import {deleteEntity, saveEntity} from "../../../utils/crudUtils.js";
-import {getAccountTypeLable, getVendorName} from "../../../utils/namingUtils.jsx";
+import AccountBookingAddEdit from "../../components/bierwart/accountBooking/AccountBookingAddEdit.jsx";
+import {loadAccountBookings, loadAccountTypes, loadVendors} from "../../utils/loadUtils.jsx";
+import {deleteEntity, saveEntity} from "../../utils/crudUtils.js";
+import {getAccountTypeLable, getVendorName} from "../../utils/namingUtils.jsx";
 
-function AccountBookingsTab() {
+function AccountBookingsPage() {
     const [accountBookings, setAccountBookings] = useState([]);
     const [vendors, setVendors] = useState([]);
     const [accountTypes, setAccountTypes] = useState([]);
@@ -113,4 +113,4 @@ function AccountBookingsTab() {
     )
 }
 
-export default AccountBookingsTab
+export default AccountBookingsPage

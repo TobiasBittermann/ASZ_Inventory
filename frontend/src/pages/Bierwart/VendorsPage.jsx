@@ -1,59 +1,59 @@
 import {useEffect, useState} from "react";
-import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi"
+import {FiEdit3, FiPlusCircle, FiTrash2} from "react-icons/fi";
 import {Tooltip} from "react-tooltip";
-import DrinkAddEdit from "./DrinkAddEdit.jsx";
-import {loadDrinks} from "../../../utils/loadUtils.jsx";
-import {deleteEntity, saveEntity} from "../../../utils/crudUtils.js";
+import VendorAddEdit from "../../components/bierwart/vendor/VendorAddEdit.jsx";
+import {loadVendors} from "../../utils/loadUtils.jsx";
+import {deleteEntity, saveEntity} from "../../utils/crudUtils.js";
 
-function DrinksTab() {
-    const [drinks, setDrinks] = useState([]);
-    const [selectedDrink, setSelectedDrink] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+function VendorsPage() {
+    const [vendors, setVendors] = useState([])
+    const [selectedVendor, setSelectedVendor] = useState(null)
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     useEffect(() => {
-        loadDrinks(setDrinks);
+        loadVendors(setVendors);
     }, [])
 
-    async function handleSaveDrink(drink){
-        await saveEntity(drink, "/drinks", loadDrinks, setDrinks)
+    async function handleSaveVendor(vendor) {
+        await saveEntity(vendor, "/vendors", loadVendors, setVendors)
     }
 
-    async function handleDeleteDrink(id){
-        await deleteEntity(id, "/drinks", loadDrinks, setDrinks)
+    async function handleDeleteVendor(id){
+        await deleteEntity(id, "/vendors", loadVendors, setVendors)
     }
 
-    function handleEditClick(drink) {
-        setSelectedDrink(drink);
+    function handeEditClick(vendor){
+        setSelectedVendor(vendor);
         setIsModalOpen(true);
     }
 
-    function handleAddClick() {
-        setSelectedDrink(null);
+    function handleAddClick(){
+        setSelectedVendor(null);
         setIsModalOpen(true);
     }
 
     return (
         <div>
             <h3 className={"text-3xl font-bold text-gray-800 text-center"}>
-                Getränkeliste
+                Lieferanten
             </h3>
 
             <button
                 className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md justify-self-start rounded px-6 py-2 m-3 transition"}
                 data-tooltip-id={"add-tip"}
-                data-tooltip-content={"Add a new drink"}
+                data-tooltip-content={"Add a new vendor"}
                 onClick={handleAddClick}>
                 <FiPlusCircle/>
             </button>
             <Tooltip id={"add-tip"}/>
 
             {
-                isModalOpen && (
-                    <DrinkAddEdit
-                        drink={selectedDrink}
-                        onClose={() => setIsModalOpen(false)}
-                        onSave={handleSaveDrink}/>
-                )}
+                isModalOpen &&
+                <VendorAddEdit
+                    vendor={selectedVendor}
+                    onClose={()=> setIsModalOpen(false)}
+                    onSave={handleSaveVendor} />
+            }
 
             <div className={"overflow-x-auto rounded-xl shadow"}>
 
@@ -62,37 +62,33 @@ function DrinksTab() {
                     <tr>
                         <th className={"px-6 py-3"}>Id</th>
                         <th className={"px-6 py-3"}>Name</th>
-                        <th className={"px-6 py-3"}>Einkaufspreis</th>
-                        <th className={"px-6 py-3"}>Verkaufspreis</th>
-                        <th className={"px-6 py-3"}>Faktor</th>
-                        <th className={"px-6 py-3"}>Menge</th>
-                        <th className={"px-6 py-3"}>Gesamtwert</th>
+                        <th className={"px-6 py-3"}>Kontaktperson</th>
+                        <th className={"px-6 py-3"}>Adresse</th>
+                        <th className={"px-6 py-3"}>IBAN</th>
                         <th className={"px-6 py-3"}>Aktionen</th>
                     </tr>
                     </thead>
                     <tbody className={"divide-y divide-gray-100"}>
-                    {drinks.map(drink => (
-                        <tr key={drink.id} className={"hover:bg-gray-50 transition"}>
-                            <td className={"px-6 py-3"}>{drink.id}</td>
-                            <td className={"px-6 py-3"}>{drink.name}</td>
-                            <td className={"px-6 py-3"}>{drink.purchasePrice}</td>
-                            <td className={"px-6 py-3"}>{drink.sellingPrice}</td>
-                            <td className={"px-6 py-3"}>{drink.factor}</td>
-                            <td className={"px-6 py-3"}>{drink.amount}</td>
-                            <td className={"px-6 py-3"}>{drink.totalValue}</td>
+                    {vendors.map(vendor => (
+                        <tr key={vendor.id} className={"hover:bg-gray-50 transition"}>
+                            <td className={"px-6 py-3"}>{vendor.id}</td>
+                            <td className={"px-6 py-3"}>{vendor.name}</td>
+                            <td className={"px-6 py-3"}>{vendor.contactPerson}</td>
+                            <td className={"px-6 py-3"}>{vendor.address}</td>
+                            <td className={"px-6 py-3"}>{vendor.iban}</td>
                             <td>
                                 <button
                                     className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}
                                     data-tooltip-id={"edit-tip"}
                                     data-tooltip-content={"Edit a member entry"}
-                                    onClick={() => handleEditClick(drink)}>
+                                    onClick={() => handeEditClick(vendor)}>
                                     <FiEdit3 />
                                 </button>
                                 <button
                                     className={"hover:bg-green-500 hover:scale-105 bg-green-300 text-black shadow-md rounded px-3 py-1 m-1 transition"}
                                     data-tooltip-id={"delete-tip"}
                                     data-tooltip-content={"Delete a member entry"}
-                                    onClick={() => handleDeleteDrink(drink.id)}>
+                                    onClick={() => handleDeleteVendor(vendor.id)}>
                                     <FiTrash2 />
                                 </button>
                             </td>
@@ -104,7 +100,7 @@ function DrinksTab() {
                 <Tooltip id={"delete-tip"}/>
             </div>
         </div>
-    );
+    )
 }
 
-export default DrinksTab;
+export default VendorsPage;
