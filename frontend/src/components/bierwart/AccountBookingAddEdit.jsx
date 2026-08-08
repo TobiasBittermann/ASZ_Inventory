@@ -80,7 +80,9 @@ function AccountBookingAddEdit({booking, vendors, accountTypes, onClose, onSave}
                         value={vendorId}
                         onChange={e => setVendorId(e.target.value)}>
                         <option value={""}>Bitte Lieferant auswählen</option>
-                        {vendors.map(vendor => (
+                        {[...vendors]
+                            .sort((a,b) => a.name.localeCompare(b.name))
+                            .map(vendor => (
                             <option key={vendor.id} value={vendor.id}>
                                 {vendor.name}
                             </option>

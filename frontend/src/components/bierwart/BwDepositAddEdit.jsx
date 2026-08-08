@@ -72,7 +72,9 @@ function BwDepositAddEdit({bwDeposit, members, accountTypes, onSave, onClose}) {
                         value={memberId}
                         onChange={e => setMemberId(e.target.value)}>
                         <option value={""}>Bitte Mitglied auswählen</option>
-                        {members.map(member => (
+                        {[...members]
+                            .sort((a,b) => a.lastName.localeCompare(b.lastName))
+                            .map(member => (
                             <option key={member.id} value={member.id}>
                                 {member.firstName} {member.lastName}
                             </option>

@@ -70,7 +70,9 @@ function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
                         value={memberId}
                         onChange={e => setMemberId(e.target.value)}>
                         <option value={""}>Bitte Mitglied auswählen</option>
-                        {members.map(member => (
+                        {[...members]
+                            .sort((a, b) => a.lastName.localeCompare(b.lastName))
+                            .map(member => (
                             <option key={member.id} value={member.id}>
                                 {member.firstName} {member.lastName}
                             </option>
@@ -85,7 +87,9 @@ function BwBookingAddEdit({booking, members, drinks, onClose, onSave}) {
                         value={drinkId}
                         onChange={e => setDrinkId(e.target.value)}>
                         <option value={""}>Bitte Getränk auswählen</option>
-                        {drinks.map(drink => (
+                        {[...drinks]
+                            .sort((a,b) => a.name.localeCompare(b.name))
+                            .map(drink => (
                             <option key={drink.id} value={drink.id}>
                                 {drink.name}
                             </option>
